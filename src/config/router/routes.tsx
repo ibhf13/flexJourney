@@ -1,13 +1,10 @@
-import { Navigate } from 'react-router-dom';
+import { RouteObject } from 'react-router-dom';
 import MainLayout from '@/components/Layout/MainLayout';
 import HomePage from '@/pages/home/HomePage';
 import Login from '@/pages/Login';
 import Signup from '@/pages/Signup';
 import ResetPassword from '@/pages/ResetPassword';
-// import Dashboard from '@/pages/Dashboard';
-// import WorkoutPlans from '@/pages/WorkoutPlans';
-// import Progress from '@/pages/Progress';
-// import Profile from '@/pages/Profile';
+import { PlanSelectionPage } from '@/pages/PlanSelectionPage';
 
 export const publicRoutes = [
     {
@@ -21,35 +18,24 @@ export const publicRoutes = [
     {
         path: '/reset-password',
         element: <ResetPassword />
-    },
-    {
-        path: '/',
-        element: <HomePage />
     }
 ];
 
-export const privateRoutes = {
-    element: <MainLayout children={undefined} />,
-    // children: [
-    //     {
-    //         path: '/dashboard',
-    //         element: <Dashboard />
-    //     },
-    //     {
-    //         path: '/workout-plans',
-    //         element: <WorkoutPlans />
-    //     },
-    //     {
-    //         path: '/progress',
-    //         element: <Progress />
-    //     },
-    //     {
-    //         path: '/profile',
-    //         element: <Profile />
-    //     },
-    //     {
-    //         path: '*',
-    //         element: <Navigate to="/dashboard" replace />
-    //     }
-    // ]
+export const privateRoutes: RouteObject = {
+    path: '/',
+    element: <MainLayout />,
+    children: [
+        {
+            path: '/',
+            element: <HomePage />
+        },
+        {
+            path: 'plan',
+            element: <PlanSelectionPage />,
+        },
+        {
+            path: 'plan/:planId',
+            element: <PlanSelectionPage />,
+        },
+    ],
 };

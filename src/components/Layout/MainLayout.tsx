@@ -1,10 +1,10 @@
 import { Box } from '@mui/material';
-import { MainLayoutProps } from './types';
+import { Outlet } from 'react-router-dom';
 import Header from './Header';
 import Sidebar from './Sidebar';
 import { useNavigation } from '@/contexts/NavigationContext';
 
-const MainLayout = ({ children }: MainLayoutProps) => {
+const MainLayout = () => {
   const { isSidebarOpen, toggleMobileMenu } = useNavigation();
 
   return (
@@ -32,7 +32,7 @@ const MainLayout = ({ children }: MainLayoutProps) => {
           overflow: 'auto',
         }}
       >
-        {children}
+        <Outlet />
       </Box>
     </Box>
   );

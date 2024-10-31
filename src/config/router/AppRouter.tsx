@@ -7,10 +7,10 @@ const AppRouter = () => {
 
     const router = createBrowserRouter([
         ...publicRoutes,
-        isAuthenticated ? privateRoutes : {
+        ...(isAuthenticated ? [privateRoutes] : [{
             path: '*',
             element: <Navigate to="/login" replace />
-        }
+        }])
     ]);
 
     return <RouterProvider router={router} />;

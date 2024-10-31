@@ -22,6 +22,7 @@ import { useAuth } from '@/contexts/AuthContext';
 
 const navigationItems = [
   { label: 'Home', path: '/', icon: <HomeIcon /> },
+  { label: 'Plan', path: '/plan', icon: <WorkoutIcon /> },
   { label: 'Workouts', path: '/workouts', icon: <WorkoutIcon /> },
   { label: 'History', path: '/history', icon: <HistoryIcon /> },
   { label: 'Profile', path: '/profile', icon: <ProfileIcon /> },
