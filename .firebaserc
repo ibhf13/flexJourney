@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "flexjourney-5c06e"
+  },
+  "targets": {
+    "flexjourney-5c06e": {
+      "hosting": {
+        "flexjourney": [
+          "flexjourney-5c06e"
+        ]
+      }
+    }
+  }
+}

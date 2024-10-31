@@ -6,4 +6,9 @@ export default defineConfig({
   html: {
     title: 'FlexJourney',
   },
+  source: {
+    define: {
+      'import.meta.env': JSON.stringify(process.env),
+    },
+  },
 });

@@ -1,0 +1,51 @@
+import { Box } from '@mui/material';
+import { GridContainerProps, GridItemProps } from './types';
+
+export const GridContainer = ({
+  children,
+  spacing = 2,
+  columns = 12,
+  ...props
+}: GridContainerProps) => {
+  return (
+    <Box
+      display="grid"
+      gap={spacing}
+      gridTemplateColumns={{
+        xs: `repeat(${Math.min(columns, 1)}, 1fr)`,
+        sm: `repeat(${Math.min(columns, 2)}, 1fr)`,
+        md: `repeat(${Math.min(columns, 3)}, 1fr)`,
+        lg: `repeat(${Math.min(columns, 4)}, 1fr)`,
+        xl: `repeat(${columns}, 1fr)`,
+      }}
+      {...props}
+    >
+      {children}
+    </Box>
+  );
+};
+
+export const GridItem = ({
+  children,
+  xs = 12,
+  sm,
+  md,
+  lg,
+  xl,
+  ...props
+}: GridItemProps) => {
+  return (
+    <Box
+      gridColumn={{
+        xs: `span ${xs}`,
+        sm: sm && `span ${sm}`,
+        md: md && `span ${md}`,
+        lg: lg && `span ${lg}`,
+        xl: xl && `span ${xl}`,
+      }}
+      {...props}
+    >
+      {children}
+    </Box>
+  );
+};

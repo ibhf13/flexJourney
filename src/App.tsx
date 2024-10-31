@@ -1,12 +1,27 @@
-import React from 'react'
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import { NotificationProvider } from '@/features/Feedback';
+import theme from '@/styles/theme';
+import Router from '@/components/common/Router/Router';
+import GlobalStyles from '@/styles/globalStyles';
+import { NavigationProvider } from '@/contexts/NavigationContext';
+import { AuthProvider } from '@/contexts/AuthContext';
 
-
-const App = () => {
+function App() {
   return (
-   <div>
-    <h1>App</h1>
-   </div>
+
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {GlobalStyles}
+      <NavigationProvider>
+        <AuthProvider>
+          <NotificationProvider>
+            <Router />
+          </NotificationProvider>
+        </AuthProvider>
+      </NavigationProvider>
+    </ThemeProvider>
   );
-};
+}
 
 export default App;

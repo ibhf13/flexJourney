@@ -7,17 +7,22 @@
     "dev": "rsbuild dev --open",
     "format": "prettier --write .",
     "lint": "eslint .",
-    "preview": "rsbuild preview"
+    "preview": "rsbuild preview",
+    "firebase": "npm run build && firebase deploy --only hosting:flexjourney"
   },
   "dependencies": {
     "@emotion/react": "^11.13.3",
     "@emotion/styled": "^11.13.0",
-    "@hookform/resolvers": "^3.9.0",
-    "@mui/icons-material": "^6.1.5",
-    "@mui/material": "^6.1.5",
+    "@firebase/auth": "^1.8.0",
+    "@firebasegen/default-connector": "file:dataconnect-generated/js/default-connector",
+    "@hookform/resolvers": "^3.9.1",
+    "@mui/icons-material": "^6.1.6",
+    "@mui/lab": "^6.0.0-beta.14",
+    "@mui/material": "^6.1.6",
     "@mui/styled-engine-sc": "^6.1.5",
     "@tanstack/react-query": "^5.59.16",
     "date-fns": "^4.1.0",
+    "firebase": "^11.0.1",
     "lodash": "^4.17.21",
     "notistack": "^3.0.1",
     "react": "^18.3.1",
@@ -29,6 +34,7 @@
     "recharts": "^2.13.0",
     "styled-components": "^6.1.13",
     "uuid": "^11.0.0",
+    "yup": "^1.4.0",
     "zod": "^3.23.8"
   },
   "devDependencies": {

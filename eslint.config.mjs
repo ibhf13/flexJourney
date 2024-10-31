@@ -1,31 +1,80 @@
-import { fixupConfigRules } from '@eslint/compat';
+// eslint.config.mjs
 import js from '@eslint/js';
+import tsParser from '@typescript-eslint/parser';
+import tsPlugin from '@typescript-eslint/eslint-plugin';
+import reactPlugin from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
-import reactJsx from 'eslint-plugin-react/configs/jsx-runtime.js';
-import react from 'eslint-plugin-react/configs/recommended.js';
-import globals from 'globals';
-import ts from 'typescript-eslint';
+import importPlugin from 'eslint-plugin-import';
 
 export default [
-  { languageOptions: { globals: globals.browser } },
+  // Base configurations and recommended rules
   js.configs.recommended,
-  ...ts.configs.recommended,
-  ...fixupConfigRules([
-    {
-      ...react,
-      settings: {
-        react: { version: 'detect' },
+
+  // TypeScript settings
+  {
+    files: ['**/*.ts', '**/*.tsx'],
+    languageOptions: {
+      parser: tsParser,
+      parserOptions: {
+        project: './tsconfig.json',
       },
     },
-    reactJsx,
-  ]),
-  {
     plugins: {
-      'react-hooks': reactHooks,
+      '@typescript-eslint': tsPlugin,
     },
     rules: {
-      ...reactHooks.configs.recommended.rules,
+      ...tsPlugin.configs.recommended.rules,
+      '@typescript-eslint/explicit-function-return-type': 'off',
+      '@typescript-eslint/no-unused-vars': ['error', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/consistent-type-imports': 'warn',
     },
   },
-  { ignores: ['dist/'] },
+
+  // React settings
+  {
+    files: ['**/*.jsx', '**/*.tsx'],
+    plugins: {
+      react: reactPlugin,
+      'react-hooks': reactHooks,
+    },
+    settings: {
+      react: {
+        version: 'detect',
+      },
+    },
+    rules: {
+      ...reactPlugin.configs.recommended.rules,
+      'react/jsx-uses-react': 'off',
+      'react-hooks/rules-of-hooks': 'error',
+      'react-hooks/exhaustive-deps': 'warn',
+    },
+  },
+
+  // Import plugin for organizing and validating imports
+  {
+    files: ['**/*.{js,jsx,ts,tsx}'],
+    plugins: {
+      import: importPlugin,
+    },
+    rules: {
+      'import/order': [
+        'warn',
+        {
+          groups: [
+            ['builtin', 'external'],
+            ['internal', 'parent', 'sibling', 'index'],
+          ],
+          'newlines-between': 'always',
+        },
+      ],
+      'import/no-unresolved': 'error',
+      'import/no-extraneous-dependencies': 'error',
+    },
+  },
+
+  // General settings
+  {
+    ignores: ['node_modules', 'dist', 'build'],
+  },
 ];
