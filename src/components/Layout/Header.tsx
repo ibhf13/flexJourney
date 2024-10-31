@@ -82,7 +82,7 @@ const Header = ({ onMobileMenuOpen }: HeaderProps) => {
         {!isAuthenticated ? (
           <PrimaryButton
             component={Link}
-            to="/login"
+            href="/login"
             variant="contained"
             size="large"
             sx={{
@@ -113,7 +113,6 @@ const Header = ({ onMobileMenuOpen }: HeaderProps) => {
             <UserMenu
               anchorEl={userMenuAnchor}
               onClose={handleUserMenuClose}
-              onLogout={handleLogout}
             />
           </>
         )}

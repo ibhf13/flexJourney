@@ -7,6 +7,7 @@ export interface NotificationProps {
   severity?: NotificationSeverity;
   autoHideDuration?: number;
   action?: React.ReactNode;
+  open?: boolean;
 }
 
 export interface NotificationContextType {

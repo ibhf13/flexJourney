@@ -18,6 +18,7 @@ import { SideDrawer } from '../common/Popups';
 import { SidebarProps } from './types';
 import { PrimaryButton } from '../common/Buttons';
 import { useNavigation } from '@/contexts/NavigationContext';
+import { useAuth } from '@/contexts/AuthContext';
 
 const navigationItems = [
   { label: 'Home', path: '/', icon: <HomeIcon /> },
@@ -27,7 +28,7 @@ const navigationItems = [
 ];
 
 const MobileMenu = ({ open, onClose }: SidebarProps) => {
-  const isAuthenticated = false; // Replace with actual auth state
+  const isAuthenticated = useAuth()
   const location = useLocation();
   const { activeRoute } = useNavigation();
 
@@ -72,7 +73,7 @@ const MobileMenu = ({ open, onClose }: SidebarProps) => {
         <Box sx={{ p: 2 }}>
           <PrimaryButton
             component={Link}
-            to="/login"
+            href="/login"
             variant="contained"
             fullWidth
             onClick={onClose}

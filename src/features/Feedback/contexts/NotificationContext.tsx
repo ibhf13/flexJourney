@@ -8,11 +8,15 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
   const [notification, setNotification] = useState<NotificationProps | null>(null);
 
   const showNotification = useCallback((props: NotificationProps) => {
-    setNotification(props);
+    setNotification({ ...props, open: true });
   }, []);
 
   const hideNotification = useCallback(() => {
-    setNotification(null);
+    setNotification((prev) => prev ? { ...prev, open: false } : null);
+    // Clean up the notification after animation
+    setTimeout(() => {
+      setNotification(null);
+    }, 300);
   }, []);
 
   return (

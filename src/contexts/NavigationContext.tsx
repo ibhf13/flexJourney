@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useCallback } from 'react';
-import { NavigationState, NavigationContextType } from '@/contexts/types/navigation';
+import { NavigationState, NavigationContextType } from '@/contexts/types/navigationType';
 
 const initialState: NavigationState = {
     isMobileMenuOpen: false,
