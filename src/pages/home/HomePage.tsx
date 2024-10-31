@@ -6,7 +6,7 @@ import PlayCircleIcon from '@mui/icons-material/PlayCircle';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 import { MainLayout } from '../../components/Layout';
-import { Container, GridContainer, GridItem, Paper } from '../../components/common/structureComponents';
+import { Container, GridContainer, GridItem, Paper } from '../../components/common/StructureComponents';
 import { PrimaryButton, SecondaryButton } from '../../components/common/Buttons';
 import { DialogPopup } from '../../components/common/Popups';
 import { TextField, SelectField } from '../../components/common/Forms';

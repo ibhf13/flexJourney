@@ -1,8 +1,8 @@
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
 import { useAuth } from '@/contexts/AuthContext';
-import { publicRoutes, privateRoutes } from '@/config/routes';
+import { publicRoutes, privateRoutes } from './routes';
 
-const Router = () => {
+const AppRouter = () => {
     const { isAuthenticated } = useAuth();
 
     const router = createBrowserRouter([
@@ -16,4 +16,4 @@ const Router = () => {
     return <RouterProvider router={router} />;
 };
 
-export default Router;
+export default AppRouter;
