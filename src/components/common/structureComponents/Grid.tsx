@@ -12,10 +12,10 @@ export const GridContainer = ({
       display="grid"
       gap={spacing}
       gridTemplateColumns={{
-        xs: `repeat(${Math.min(columns, 1)}, 1fr)`,
-        sm: `repeat(${Math.min(columns, 2)}, 1fr)`,
-        md: `repeat(${Math.min(columns, 3)}, 1fr)`,
-        lg: `repeat(${Math.min(columns, 4)}, 1fr)`,
+        xs: `repeat(${columns}, 1fr)`,
+        sm: `repeat(${columns}, 1fr)`,
+        md: `repeat(${columns}, 1fr)`,
+        lg: `repeat(${columns}, 1fr)`,
         xl: `repeat(${columns}, 1fr)`,
       }}
       {...props}

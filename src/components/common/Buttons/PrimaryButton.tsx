@@ -1,28 +1,28 @@
 import { Button, CircularProgress, Link } from '@mui/material';
 import { PrimaryButtonProps } from './types';
 
-const PrimaryButton = ({  
+const PrimaryButton = ({
   children,
   isLoading = false,
   disabled,
   variant = 'contained',
-  to,
+  href,
   ...props
 }: PrimaryButtonProps) => {
   return (
     <Button
       variant={variant}
       disabled={disabled || isLoading}
-      component={to ? Link : 'button'}
-      to={to}
+      component={href ? Link : 'button'}
+      href={href}
       {...props}
     >
       {isLoading ? (
         <CircularProgress
           size={24}
-          sx={{ 
+          sx={{
             color: variant === 'contained' ? 'primary.contrastText' : 'primary.main',
-            mr: children ? 1 : 0 
+            mr: children ? 1 : 0
           }}
         />
       ) : null}

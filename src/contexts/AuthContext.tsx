@@ -45,8 +45,11 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
                     displayName: user.displayName,
                     photoURL: user.photoURL,
                 });
+                setIsAuthenticated(true);
             } else {
                 setUser(null);
+                setCurrentUser(null);
+                setIsAuthenticated(false);
             }
             setLoading(false);
         });

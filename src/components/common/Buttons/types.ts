@@ -3,7 +3,7 @@ import { ButtonProps as MuiButtonProps } from '@mui/material';
 export interface BaseButtonProps extends Omit<MuiButtonProps, 'variant'> {
   isLoading?: boolean;
   fullWidth?: boolean;
-  to?: string;
+  href?: string;
 }
 
 export interface PrimaryButtonProps extends BaseButtonProps {

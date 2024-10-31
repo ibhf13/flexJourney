@@ -6,13 +6,14 @@ import Router from '@/components/common/Router/Router';
 import GlobalStyles from '@/styles/globalStyles';
 import { NavigationProvider } from '@/contexts/NavigationContext';
 import { AuthProvider } from '@/contexts/AuthContext';
+import { GlobalStyles as MuiGlobalStyles } from '@mui/material';
 
 function App() {
   return (
 
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      {GlobalStyles}
+      <MuiGlobalStyles styles={GlobalStyles} />
       <NavigationProvider>
         <AuthProvider>
           <NotificationProvider>
