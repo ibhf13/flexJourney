@@ -1,9 +1,9 @@
 import { Container, Grid, Typography, Box, CircularProgress, Alert } from '@mui/material'
 import { useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { PlanCard } from '../features/workout/components/PlanCard'
-import { useWorkoutContext } from '../features/workout/contexts/WorkoutContext'
-import { useWorkoutPlans } from '../features/workout/hooks/useWorkoutPlans'
+import { PlanCard } from '@features/workout/components/PlanCard'
+import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
+import { useWorkoutPlans } from '@/features/workout/hooks/useWorkoutPlans'
 
 import { WorkoutPlan } from '@/features/workout/types/WorkoutTypes'
 
