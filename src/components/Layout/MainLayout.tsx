@@ -7,8 +7,6 @@ import { useNavigation } from '@/contexts/NavigationContext'
 const MainLayout = () => {
   const { isSidebarOpen, toggleSidebar } = useNavigation()
 
-  console.log({ isSidebarOpen, toggleSidebar });
-
   return (
     <Box
       sx={{
