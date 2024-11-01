@@ -22,8 +22,6 @@ export const NavigationProvider: React.FC<NavigationProviderProps> = ({ children
     setState((prev) => ({
       ...prev,
       isMobileMenuOpen: !prev.isMobileMenuOpen,
-      // Close other menus when mobile menu is toggled
-      isProfileMenuOpen: false,
     }))
   }, [])
 
@@ -31,7 +29,6 @@ export const NavigationProvider: React.FC<NavigationProviderProps> = ({ children
     setState((prev) => ({
       ...prev,
       isProfileMenuOpen: !prev.isProfileMenuOpen,
-      // Close other menus when profile menu is toggled
       isMobileMenuOpen: false,
     }))
   }, [])

@@ -13,7 +13,7 @@ import {
   History as HistoryIcon,
   Person as ProfileIcon,
 } from '@mui/icons-material'
-import { Link, useLocation } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { SideDrawer } from '../common/Popups'
 import { SidebarProps } from './types'
 import { PrimaryButton } from '../common/Buttons'
@@ -30,7 +30,6 @@ const navigationItems = [
 
 const MobileMenu = ({ open, onClose }: SidebarProps) => {
   const isAuthenticated = useAuth()
-  const location = useLocation()
   const { activeRoute } = useNavigation()
 
   return (
