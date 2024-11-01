@@ -2,6 +2,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import CssBaseline from '@mui/material/CssBaseline'
 import { NotificationProvider } from '@/features/Feedback'
 import { WorkoutProvider } from '@/features/workout/contexts/WorkoutContext'
+import { ExerciseProvider } from '@/features/workout/contexts/ExerciseContext'
 import theme from '@/styles/theme'
 import GlobalStyles from '@/styles/globalStyles'
 import { NavigationProvider } from '@/contexts/NavigationContext'
@@ -18,7 +19,9 @@ function App() {
         <AuthProvider>
           <NotificationProvider>
             <WorkoutProvider>
-              <AppRouter />
+              <ExerciseProvider>
+                <AppRouter />
+              </ExerciseProvider>
             </WorkoutProvider>
           </NotificationProvider>
         </AuthProvider>

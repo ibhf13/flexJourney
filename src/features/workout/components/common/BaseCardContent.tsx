@@ -2,12 +2,14 @@ import { CardContent, Typography, Box, Chip } from '@mui/material'
 import { DifficultyLevel } from '../../types/WorkoutTypes'
 import { DifficultyChip } from './DifficultyChip'
 import { ellipsisTextStyles } from '../../utils/cardStyles'
+import { ReactNode } from 'react'
 
 interface BaseCardContentProps {
     title: string
     description: string
     level: DifficultyLevel
     exercisesCount?: number
+    children?: ReactNode
 }
 
 export const BaseCardContent = ({
@@ -15,6 +17,7 @@ export const BaseCardContent = ({
     description,
     level,
     exercisesCount,
+    children,
 }: BaseCardContentProps) => (
     <CardContent>
         <Typography
@@ -44,17 +47,20 @@ export const BaseCardContent = ({
                 gap: 1
             }}
         >
-            <Chip
-                label={`${exercisesCount} exercises`}
-                color="primary"
-                size="small"
-                variant="outlined"
-                aria-label={`Contains ${exercisesCount} exercises`}
-            />
+            {exercisesCount !== undefined && (
+                <Chip
+                    label={`${exercisesCount} exercises`}
+                    color="primary"
+                    size="small"
+                    variant="outlined"
+                    aria-label={`Contains ${exercisesCount} exercises`}
+                />
+            )}
             <DifficultyChip
                 level={level}
                 aria-label={`Difficulty level: ${level}`}
             />
         </Box>
+        {children}
     </CardContent >
 )

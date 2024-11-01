@@ -6,6 +6,7 @@ import Signup from '@/pages/Signup'
 import ResetPassword from '@/pages/ResetPassword'
 import { PlanSelectionPage } from '@/pages/workout/PlanSelectionPage'
 import { PlanDetailsPage } from '@/pages/workout/PlanDetailsPage'
+import { ExerciseListPage } from '@/pages/ExerciseListPage'
 
 export const publicRoutes = [
     {
@@ -37,6 +38,10 @@ export const privateRoutes: RouteObject = {
         {
             path: '/plan/:planId',
             element: <PlanDetailsPage />,
+        },
+        {
+            path: '/plan/:planId/day/:dayId',
+            element: <ExerciseListPage />
         }
     ],
 }
