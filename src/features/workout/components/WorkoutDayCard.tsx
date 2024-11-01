@@ -1,55 +1,38 @@
-import { Card, CardContent, CardMedia, Typography, CardActionArea, Chip, Box } from '@mui/material'
 import { WorkoutDay } from '../types/WorkoutTypes'
+import { BaseWorkoutCard } from './common/BaseWorkoutCard'
+import { BaseCardContent } from './common/BaseCardContent'
 
 interface WorkoutDayCardProps {
     day: WorkoutDay
     onClick: (day: WorkoutDay) => void
+    isLoading?: boolean
 }
-export const WorkoutDayCard = ({ day, onClick }: WorkoutDayCardProps) => {
-    const handleClick = () => onClick(day)
+
+export const WorkoutDayCard = ({
+    day,
+    onClick,
+    isLoading = false
+}: WorkoutDayCardProps) => {
+    const handleClick = () => {
+        if (!isLoading) {
+            onClick(day)
+        }
+    }
 
     return (
-        <Card
-            sx={{
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-                transition: 'transform 0.2s',
-                '&:hover': {
-                    transform: 'scale(1.02)',
-                },
-            }}
+        <BaseWorkoutCard
+            title={day.title}
+            imageUrl={day.imageUrl}
+            imageHeight={200}
+            isLoading={isLoading}
+            onClick={handleClick}
         >
-            <CardActionArea onClick={handleClick} sx={{ height: '100%' }}>
-                <CardMedia component="img" height="200" image={day.imageUrl} alt={day.title} />
-                <CardContent>
-                    <Typography gutterBottom variant="h5" component="div">
-                        {day.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-                        {day.description}
-                    </Typography>
-                    <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                        <Chip
-                            label={`${day.exercises.length} exercises`}
-                            color="primary"
-                            size="small"
-                            variant="outlined"
-                        />
-                        <Chip
-                            label={day.level}
-                            color={
-                                day.level === 'Beginner'
-                                    ? 'success'
-                                    : day.level === 'Intermediate'
-                                        ? 'warning'
-                                        : 'error'
-                            }
-                            size="small"
-                        />
-                    </Box>
-                </CardContent>
-            </CardActionArea>
-        </Card>
+            <BaseCardContent
+                title={day.title}
+                description={day.description}
+                level={day.level}
+                exercisesCount={day.exercises.length}
+            />
+        </BaseWorkoutCard>
     )
 }

@@ -1,49 +1,37 @@
-import { Card, CardContent, CardMedia, Typography, CardActionArea, Chip } from '@mui/material'
-import { WorkoutPlan } from '@/features/workout/types/WorkoutTypes'
+import { WorkoutPlan } from '../types/WorkoutTypes'
+import { BaseWorkoutCard } from './common/BaseWorkoutCard'
+import { BaseCardContent } from './common/BaseCardContent'
+
 
 interface PlanCardProps {
   plan: WorkoutPlan
   onClick: (plan: WorkoutPlan) => void
+  isLoading?: boolean
 }
 
-export const PlanCard = ({ plan, onClick }: PlanCardProps) => {
-  const handleClick = () => onClick(plan)
+export const PlanCard = ({ plan, onClick, isLoading = false }: PlanCardProps) => {
+
+  const exercisesCount = plan.days.reduce((acc, day) => acc + day.exercises.length, 0)
+
+  const handleClick = () => {
+    if (!isLoading) {
+      onClick(plan)
+    }
+  }
 
   return (
-    <Card
-      sx={{
-        maxWidth: 345,
-        height: '100%',
-        display: 'flex',
-        flexDirection: 'column',
-        transition: 'transform 0.2s',
-        '&:hover': {
-          transform: 'scale(1.02)',
-        },
-      }}
+    <BaseWorkoutCard
+      title={plan.title}
+      imageUrl={plan.imageUrl}
+      isLoading={isLoading}
+      onClick={handleClick}
     >
-      <CardActionArea onClick={handleClick} sx={{ height: '100%' }}>
-        <CardMedia component="img" height="140" image={plan.imageUrl} alt={plan.title} />
-        <CardContent>
-          <Typography gutterBottom variant="h5" component="div">
-            {plan.title}
-          </Typography>
-          <Typography variant="body2" color="text.secondary" sx={{ mb: 2 }}>
-            {plan.description}
-          </Typography>
-          <Chip
-            label={plan.level}
-            color={
-              plan.level === 'Beginner'
-                ? 'success'
-                : plan.level === 'Intermediate'
-                  ? 'warning'
-                  : 'error'
-            }
-            size="small"
-          />
-        </CardContent>
-      </CardActionArea>
-    </Card>
+      <BaseCardContent
+        title={plan.title}
+        description={plan.description}
+        level={plan.level}
+        exercisesCount={exercisesCount}
+      />
+    </BaseWorkoutCard>
   )
 }
