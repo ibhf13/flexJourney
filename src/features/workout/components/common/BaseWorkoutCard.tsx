@@ -2,7 +2,7 @@ import { Card, CardActionArea } from '@mui/material'
 import { sharedCardStyles } from '../../utils/cardStyles'
 import { CardSkeleton } from './CardSkeleton'
 import { MediaWithSkeleton } from './MediaWithSkeleton'
-import { ReactNode, useCallback, useState } from 'react'
+import { ReactNode, useCallback } from 'react'
 
 interface BaseWorkoutCardProps {
     title: string
@@ -21,9 +21,6 @@ export const BaseWorkoutCard = ({
     onClick,
     children
 }: BaseWorkoutCardProps) => {
-    const [imageLoaded, setImageLoaded] = useState(false)
-    const handleImageLoad = () => setImageLoaded(true)
-
     const handleKeyPress = useCallback(
         (event: React.KeyboardEvent) => {
             if (event.key === 'Enter' || event.key === ' ') {
@@ -49,8 +46,6 @@ export const BaseWorkoutCard = ({
                 <MediaWithSkeleton
                     height={imageHeight}
                     imageUrl={imageUrl}
-                    imageLoaded={imageLoaded}
-                    onLoad={handleImageLoad}
                 />
                 {children}
             </CardActionArea>

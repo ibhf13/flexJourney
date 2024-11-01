@@ -5,7 +5,7 @@ import { fetchWorkoutPlanById } from '../api/mockData'
 
 interface PlanDetailsState {
     isLoading: boolean
-    error: string | null
+    error: Error | null
     currentPlan: WorkoutPlan | null
 }
 
@@ -31,7 +31,7 @@ export const usePlanDetails = (planId: string | undefined) => {
                 if (!plan) {
                     setState(prev => ({
                         ...prev,
-                        error: 'Workout plan not found',
+                        error: new Error('Workout plan not found'),
                         isLoading: false
                     }))
                     return
@@ -45,7 +45,7 @@ export const usePlanDetails = (planId: string | undefined) => {
             } catch (err) {
                 setState(prev => ({
                     ...prev,
-                    error: 'Failed to load workout plan',
+                    error: new Error('Failed to load workout plan'),
                     isLoading: false
                 }))
                 console.error(err)
