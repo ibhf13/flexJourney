@@ -1,31 +1,24 @@
-import {
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  alpha,
-} from '@mui/material';
+import { Menu, MenuItem, ListItemIcon, ListItemText, Divider, alpha } from '@mui/material'
 import {
   Person as PersonIcon,
   Settings as SettingsIcon,
   ExitToApp as LogoutIcon,
-} from '@mui/icons-material';
-import { Link } from 'react-router-dom';
-import { useLogout } from '@/features/auth/hooks/useLogout';
+} from '@mui/icons-material'
+import { Link } from 'react-router-dom'
+import { useLogout } from '@/features/auth/hooks/useLogout'
 
 interface UserMenuProps {
-  anchorEl: HTMLElement | null;
-  onClose: () => void;
+  anchorEl: HTMLElement | null
+  onClose: () => void
 }
 
 const UserMenu = ({ anchorEl, onClose }: UserMenuProps) => {
-  const { handleLogout } = useLogout();
+  const { handleLogout } = useLogout()
 
   const handleLogoutClick = async () => {
-    onClose();
-    await handleLogout();
-  };
+    onClose()
+    await handleLogout()
+  }
 
   return (
     <Menu
@@ -83,7 +76,7 @@ const UserMenu = ({ anchorEl, onClose }: UserMenuProps) => {
         <ListItemText primary="Logout" />
       </MenuItem>
     </Menu>
-  );
-};
+  )
+}
 
-export default UserMenu;
+export default UserMenu

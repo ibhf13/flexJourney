@@ -1,5 +1,5 @@
-import { Alert as MuiAlert, AlertTitle } from '@mui/material';
-import { AlertProps } from '../types';
+import { Alert as MuiAlert, AlertTitle } from '@mui/material'
+import { AlertProps } from '../types'
 
 const Alert = ({
   severity = 'info',
@@ -8,16 +8,11 @@ const Alert = ({
   ...props
 }: AlertProps & { title?: string }) => {
   return (
-    <MuiAlert
-      severity={severity}
-      elevation={6}
-      variant="filled"
-      {...props}
-    >
+    <MuiAlert severity={severity} elevation={6} variant="filled" {...props}>
       {title && <AlertTitle>{title}</AlertTitle>}
       {children}
     </MuiAlert>
-  );
-};
+  )
+}
 
-export default Alert;
+export default Alert

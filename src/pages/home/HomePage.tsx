@@ -1,51 +1,53 @@
-import { useState } from 'react';
-import { Typography, Box, useTheme } from '@mui/material';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
-import TrendingUpIcon from '@mui/icons-material/TrendingUp';
-import PlayCircleIcon from '@mui/icons-material/PlayCircle';
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import { useState } from 'react'
+import { Typography, Box, useTheme } from '@mui/material'
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
+import TrendingUpIcon from '@mui/icons-material/TrendingUp'
+import PlayCircleIcon from '@mui/icons-material/PlayCircle'
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 
-import { Container, GridContainer, GridItem, Paper } from '@/components/common/StructureComponents';
-import { PrimaryButton, SecondaryButton } from '@/components/common/Buttons';
-import { DialogPopup } from '@/components/common/Popups';
-import { TextField, SelectField } from '@/components/common/Forms';
-import { useNotification } from '@/features/Feedback';
-import { useNavigate } from 'react-router-dom';
+import { Container, GridContainer, GridItem, Paper } from '@/components/common/StructureComponents'
+import { PrimaryButton, SecondaryButton } from '@/components/common/Buttons'
+import { DialogPopup } from '@/components/common/Popups'
+import { TextField, SelectField } from '@/components/common/Forms'
+import { useNotification } from '@/features/Feedback'
+import { useNavigate } from 'react-router-dom'
 
 const HomePage = () => {
-  const theme = useTheme();
-  const navigate = useNavigate();
-  const { showNotification } = useNotification();
-  const [dialogOpen, setDialogOpen] = useState(false);
+  const theme = useTheme()
+  const navigate = useNavigate()
+  const { showNotification } = useNotification()
+  const [dialogOpen, setDialogOpen] = useState(false)
 
   const handleGetStarted = () => {
     showNotification({
-      message: 'Welcome to FitLife! Let\'s begin your fitness journey.',
-      severity: 'success'
-    });
-    navigate('/plan'); // Navigate to plan selection page
-  };
+      message: "Welcome to FitLife! Let's begin your fitness journey.",
+      severity: 'success',
+    })
+    navigate('/plan') // Navigate to plan selection page
+  }
 
   const workoutLevels = [
     { value: 'beginner', label: 'Beginner' },
     { value: 'intermediate', label: 'Intermediate' },
-    { value: 'advanced', label: 'Advanced' }
-  ];
+    { value: 'advanced', label: 'Advanced' },
+  ]
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
       {/* Hero Section */}
-      <Box sx={{
-        py: { xs: 4, md: 8 },
-        textAlign: 'center',
-        color: 'common.white' // Add this for better contrast on dark background
-      }}>
+      <Box
+        sx={{
+          py: { xs: 4, md: 8 },
+          textAlign: 'center',
+          color: 'common.white', // Add this for better contrast on dark background
+        }}
+      >
         <Typography
           variant="h1"
           gutterBottom
           sx={{
             fontSize: { xs: '2.5rem', md: '3.5rem' },
-            fontWeight: 'bold'
+            fontWeight: 'bold',
           }}
         >
           Transform Your Life with FitLife
@@ -54,17 +56,13 @@ const HomePage = () => {
           variant="h5"
           sx={{
             mb: 4,
-            color: 'grey.400' // Lighter grey for better readability
+            color: 'grey.400', // Lighter grey for better readability
           }}
         >
           Personalized workouts, expert guidance, and a supportive community
         </Typography>
         <Box sx={{ display: 'flex', gap: 2, justifyContent: 'center' }}>
-          <PrimaryButton
-            startIcon={<FitnessCenterIcon />}
-            onClick={handleGetStarted}
-            size="large"
-          >
+          <PrimaryButton startIcon={<FitnessCenterIcon />} onClick={handleGetStarted} size="large">
             Get Started
           </PrimaryButton>
           <SecondaryButton
@@ -83,18 +81,18 @@ const HomePage = () => {
           {
             icon: <FitnessCenterIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />,
             title: 'Custom Workouts',
-            description: 'Tailored fitness programs designed for your goals'
+            description: 'Tailored fitness programs designed for your goals',
           },
           {
             icon: <TrendingUpIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />,
             title: 'Track Progress',
-            description: 'Monitor your fitness journey with detailed analytics'
+            description: 'Monitor your fitness journey with detailed analytics',
           },
           {
             icon: <CalendarTodayIcon sx={{ fontSize: 48, color: 'primary.main', mb: 2 }} />,
             title: 'Schedule Workouts',
-            description: 'Plan your routine with our smart calendar'
-          }
+            description: 'Plan your routine with our smart calendar',
+          },
         ].map((feature, index) => (
           <GridItem key={index} xs={12} md={4}>
             <Paper
@@ -103,8 +101,8 @@ const HomePage = () => {
                 bgcolor: 'background.paper',
                 transition: 'transform 0.2s',
                 '&:hover': {
-                  transform: 'translateY(-4px)'
-                }
+                  transform: 'translateY(-4px)',
+                },
               }}
             >
               <Box sx={{ textAlign: 'center', p: 3 }}>
@@ -112,9 +110,7 @@ const HomePage = () => {
                 <Typography variant="h5" gutterBottom>
                   {feature.title}
                 </Typography>
-                <Typography color="text.secondary">
-                  {feature.description}
-                </Typography>
+                <Typography color="text.secondary">{feature.description}</Typography>
               </Box>
             </Paper>
           </GridItem>
@@ -126,12 +122,14 @@ const HomePage = () => {
         <Typography variant="h4" gutterBottom>
           Quick Start
         </Typography>
-        <Box sx={{
-          display: 'flex',
-          gap: 2,
-          flexWrap: 'wrap',
-          alignItems: 'flex-start'
-        }}>
+        <Box
+          sx={{
+            display: 'flex',
+            gap: 2,
+            flexWrap: 'wrap',
+            alignItems: 'flex-start',
+          }}
+        >
           <TextField
             label="Search Workouts"
             placeholder="E.g., Yoga, HIIT..."
@@ -143,9 +141,7 @@ const HomePage = () => {
             defaultValue="beginner"
             sx={{ minWidth: 200 }}
           />
-          <PrimaryButton>
-            Find Workouts
-          </PrimaryButton>
+          <PrimaryButton>Find Workouts</PrimaryButton>
         </Box>
       </Paper>
 
@@ -164,7 +160,7 @@ const HomePage = () => {
         </Box>
       </DialogPopup>
     </Container>
-  );
-};
+  )
+}
 
-export default HomePage;
+export default HomePage

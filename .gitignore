@@ -14,4 +14,8 @@ dist/
 .idea
 *.md
 *.env
+*.cache
+
+# firebase
+.firebase/*
 

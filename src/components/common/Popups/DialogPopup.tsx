@@ -7,9 +7,9 @@ import {
   Typography,
   useTheme,
   useMediaQuery,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import { DialogPopupProps } from './types';
+} from '@mui/material'
+import CloseIcon from '@mui/icons-material/Close'
+import { DialogPopupProps } from './types'
 const DialogPopup = ({
   open,
   onClose,
@@ -24,15 +24,15 @@ const DialogPopup = ({
   preventBackdropClick = false,
   customDialogProps,
 }: DialogPopupProps) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
   const handleBackdropClick = (event: React.MouseEvent) => {
     if (preventBackdropClick) {
-      event.stopPropagation();
+      event.stopPropagation()
     } else {
-      onClose();
+      onClose()
     }
-  };
+  }
   return (
     <Dialog
       open={open}
@@ -50,7 +50,7 @@ const DialogPopup = ({
         id="dialog-title"
         sx={{
           pr: showCloseButton ? 6 : 3,
-          pb: subtitle ? 0 : 2
+          pb: subtitle ? 0 : 2,
         }}
       >
         <Typography variant="h6" component="div">
@@ -79,13 +79,13 @@ const DialogPopup = ({
         sx={{
           height: fullHeight ? '80vh' : 'auto',
           display: 'flex',
-          flexDirection: 'column'
+          flexDirection: 'column',
         }}
       >
         {children}
       </DialogContent>
       {actions && <DialogActions>{actions}</DialogActions>}
     </Dialog>
-  );
-};
-export default DialogPopup;
+  )
+}
+export default DialogPopup

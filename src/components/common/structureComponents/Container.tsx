@@ -1,5 +1,5 @@
-import { Container as MuiContainer, Box } from '@mui/material';
-import { ContainerProps } from './types';
+import { Container as MuiContainer, Box } from '@mui/material'
+import { ContainerProps } from './types'
 
 const Container = ({
   children,
@@ -19,16 +19,13 @@ const Container = ({
     </Box>
   ) : (
     children
-  );
+  )
 
   return (
-    <MuiContainer
-      maxWidth={maxWidth}
-      {...props}
-    >
+    <MuiContainer maxWidth={maxWidth} {...props}>
       {content}
     </MuiContainer>
-  );
-};
+  )
+}
 
-export default Container;
+export default Container

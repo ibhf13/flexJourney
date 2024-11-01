@@ -1,5 +1,5 @@
-import { Button, CircularProgress, Link } from '@mui/material';
-import { PrimaryButtonProps } from './types';
+import { Button, CircularProgress, Link } from '@mui/material'
+import { PrimaryButtonProps } from './types'
 
 const PrimaryButton = ({
   children,
@@ -22,13 +22,13 @@ const PrimaryButton = ({
           size={24}
           sx={{
             color: variant === 'contained' ? 'primary.contrastText' : 'primary.main',
-            mr: children ? 1 : 0
+            mr: children ? 1 : 0,
           }}
         />
       ) : null}
       {children}
     </Button>
-  );
-};
+  )
+}
 
-export default PrimaryButton;
+export default PrimaryButton
