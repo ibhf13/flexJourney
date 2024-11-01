@@ -18,7 +18,11 @@ const navigationItems = [
 ]
 
 const Navigation = ({ orientation = 'horizontal' }: NavigationProps) => {
-  const { activeRoute } = useNavigation()
+  const { activeRoute, setActiveRoute } = useNavigation()
+
+  const handleNavigation = (path: string) => {
+    setActiveRoute(path)
+  }
 
   return (
     <List component="nav" sx={{ width: '100%' }}>
@@ -28,6 +32,7 @@ const Navigation = ({ orientation = 'horizontal' }: NavigationProps) => {
             component={Link}
             to={item.path}
             selected={activeRoute === item.path}
+            onClick={() => handleNavigation(item.path)}
             sx={{
               minHeight: 48,
               borderRadius: 1,
