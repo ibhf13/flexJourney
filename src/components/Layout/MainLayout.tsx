@@ -5,7 +5,9 @@ import Sidebar from './Sidebar'
 import { useNavigation } from '@/contexts/NavigationContext'
 
 const MainLayout = () => {
-  const { isSidebarOpen, toggleMobileMenu } = useNavigation()
+  const { isSidebarOpen, toggleSidebar } = useNavigation()
+
+  console.log({ isSidebarOpen, toggleSidebar });
 
   return (
     <Box
@@ -17,8 +19,8 @@ const MainLayout = () => {
         backgroundColor: '#121212',
       }}
     >
-      <Header onMobileMenuOpen={toggleMobileMenu} />
-      <Sidebar open={isSidebarOpen} onClose={toggleMobileMenu} />
+      <Header toggleSidebar={toggleSidebar} />
+      <Sidebar open={isSidebarOpen} onClose={toggleSidebar} />
 
       <Box
         component="main"

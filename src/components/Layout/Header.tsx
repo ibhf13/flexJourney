@@ -10,18 +10,19 @@ import {
   Typography,
 } from '@mui/material'
 import MenuIcon from '@mui/icons-material/Menu'
-import { Link, useNavigate } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { HeaderProps } from './types'
 import UserMenu from './UserMenu'
 import { PrimaryButton } from '../common/Buttons'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
+import { useAuth } from '@/contexts/AuthContext'
 
-const Header = ({ onMobileMenuOpen }: HeaderProps) => {
+
+const Header = ({ toggleSidebar }: HeaderProps) => {
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null)
   const theme = useTheme()
-  const navigate = useNavigate()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const isAuthenticated = true // For testing, replace with actual auth state
+  const isAuthenticated = useAuth()
 
   const handleUserMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setUserMenuAnchor(event.currentTarget)
@@ -31,11 +32,6 @@ const Header = ({ onMobileMenuOpen }: HeaderProps) => {
     setUserMenuAnchor(null)
   }
 
-  const handleLogout = () => {
-    // Implement your logout logic here
-    setUserMenuAnchor(null)
-    navigate('/login')
-  }
 
   return (
     <AppBar
@@ -52,7 +48,7 @@ const Header = ({ onMobileMenuOpen }: HeaderProps) => {
     >
       <Toolbar sx={{ height: '100%' }}>
         {isMobile && (
-          <IconButton color="primary" onClick={onMobileMenuOpen} sx={{ mr: 2 }}>
+          <IconButton color="primary" onClick={toggleSidebar} sx={{ mr: 2 }}>
             <MenuIcon />
           </IconButton>
         )}

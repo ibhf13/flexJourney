@@ -1,7 +1,7 @@
 import { ReactNode } from 'react'
 
 export interface HeaderProps {
-  onMobileMenuOpen: () => void
+  toggleSidebar: () => void
 }
 
 export interface FooterProps {
