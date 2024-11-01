@@ -4,38 +4,39 @@ import HomePage from '@/pages/home/HomePage'
 import Login from '@/pages/Login'
 import Signup from '@/pages/Signup'
 import ResetPassword from '@/pages/ResetPassword'
-import { PlanSelectionPage } from '@/pages/PlanSelectionPage'
+import { PlanSelectionPage } from '@/pages/workout/PlanSelectionPage'
+import { PlanDetailsPage } from '@/pages/workout/PlanDetailsPage'
 
 export const publicRoutes = [
-  {
-    path: '/login',
-    element: <Login />,
-  },
-  {
-    path: '/signup',
-    element: <Signup />,
-  },
-  {
-    path: '/reset-password',
-    element: <ResetPassword />,
-  },
+    {
+        path: '/login',
+        element: <Login />,
+    },
+    {
+        path: '/signup',
+        element: <Signup />,
+    },
+    {
+        path: '/reset-password',
+        element: <ResetPassword />,
+    },
 ]
 
 export const privateRoutes: RouteObject = {
-  path: '/',
-  element: <MainLayout />,
-  children: [
-    {
-      path: '/',
-      element: <HomePage />,
-    },
-    {
-      path: 'plan',
-      element: <PlanSelectionPage />,
-    },
-    {
-      path: 'plan/:planId',
-      element: <PlanSelectionPage />,
-    },
-  ],
+    path: '/',
+    element: <MainLayout />,
+    children: [
+        {
+            path: '/',
+            element: <HomePage />,
+        },
+        {
+            path: 'plan',
+            element: <PlanSelectionPage />,
+        },
+        {
+            path: '/plan/:planId',
+            element: <PlanDetailsPage />,
+        }
+    ],
 }
