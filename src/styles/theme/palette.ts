@@ -1,4 +1,4 @@
-import { PaletteOptions } from '@mui/material';
+import { PaletteOptions } from '@mui/material'
 
 export const palette: PaletteOptions = {
   mode: 'dark',
@@ -28,4 +28,4 @@ export const palette: PaletteOptions = {
     secondary: 'rgba(255, 255, 255, 0.7)',
     disabled: 'rgba(255, 255, 255, 0.5)',
   },
-};
+}

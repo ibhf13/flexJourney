@@ -1,5 +1,5 @@
-import { Button, CircularProgress } from '@mui/material';
-import { SecondaryButtonProps } from './types';
+import { Button, CircularProgress } from '@mui/material'
+import { SecondaryButtonProps } from './types'
 
 const SecondaryButton = ({
   children,
@@ -9,24 +9,19 @@ const SecondaryButton = ({
   ...props
 }: SecondaryButtonProps) => {
   return (
-    <Button
-      variant={variant}
-      color="secondary"
-      disabled={disabled || isLoading}
-      {...props}
-    >
+    <Button variant={variant} color="secondary" disabled={disabled || isLoading} {...props}>
       {isLoading ? (
         <CircularProgress
           size={24}
-          sx={{ 
+          sx={{
             color: 'secondary.main',
-            mr: children ? 1 : 0 
+            mr: children ? 1 : 0,
           }}
         />
       ) : null}
       {children}
     </Button>
-  );
-};
+  )
+}
 
-export default SecondaryButton;
+export default SecondaryButton

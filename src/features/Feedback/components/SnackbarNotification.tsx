@@ -1,5 +1,5 @@
-import { Snackbar, Alert } from '@mui/material';
-import { NotificationProps } from '../types';
+import { Snackbar, Alert } from '@mui/material'
+import { NotificationProps } from '../types'
 
 const SnackbarNotification = ({
   message,
@@ -11,10 +11,10 @@ const SnackbarNotification = ({
 }: NotificationProps & { onClose: () => void }) => {
   const handleClose = (event?: React.SyntheticEvent | Event, reason?: string) => {
     if (reason === 'clickaway') {
-      return;
+      return
     }
-    onClose();
-  };
+    onClose()
+  }
 
   return (
     <Snackbar
@@ -24,16 +24,11 @@ const SnackbarNotification = ({
       anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       action={action}
     >
-      <Alert
-        onClose={handleClose}
-        severity={severity}
-        sx={{ width: '100%' }}
-        variant="filled"
-      >
+      <Alert onClose={handleClose} severity={severity} sx={{ width: '100%' }} variant="filled">
         {message}
       </Alert>
     </Snackbar>
-  );
-};
+  )
+}
 
-export default SnackbarNotification;
+export default SnackbarNotification
