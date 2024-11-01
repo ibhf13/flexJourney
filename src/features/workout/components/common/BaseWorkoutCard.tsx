@@ -1,4 +1,4 @@
-import { Card, CardActionArea } from '@mui/material'
+import { Card, CardActionArea, Theme, SxProps } from '@mui/material'
 import { sharedCardStyles } from '../../utils/cardStyles'
 import { CardSkeleton } from './CardSkeleton'
 import { MediaWithSkeleton } from './MediaWithSkeleton'
@@ -11,6 +11,7 @@ interface BaseWorkoutCardProps {
     isLoading?: boolean
     onClick: () => void
     children: ReactNode
+    sx?: SxProps<Theme>
 }
 
 export const BaseWorkoutCard = ({
@@ -19,7 +20,8 @@ export const BaseWorkoutCard = ({
     imageHeight = 140,
     isLoading = false,
     onClick,
-    children
+    children,
+    sx
 }: BaseWorkoutCardProps) => {
     const handleKeyPress = useCallback(
         (event: React.KeyboardEvent) => {
@@ -36,7 +38,7 @@ export const BaseWorkoutCard = ({
     }
 
     return (
-        <Card sx={sharedCardStyles}>
+        <Card sx={sx ?? sharedCardStyles}>
             <CardActionArea
                 onClick={onClick}
                 onKeyPress={handleKeyPress}
