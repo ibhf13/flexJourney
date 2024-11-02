@@ -12,17 +12,18 @@ import {
     Box,
     useTheme,
     useMediaQuery,
-    Fade,
-    Slide,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { YoutubePlayer } from '@/components/common/VideoPlayer/YoutubePlayer';
 import { Exercise } from '../../types/WorkoutTypes';
-import { ConfirmationDialog } from '@/components/common/dialogs/ConfirmationDialog';
+import { ExerciseForm } from './forms/ExerciseForm';
+import { ExerciseFormData } from '../../types/ExerciseTypes';
+import { YoutubePlayer } from '@/components/common/VideoPlayer/YoutubePlayer';
 import { MediaWithSkeleton } from '../common/MediaWithSkeleton';
+import { ConfirmationDialog } from '@/components/common/dialogs/ConfirmationDialog';
+import { useExerciseContext } from '../../contexts/ExerciseContext';
 
-export interface ExerciseDetailModalProps {
+interface ExerciseDetailModalProps {
     exercise: Exercise;
     open: boolean;
     onClose: () => void;
@@ -36,13 +37,26 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
     const [showConfirmation, setShowConfirmation] = useState(false);
+    const [hasChanges, setHasChanges] = useState(false);
+    const { toggleExerciseCompletion } = useExerciseContext();
 
-    const handleClose = () => {
-        setShowConfirmation(true);
+    const handleFormSubmit = (data: ExerciseFormData) => {
+        toggleExerciseCompletion(exercise.id);
+        setHasChanges(false);
+        onClose();
+    };
+
+    const handleCancel = () => {
+        if (hasChanges) {
+            setShowConfirmation(true);
+        } else {
+            onClose();
+        }
     };
 
     const handleConfirmClose = () => {
         setShowConfirmation(false);
+        setHasChanges(false);
         onClose();
     };
 
@@ -54,27 +68,15 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
         <>
             <Dialog
                 open={open}
-                onClose={handleConfirmClose}
+                onClose={handleCancel}
                 maxWidth="lg"
                 fullWidth
                 fullScreen={isMobile}
-                TransitionComponent={isMobile ? Slide : Fade}
             >
                 <DialogTitle>
                     <Box display="flex" justifyContent="space-between" alignItems="center">
-                        <Typography variant="h5" component="h2">
-                            {exercise.title}
-                        </Typography>
-                        <IconButton
-                            onClick={handleConfirmClose}
-                            aria-label="close"
-                            sx={{
-                                transition: 'transform 0.2s',
-                                '&:hover': {
-                                    transform: 'rotate(90deg)',
-                                },
-                            }}
-                        >
+                        <Typography variant="h6">{exercise.title}</Typography>
+                        <IconButton onClick={handleCancel} size="small">
                             <CloseIcon />
                         </IconButton>
                     </Box>
@@ -99,59 +101,39 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
                             <Typography variant="body1" paragraph>
                                 {exercise.description}
                             </Typography>
-                            <Box
-                                mt={2}
-                                sx={{
-                                    display: 'flex',
-                                    gap: 2,
-                                    flexWrap: 'wrap'
-                                }}
-                            >
-                                <Typography variant="subtitle1" color="primary">
-                                    Level: {exercise.level}
-                                </Typography>
-                                <Typography variant="subtitle1" color="primary">
-                                    Category: {exercise.category}
-                                </Typography>
-                                <Typography variant="subtitle1" color="primary">
-                                    Rest Period: {exercise.defaultRestPeriod}s
-                                </Typography>
-                            </Box>
                         </Grid>
 
                         <Grid item xs={12} md={6}>
-                            <Accordion
-                                defaultExpanded
-                                sx={{
-                                    backgroundColor: 'background.paper',
-                                    boxShadow: theme.shadows[2],
-                                }}
-                            >
-                                <AccordionSummary
-                                    expandIcon={<ExpandMoreIcon />}
-                                    aria-controls="video-content"
-                                    id="video-header"
-                                >
-                                    <Typography variant="h6">Instruction Video</Typography>
+                            <Accordion defaultExpanded>
+                                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                                    <Typography variant="h6">Exercise Video</Typography>
                                 </AccordionSummary>
                                 <AccordionDetails>
-                                    <Box sx={{ width: '100%', position: 'relative' }}>
-                                        <YoutubePlayer videoUrl={exercise.videoUrl} />
-                                    </Box>
+                                    <YoutubePlayer videoUrl={exercise.videoUrl} />
                                 </AccordionDetails>
                             </Accordion>
+
+                            <Box mt={3}>
+                                <ExerciseForm
+                                    exerciseType={exercise.type as any}
+                                    defaultRestPeriod={exercise.defaultRestPeriod}
+                                    onSubmit={handleFormSubmit}
+                                    onCancel={handleCancel}
+                                    onChange={() => setHasChanges(true)}
+                                />
+                            </Box>
                         </Grid>
                     </Grid>
                 </DialogContent>
             </Dialog>
 
-            {/* <ConfirmationDialog
+            <ConfirmationDialog
                 open={showConfirmation}
-                title="Close Exercise Details"
-                message="Are you sure you want to close this exercise? Any unsaved progress will be lost."
+                title="Discard Changes?"
+                message="You have unsaved changes. Are you sure you want to close without saving?"
                 onConfirm={handleConfirmClose}
                 onCancel={handleCancelClose}
-            /> */}
+            />
         </>
     );
 };
