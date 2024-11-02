@@ -1,4 +1,4 @@
-export type DifficultyLevel = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert'
+export type DifficultyLevel = 'Beginner' | 'Intermediate' | 'Advanced'
 
 export interface WorkoutSet {
   id: string
@@ -15,10 +15,9 @@ export interface Exercise {
   imageUrl: string
   videoUrl: string
   level: DifficultyLevel
-  type: 'weight' | 'cardio' | 'bodyweight' | 'cable' | 'machine'
+  type: string
   defaultRestPeriod: number // in seconds
-  isCompleted?: boolean
-  sets?: WorkoutSet[]
+  category: string
 }
 
 export interface WorkoutDay {
