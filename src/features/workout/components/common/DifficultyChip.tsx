@@ -13,7 +13,6 @@ export const DifficultyChip = ({ level, ...props }: DifficultyChipProps) => {
             Beginner: 'success',
             Intermediate: 'warning',
             Advanced: 'error',
-            Expert: 'error'
         }
         return colorMap[level]
     }

@@ -24,6 +24,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'shoulder-press',
@@ -34,6 +35,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'tricep-dips',
@@ -44,6 +46,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'bodyweight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'incline-dumbbell-press',
@@ -54,6 +57,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'lateral-raises',
@@ -64,6 +68,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'weight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'tricep-pushdown',
@@ -74,6 +79,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'weight',
             defaultRestPeriod: 60,
+            category: ''
           },
         ],
       },
@@ -93,6 +99,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'bodyweight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'barbell-row',
@@ -103,6 +110,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'bicep-curl',
@@ -113,6 +121,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'weight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'face-pull',
@@ -123,6 +132,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'cable',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'hammer-curl',
@@ -133,6 +143,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'weight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'lat-pulldown',
@@ -143,6 +154,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'cable',
             defaultRestPeriod: 90,
+            category: ''
           },
         ],
       },
@@ -162,6 +174,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'leg-press',
@@ -172,6 +185,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'lunges',
@@ -182,6 +196,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'bodyweight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'calf-raise',
@@ -192,6 +207,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'weight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'leg-curl',
@@ -202,6 +218,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'machine',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'romanian-deadlift',
@@ -212,6 +229,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Intermediate',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
         ],
       },
@@ -240,6 +258,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'bench-press',
@@ -250,6 +269,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'barbell-row',
@@ -260,6 +280,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'bicep-curl',
@@ -270,6 +291,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'weight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'overhead-press',
@@ -280,6 +302,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'plank',
@@ -290,6 +313,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'bodyweight',
             defaultRestPeriod: 60,
+            category: ''
           },
         ],
       },
@@ -309,6 +333,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'incline-bench-press',
@@ -319,6 +344,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'lat-pulldown',
@@ -329,6 +355,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'cable',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'leg-extension',
@@ -339,6 +366,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'machine',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'tricep-extension',
@@ -349,6 +377,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'cable',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'side-plank',
@@ -359,6 +388,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'bodyweight',
             defaultRestPeriod: 60,
+            category: ''
           },
         ],
       },
@@ -378,6 +408,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'bodyweight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'push-up',
@@ -388,6 +419,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'bodyweight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'bent-over-row',
@@ -398,6 +430,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'leg-raise',
@@ -408,6 +441,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'bodyweight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'bicep-hammer-curl',
@@ -418,6 +452,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'weight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'mountain-climbers',
@@ -428,6 +463,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'bodyweight',
             defaultRestPeriod: 60,
+            category: ''
           },
         ],
       },
@@ -456,6 +492,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'lat-pulldown',
@@ -466,6 +503,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'cable',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'shoulder-press',
@@ -476,6 +514,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'bicep-curl',
@@ -486,6 +525,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'weight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'tricep-dips',
@@ -496,6 +536,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'bodyweight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'rear-delt-fly',
@@ -506,6 +547,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'weight',
             defaultRestPeriod: 60,
+            category: ''
           },
         ],
       },
@@ -525,6 +567,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'deadlift',
@@ -535,6 +578,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'leg-press',
@@ -545,6 +589,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'calf-raise',
@@ -555,6 +600,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'weight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'leg-curl',
@@ -565,6 +611,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'machine',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'bulgarian-split-squat',
@@ -575,6 +622,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'weight',
             defaultRestPeriod: 60,
+            category: ''
           },
         ],
       },
@@ -594,6 +642,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'weight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'lunges',
@@ -604,6 +653,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'bodyweight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'push-up',
@@ -614,6 +664,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'bodyweight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'chin-up',
@@ -624,6 +675,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'bodyweight',
             defaultRestPeriod: 90,
+            category: ''
           },
           {
             id: 'box-jump',
@@ -634,6 +686,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'bodyweight',
             defaultRestPeriod: 60,
+            category: ''
           },
           {
             id: 'kettlebell-swing',
@@ -644,6 +697,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Advanced',
             type: 'weight',
             defaultRestPeriod: 60,
+            category: ''
           },
         ],
       },
