@@ -57,21 +57,20 @@ export const ExerciseCard = ({ exercise, onSelect, isCompleted = false }: Exerci
                 title={exercise.title}
                 description={exercise.description}
                 level={exercise.level as DifficultyLevel}
+                category={exercise.category}
             >
-                <Box sx={{ mt: 1, display: 'flex', gap: 1 }}>
-                    <Chip
-                        label={`Rest: ${exercise.defaultRestPeriod}s`}
-                        size="small"
-                        variant="outlined"
-                        color="primary"
-                    />
-                    <Chip
-                        label={exercise.type}
-                        size="small"
-                        variant="outlined"
-                        color="secondary"
-                    />
-                </Box>
+                <Chip
+                    label={`Rest: ${exercise.defaultRestPeriod}s`}
+                    size="small"
+                    variant="outlined"
+                    color="primary"
+                />
+                <Chip
+                    label={exercise.type}
+                    size="small"
+                    variant="outlined"
+                    color="secondary"
+                />
             </BaseCardContent>
         </BaseCard>
     )

@@ -1,29 +1,40 @@
-import { Box, CardMedia, Skeleton } from '@mui/material'
+import { CardMedia, Skeleton } from '@mui/material'
 import { useState } from 'react'
-import { MediaWithSkeletonProps } from './types'
+import fallbackImage from '@/assets/images/dumbells.jpg'
 
-const MediaWithSkeleton = ({
-    height,
-    imageUrl,
-    mediaStyles
-}: MediaWithSkeletonProps) => {
-    const [imageLoaded, setImageLoaded] = useState(false)
+interface MediaWithSkeletonProps {
+    imageUrl?: string
+    height: number
+    alt?: string
+    mediaStyles?: React.CSSProperties
+}
+
+const MediaWithSkeleton = ({ imageUrl, height, alt = 'content image', mediaStyles }: MediaWithSkeletonProps) => {
+    const [isLoading, setIsLoading] = useState(true)
+    const [hasError, setHasError] = useState(false)
+
+    const handleLoad = () => {
+        setIsLoading(false)
+    }
+
+    const handleError = () => {
+        setIsLoading(false)
+        setHasError(true)
+    }
 
     return (
-        <Box sx={{ position: 'relative' }}>
-            {!imageLoaded && <Skeleton variant="rectangular" height={height} />}
+        <>
+            {isLoading && <Skeleton variant="rectangular" height={height} />}
             <CardMedia
                 component="img"
                 height={height}
-                image={imageUrl}
-                alt=""
-                sx={{
-                    ...mediaStyles,
-                    display: imageLoaded ? 'block' : 'none'
-                }}
-                onLoad={() => setImageLoaded(true)}
+                image={hasError ? fallbackImage : imageUrl}
+                alt={alt}
+                onLoad={handleLoad}
+                onError={handleError}
+                sx={{ display: isLoading ? 'none' : 'block', ...mediaStyles }}
             />
-        </Box>
+        </>
     )
 }
 

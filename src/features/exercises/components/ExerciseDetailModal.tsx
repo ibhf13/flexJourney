@@ -117,6 +117,10 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
                         <ExerciseDetails
                             imageUrl={exercise.imageUrl}
                             description={exercise.description}
+                            level={exercise.level}
+                            category={exercise.category}
+                            type={exercise.type}
+                            defaultRestPeriod={exercise.defaultRestPeriod}
                         />
                     </Grid>
 

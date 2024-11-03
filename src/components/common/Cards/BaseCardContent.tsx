@@ -8,6 +8,7 @@ const BaseCardContent = ({
     description,
     level,
     exercisesCount,
+    category,
     children,
 }: BaseCardContentProps) => (
     <CardContent>
@@ -33,11 +34,24 @@ const BaseCardContent = ({
         <Box
             sx={{
                 display: 'flex',
-                justifyContent: 'space-between',
+                flexWrap: 'wrap',
+                gap: 1,
                 alignItems: 'center',
-                gap: 1
             }}
         >
+            <DifficultyChip
+                level={level}
+                aria-label={`Difficulty level: ${level}`}
+            />
+            {category && (
+                <Chip
+                    label={category}
+                    color="info"
+                    size="small"
+                    variant="outlined"
+                    aria-label={`Category: ${category}`}
+                />
+            )}
             {exercisesCount !== undefined && (
                 <Chip
                     label={`${exercisesCount} exercises`}
@@ -47,12 +61,9 @@ const BaseCardContent = ({
                     aria-label={`Contains ${exercisesCount} exercises`}
                 />
             )}
-            <DifficultyChip
-                level={level}
-                aria-label={`Difficulty level: ${level}`}
-            />
+            {children}
         </Box>
-        {children}
-    </CardContent >
+    </CardContent>
 )
+
 export default BaseCardContent
