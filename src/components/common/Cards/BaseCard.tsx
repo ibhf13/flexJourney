@@ -1,20 +1,11 @@
-import { Card, CardActionArea, Theme, SxProps } from '@mui/material'
-import { sharedCardStyles } from '../../utils/cardStyles'
-import { CardSkeleton } from './CardSkeleton'
-import { MediaWithSkeleton } from './MediaWithSkeleton'
-import { ReactNode, useCallback } from 'react'
+import { Card, CardActionArea } from '@mui/material'
+import { sharedCardStyles } from './cardStyles'
+import { useCallback } from 'react'
+import { BaseCardProps } from './types'
+import CardSkeleton from './CardSkeleton'
+import MediaWithSkeleton from './MediaWithSkeleton'
 
-interface BaseWorkoutCardProps {
-    title: string
-    imageUrl: string
-    imageHeight?: number
-    isLoading?: boolean
-    onClick: () => void
-    children: ReactNode
-    sx?: SxProps<Theme>
-}
-
-export const BaseWorkoutCard = ({
+const BaseCard = ({
     title,
     imageUrl,
     imageHeight = 140,
@@ -22,7 +13,7 @@ export const BaseWorkoutCard = ({
     onClick,
     children,
     sx
-}: BaseWorkoutCardProps) => {
+}: BaseCardProps) => {
     const handleKeyPress = useCallback(
         (event: React.KeyboardEvent) => {
             if (event.key === 'Enter' || event.key === ' ') {
@@ -54,3 +45,5 @@ export const BaseWorkoutCard = ({
         </Card>
     )
 }
+
+export default BaseCard

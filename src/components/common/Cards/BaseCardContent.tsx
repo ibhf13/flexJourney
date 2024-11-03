@@ -1,18 +1,9 @@
 import { CardContent, Typography, Box, Chip } from '@mui/material'
-import { DifficultyLevel } from '../../types/WorkoutTypes'
-import { DifficultyChip } from './DifficultyChip'
-import { ellipsisTextStyles } from '../../utils/cardStyles'
-import { ReactNode } from 'react'
+import { DifficultyChip } from '../Forms/DifficultyChip'
+import { ellipsisTextStyles } from './cardStyles'
+import { BaseCardContentProps } from './types'
 
-interface BaseCardContentProps {
-    title: string
-    description: string
-    level: DifficultyLevel
-    exercisesCount?: number
-    children?: ReactNode
-}
-
-export const BaseCardContent = ({
+const BaseCardContent = ({
     title,
     description,
     level,
@@ -64,3 +55,4 @@ export const BaseCardContent = ({
         {children}
     </CardContent >
 )
+export default BaseCardContent

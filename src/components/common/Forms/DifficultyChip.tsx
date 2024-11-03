@@ -1,15 +1,14 @@
 import { Chip, ChipProps } from '@mui/material'
-import { DifficultyLevel } from '../../types/WorkoutTypes'
 
 type ChipColorType = 'success' | 'warning' | 'error' | 'default' | 'primary' | 'secondary' | 'info'
 
 interface DifficultyChipProps extends Omit<ChipProps, 'color'> {
-    level: DifficultyLevel
+    level: string
 }
 
 export const DifficultyChip = ({ level, ...props }: DifficultyChipProps) => {
-    const getChipColor = (level: DifficultyLevel): ChipColorType => {
-        const colorMap: Record<DifficultyLevel, ChipColorType> = {
+    const getChipColor = (level: string): ChipColorType => {
+        const colorMap: Record<string, ChipColorType> = {
             Beginner: 'success',
             Intermediate: 'warning',
             Advanced: 'error',

@@ -1,4 +1,4 @@
-import { Exercise } from '../types/WorkoutTypes'
+import { Exercise } from '../types/ExerciseTypes'
 
 export const reorderExercises = (
     exercises: Exercise[],

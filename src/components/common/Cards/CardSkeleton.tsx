@@ -1,11 +1,8 @@
 import { Card, CardContent, Box, Skeleton } from '@mui/material'
-import { sharedCardStyles } from '../../utils/cardStyles'
+import { sharedCardStyles } from './cardStyles'
+import { CardSkeletonProps } from './types'
 
-interface CardSkeletonProps {
-    height?: number;
-}
-
-export const CardSkeleton = ({ height }: CardSkeletonProps) => (
+const CardSkeleton = ({ height }: CardSkeletonProps) => (
     <Card sx={sharedCardStyles}>
         <Skeleton variant="rectangular" height={height} />
         <CardContent>
@@ -18,3 +15,5 @@ export const CardSkeleton = ({ height }: CardSkeletonProps) => (
         </CardContent>
     </Card>
 )
+
+export default CardSkeleton

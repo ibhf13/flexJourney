@@ -1,3 +1,5 @@
+import { Exercise } from "@/features/exercises/types/ExerciseTypes"
+
 export type DifficultyLevel = 'Beginner' | 'Intermediate' | 'Advanced'
 
 export interface WorkoutSet {
@@ -8,17 +10,6 @@ export interface WorkoutSet {
   unit: 'kg' | 'sec'
 }
 
-export interface Exercise {
-  id: string
-  title: string
-  description: string
-  imageUrl: string
-  videoUrl: string
-  level: DifficultyLevel
-  type: string
-  defaultRestPeriod: number
-  category: string
-}
 
 export interface WorkoutDay {
   id: string

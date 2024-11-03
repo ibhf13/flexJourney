@@ -1,6 +1,5 @@
 import { WorkoutPlan } from '../types/WorkoutTypes'
-import { BaseWorkoutCard } from './common/BaseWorkoutCard'
-import { BaseCardContent } from './common/BaseCardContent'
+import { BaseCard, BaseCardContent } from '@/components/common/Cards'
 
 
 interface PlanCardProps {
@@ -20,7 +19,7 @@ export const PlanCard = ({ plan, onClick, isLoading = false }: PlanCardProps) =>
   }
 
   return (
-    <BaseWorkoutCard
+    <BaseCard
       title={plan.title}
       imageUrl={plan.imageUrl}
       isLoading={isLoading}
@@ -32,6 +31,6 @@ export const PlanCard = ({ plan, onClick, isLoading = false }: PlanCardProps) =>
         level={plan.level}
         exercisesCount={exercisesCount}
       />
-    </BaseWorkoutCard>
+    </BaseCard>
   )
 }

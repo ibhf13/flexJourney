@@ -1,6 +1,6 @@
 import React from 'react';
 import { Box, Typography, useTheme } from '@mui/material';
-import { MediaWithSkeleton } from '../../common/MediaWithSkeleton';
+import { MediaWithSkeleton } from '@/components/common/Cards';
 
 interface ExerciseDetailsProps {
     imageUrl: string;

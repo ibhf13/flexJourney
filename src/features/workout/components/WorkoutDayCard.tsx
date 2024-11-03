@@ -1,6 +1,5 @@
 import { WorkoutDay } from '../types/WorkoutTypes'
-import { BaseWorkoutCard } from './common/BaseWorkoutCard'
-import { BaseCardContent } from './common/BaseCardContent'
+import { BaseCard, BaseCardContent } from '@/components/common/Cards'
 
 interface WorkoutDayCardProps {
     day: WorkoutDay
@@ -20,7 +19,7 @@ export const WorkoutDayCard = ({
     }
 
     return (
-        <BaseWorkoutCard
+        <BaseCard
             title={day.title}
             imageUrl={day.imageUrl}
             imageHeight={200}
@@ -33,6 +32,6 @@ export const WorkoutDayCard = ({
                 level={day.level}
                 exercisesCount={day.exercises.length}
             />
-        </BaseWorkoutCard>
+        </BaseCard>
     )
 }

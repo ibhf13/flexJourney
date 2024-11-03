@@ -1,13 +1,8 @@
-import { Box, CardMedia, Skeleton, SxProps, Theme } from '@mui/material'
+import { Box, CardMedia, Skeleton } from '@mui/material'
 import { useState } from 'react'
+import { MediaWithSkeletonProps } from './types'
 
-interface MediaWithSkeletonProps {
-    height: number
-    imageUrl: string
-    mediaStyles?: SxProps<Theme>
-}
-
-export const MediaWithSkeleton = ({
+const MediaWithSkeleton = ({
     height,
     imageUrl,
     mediaStyles
@@ -31,3 +26,5 @@ export const MediaWithSkeleton = ({
         </Box>
     )
 }
+
+export default MediaWithSkeleton

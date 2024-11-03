@@ -1,8 +1,8 @@
 import { Box, Typography, Chip } from '@mui/material'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { DifficultyLevel, Exercise } from '../../types/WorkoutTypes'
-import { BaseWorkoutCard } from '../common/BaseWorkoutCard'
-import { BaseCardContent } from '../common/BaseCardContent'
+import { Exercise } from '../types/ExerciseTypes'
+import { DifficultyLevel } from '@/features/workout/types/WorkoutTypes'
+import { BaseCard, BaseCardContent } from '@/components/common/Cards'
 import { alpha } from '@mui/material/styles'
 
 interface ExerciseCardProps {
@@ -19,7 +19,7 @@ export const ExerciseCard = ({ exercise, onSelect, isCompleted = false }: Exerci
     }
 
     return (
-        <BaseWorkoutCard
+        <BaseCard
             title={exercise.title}
             imageUrl={exercise.imageUrl}
             imageHeight={200}
@@ -73,6 +73,6 @@ export const ExerciseCard = ({ exercise, onSelect, isCompleted = false }: Exerci
                     />
                 </Box>
             </BaseCardContent>
-        </BaseWorkoutCard>
+        </BaseCard>
     )
 }

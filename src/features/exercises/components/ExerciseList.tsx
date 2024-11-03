@@ -1,10 +1,10 @@
 import { useMemo, useState } from 'react'
 import { Grid } from '@mui/material'
-import { ExerciseCard } from './ExerciseCard'
-import { ExerciseDetailModal } from './ExerciseDetailModal'
-import { useWorkoutContext } from '../../contexts/WorkoutContext'
-import { Exercise } from '../../types/WorkoutTypes'
-import { reorderExercises } from '../../utils/exerciseUtils'
+import { Exercise } from '../types/ExerciseTypes';
+import { ExerciseCard } from './ExerciseCard';
+import { ExerciseDetailModal } from './ExerciseDetailModal';
+import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext';
+import { reorderExercises } from '../utils/exerciseUtils';
 
 interface ExerciseListProps {
     exercises: Exercise[];
