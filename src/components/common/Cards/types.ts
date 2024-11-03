@@ -22,6 +22,7 @@ export interface BaseCardContentProps {
     level: string
     exercisesCount?: number
     children?: ReactNode
+    category?: string
 }
 
 export interface MediaWithSkeletonProps {

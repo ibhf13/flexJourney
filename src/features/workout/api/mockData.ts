@@ -4,7 +4,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
   {
     id: 'ppl-split',
     title: 'Push Pull Legs Split',
-    description: 'A classic 3-day split targeting all major muscle groups',
+    description: 'A classic 3-day split targeting all major muscle groups for strength and hypertrophy',
     imageUrl: '/images/plans/ppl-split.jpg',
     level: 'Intermediate',
     days: [
@@ -24,7 +24,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Chest'
           },
           {
             id: 'shoulder-press',
@@ -35,7 +35,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Shoulders'
           },
           {
             id: 'tricep-dips',
@@ -46,7 +46,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'bodyweight',
             defaultRestPeriod: 60,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Triceps'
           },
           {
             id: 'incline-dumbbell-press',
@@ -57,7 +57,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Chest'
           },
           {
             id: 'lateral-raises',
@@ -68,7 +68,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 60,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Shoulders'
           },
           {
             id: 'tricep-pushdown',
@@ -79,7 +79,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 60,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Triceps'
           },
         ],
       },
@@ -99,7 +99,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'bodyweight',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Back'
           },
           {
             id: 'barbell-row',
@@ -110,7 +110,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Back'
           },
           {
             id: 'bicep-curl',
@@ -121,7 +121,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 60,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Biceps'
           },
           {
             id: 'face-pull',
@@ -132,7 +132,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'cable',
             defaultRestPeriod: 60,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Shoulders'
           },
           {
             id: 'hammer-curl',
@@ -143,7 +143,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 60,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Biceps'
           },
           {
             id: 'lat-pulldown',
@@ -154,7 +154,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'cable',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Back'
           },
         ],
       },
@@ -174,7 +174,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Legs'
           },
           {
             id: 'leg-press',
@@ -185,7 +185,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Legs'
           },
           {
             id: 'lunges',
@@ -196,7 +196,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'bodyweight',
             defaultRestPeriod: 60,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Legs'
           },
           {
             id: 'calf-raise',
@@ -207,7 +207,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 60,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Calves'
           },
           {
             id: 'leg-curl',
@@ -218,7 +218,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'machine',
             defaultRestPeriod: 60,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Legs'
           },
           {
             id: 'romanian-deadlift',
@@ -229,7 +229,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Legs'
           },
         ],
       },
@@ -258,7 +258,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Legs'
           },
           {
             id: 'bench-press',
@@ -269,7 +269,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Chest'
           },
           {
             id: 'barbell-row',
@@ -280,7 +280,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Back'
           },
           {
             id: 'bicep-curl',
@@ -291,7 +291,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 60,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Biceps'
           },
           {
             id: 'overhead-press',
@@ -302,7 +302,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Shoulders'
           },
           {
             id: 'plank',
@@ -313,7 +313,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'bodyweight',
             defaultRestPeriod: 60,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Core'
           },
         ],
       },
@@ -333,7 +333,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Back'
           },
           {
             id: 'incline-bench-press',
@@ -344,7 +344,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Chest'
           },
           {
             id: 'lat-pulldown',
@@ -355,7 +355,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'cable',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Back'
           },
           {
             id: 'leg-extension',
@@ -366,7 +366,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'machine',
             defaultRestPeriod: 60,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Legs'
           },
           {
             id: 'tricep-extension',
@@ -377,7 +377,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'cable',
             defaultRestPeriod: 60,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Triceps'
           },
           {
             id: 'side-plank',
@@ -388,7 +388,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'bodyweight',
             defaultRestPeriod: 60,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Core'
           },
         ],
       },
@@ -408,7 +408,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'bodyweight',
             defaultRestPeriod: 60,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Legs'
           },
           {
             id: 'push-up',
@@ -418,8 +418,8 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'bodyweight',
             defaultRestPeriod: 60,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab-channel=MulliganBrothers',
+            category: 'Chest'
           },
           {
             id: 'bent-over-row',
@@ -430,7 +430,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             type: 'weight',
             defaultRestPeriod: 90,
             videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            category: 'Back'
           },
           {
             id: 'leg-raise',
@@ -440,8 +440,8 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'bodyweight',
             defaultRestPeriod: 60,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab-channel=MulliganBrothers',
+            category: 'Core'
           },
           {
             id: 'bicep-hammer-curl',
@@ -451,8 +451,8 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'weight',
             defaultRestPeriod: 60,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab-channel=MulliganBrothers',
+            category: 'Biceps'
           },
           {
             id: 'mountain-climbers',
@@ -462,262 +462,28 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
             level: 'Beginner',
             type: 'bodyweight',
             defaultRestPeriod: 60,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
+            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab-channel=MulliganBrothers',
+            category: 'Cardio'
           },
         ],
       },
     ],
   },
-  {
-    id: 'upper-lower-split',
-    title: 'Upper Lower Split',
-    description: 'Focuses on upper and lower body strength training',
-    imageUrl: '/images/plans/upper-lower.jpg',
-    level: 'Advanced',
-    days: [
-      {
-        id: 'upper-day',
-        title: 'Day 1: Upper Body',
-        description: 'Focus on chest, back, shoulders, and arms',
-        imageUrl: '/images/days/upper-day.jpg',
-        level: 'Advanced',
-        exercises: [
-          {
-            id: 'bench-press',
-            title: 'Bench Press',
-            description: 'Chest strength exercise',
-            imageUrl: '/images/exercises/bench-press.jpg',
-            level: 'Advanced',
-            type: 'weight',
-            defaultRestPeriod: 90,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-          {
-            id: 'lat-pulldown',
-            title: 'Lat Pulldown',
-            description: 'Back width exercise',
-            imageUrl: '/images/exercises/lat-pulldown.jpg',
-            level: 'Advanced',
-            type: 'cable',
-            defaultRestPeriod: 90,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-          {
-            id: 'shoulder-press',
-            title: 'Shoulder Press',
-            description: 'Builds shoulder strength',
-            imageUrl: '/images/exercises/shoulder-press.jpg',
-            level: 'Advanced',
-            type: 'weight',
-            defaultRestPeriod: 90,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-          {
-            id: 'bicep-curl',
-            title: 'Bicep Curl',
-            description: 'Bicep isolation',
-            imageUrl: '/images/exercises/bicep-curl.jpg',
-            level: 'Advanced',
-            type: 'weight',
-            defaultRestPeriod: 60,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-          {
-            id: 'tricep-dips',
-            title: 'Tricep Dips',
-            description: 'Tricep exercise',
-            imageUrl: '/images/exercises/tricep-dips.jpg',
-            level: 'Advanced',
-            type: 'bodyweight',
-            defaultRestPeriod: 60,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-          {
-            id: 'rear-delt-fly',
-            title: 'Rear Delt Fly',
-            description: 'Rear shoulder exercise',
-            imageUrl: '/images/exercises/rear-delt-fly.jpg',
-            level: 'Advanced',
-            type: 'weight',
-            defaultRestPeriod: 60,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-        ],
-      },
-      {
-        id: 'lower-day',
-        title: 'Day 2: Lower Body',
-        description: 'Intense leg workout',
-        imageUrl: '/images/days/lower-day.jpg',
-        level: 'Advanced',
-        exercises: [
-          {
-            id: 'squat',
-            title: 'Squat',
-            description: 'Core leg strength exercise',
-            imageUrl: '/images/exercises/squat.jpg',
-            level: 'Advanced',
-            type: 'weight',
-            defaultRestPeriod: 90,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-          {
-            id: 'deadlift',
-            title: 'Deadlift',
-            description: 'Posterior chain exercise',
-            imageUrl: '/images/exercises/deadlift.jpg',
-            level: 'Advanced',
-            type: 'weight',
-            defaultRestPeriod: 90,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-          {
-            id: 'leg-press',
-            title: 'Leg Press',
-            description: 'Quad strength exercise',
-            imageUrl: '/images/exercises/leg-press.jpg',
-            level: 'Advanced',
-            type: 'weight',
-            defaultRestPeriod: 90,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-          {
-            id: 'calf-raise',
-            title: 'Calf Raise',
-            description: 'Calf development',
-            imageUrl: '/images/exercises/calf-raise.jpg',
-            level: 'Advanced',
-            type: 'weight',
-            defaultRestPeriod: 60,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-          {
-            id: 'leg-curl',
-            title: 'Leg Curl',
-            description: 'Hamstring isolation',
-            imageUrl: '/images/exercises/leg-curl.jpg',
-            level: 'Advanced',
-            type: 'machine',
-            defaultRestPeriod: 60,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-          {
-            id: 'bulgarian-split-squat',
-            title: 'Bulgarian Split Squat',
-            description: 'Single-leg exercise',
-            imageUrl: '/images/exercises/bulgarian-split-squat.jpg',
-            level: 'Advanced',
-            type: 'weight',
-            defaultRestPeriod: 60,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-        ],
-      },
-      {
-        id: 'upper-lower-combo',
-        title: 'Day 3: Upper & Lower Combo',
-        description: 'Combines upper and lower body exercises',
-        imageUrl: '/images/days/upper-lower-combo.jpg',
-        level: 'Advanced',
-        exercises: [
-          {
-            id: 'clean-and-press',
-            title: 'Clean and Press',
-            description: 'Full body exercise',
-            imageUrl: '/images/exercises/clean-and-press.jpg',
-            level: 'Advanced',
-            type: 'weight',
-            defaultRestPeriod: 90,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-          {
-            id: 'lunges',
-            title: 'Lunges',
-            description: 'Leg and glute exercise',
-            imageUrl: '/images/exercises/lunges.jpg',
-            level: 'Advanced',
-            type: 'bodyweight',
-            defaultRestPeriod: 60,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-          {
-            id: 'push-up',
-            title: 'Push-Up',
-            description: 'Upper body endurance',
-            imageUrl: '/images/exercises/push-up.jpg',
-            level: 'Advanced',
-            type: 'bodyweight',
-            defaultRestPeriod: 60,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-          {
-            id: 'chin-up',
-            title: 'Chin-Up',
-            description: 'Upper back and biceps',
-            imageUrl: '/images/exercises/chin-up.jpg',
-            level: 'Advanced',
-            type: 'bodyweight',
-            defaultRestPeriod: 90,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-          {
-            id: 'box-jump',
-            title: 'Box Jump',
-            description: 'Plyometric leg exercise',
-            imageUrl: '/images/exercises/box-jump.jpg',
-            level: 'Advanced',
-            type: 'bodyweight',
-            defaultRestPeriod: 60,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-          {
-            id: 'kettlebell-swing',
-            title: 'Kettlebell Swing',
-            description: 'Full body cardio and strength',
-            imageUrl: '/images/exercises/kettlebell-swing.jpg',
-            level: 'Advanced',
-            type: 'weight',
-            defaultRestPeriod: 60,
-            videoUrl: 'https://www.youtube.com/watch?v=tbny6P9TotU&list=TLPQMjUwNjIwMjIEUkDPQVSAQA&index=9&ab_channel=MulliganBrothers',
-            category: ''
-          },
-        ],
-      },
-    ],
-  },
-]
+];
 
 export const fetchWorkoutPlans = (): Promise<WorkoutPlan[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(WORKOUT_PLANS)
     }, 1000)
-  })
-}
+  });
+};
 
 export const fetchWorkoutPlanById = (planId: string): Promise<WorkoutPlan | undefined> => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      const plan = WORKOUT_PLANS.find((p) => p.id === planId)
-      resolve(plan)
+      const plan = WORKOUT_PLANS.find((p) => p.id === planId);
+      resolve(plan);
     }, 1000)
-  })
-}
+  });
+};
