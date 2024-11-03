@@ -9,15 +9,20 @@ import { useUnsavedChanges } from '@/features/exercises/hooks/useUnsavedChanges'
 import { ExerciseModalHeader } from './ExerciseModalHeader';
 import { ExerciseDetails } from './ExerciseDetails';
 import { ExerciseVideo } from './ExerciseVideo';
+import { useTrainingHistory } from '@/features/workout/hooks/useTrainingHistory'
+import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
+import { WorkoutDay } from '@/features/workout/types/WorkoutTypes'
 
 interface ExerciseDetailModalProps {
     exercise: Exercise;
+    day: WorkoutDay;
     open: boolean;
     onClose: () => void;
 }
 
 export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
     exercise,
+    day,
     open,
     onClose,
 }) => {
@@ -26,6 +31,8 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
     const [hasChanges, setHasChanges] = useState(false);
     const { handleExerciseComplete } = useExerciseCompletion();
     const { showNotification } = useNotification();
+    const { selectedPlan } = useWorkoutContext()
+    const { saveExerciseLog, isLoading: isSaving } = useTrainingHistory()
 
     const { handleCloseWithConfirmation } = useUnsavedChanges({
         hasChanges,
@@ -35,21 +42,59 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
 
     const handleFormSubmit = async (data: ExerciseFormData) => {
         try {
-            const result = await handleExerciseComplete(exercise, data);
-            if (result) {
-                setHasChanges(false);
-                onClose();
+            if (!selectedPlan) {
                 showNotification({
-                    message: 'Exercise completed successfully!',
+                    message: 'No workout plan selected',
+                    severity: 'error'
+                })
+                return
+            }
+
+            if (!day) {
+                showNotification({
+                    message: 'No workout day selected',
+                    severity: 'error'
+                })
+                return
+            }
+
+            if (isSaving) return
+
+            await saveExerciseLog(
+                selectedPlan.id,
+                selectedPlan.title,
+                day.id,
+                day.title,
+                {
+                    exerciseId: exercise.id,
+                    exerciseName: exercise.title,
+                    sets: data.sets.map(set => ({
+                        weight: set.weight || 0,
+                        reps: set.repetitions || 0,
+                        time: set.time || 0,
+                        unit: exercise.type === 'cardio' ? 'sec' : 'kg'
+                    })),
+                    completedAt: new Date().toISOString()
+                }
+            )
+
+            const completed = handleExerciseComplete(exercise, day, data)
+
+            if (completed) {
+                showNotification({
+                    message: 'Exercise completed successfully',
                     severity: 'success'
-                });
+                })
+                onClose()
+            } else {
+                throw new Error('Failed to mark exercise as complete')
             }
         } catch (error) {
-            console.error('Error completing exercise:', error);
+            console.error('Error saving exercise:', error)
             showNotification({
-                message: 'An error occurred while saving',
+                message: 'Failed to save exercise progress',
                 severity: 'error'
-            });
+            })
         }
     };
 

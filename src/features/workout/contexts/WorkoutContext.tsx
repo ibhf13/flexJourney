@@ -28,6 +28,7 @@ interface WorkoutContextValue extends WorkoutContextState {
     completeExercise: (exerciseId: string) => void
     resetWorkout: () => void
     updateExerciseProgress: (exerciseId: string, weight: number, reps: number) => void
+    selectedDay: number
 }
 
 const initialState: WorkoutContextState = {
@@ -137,6 +138,7 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
         resetWorkout: () => dispatch({ type: 'RESET_WORKOUT' }),
         updateExerciseProgress: (exerciseId: string, weight: number, reps: number) =>
             dispatch({ type: 'UPDATE_EXERCISE_PROGRESS', payload: { exerciseId, weight, reps } }),
+        selectedDay: state.selectedDay,
     }
 
     return <WorkoutContext.Provider value={value}>{children}</WorkoutContext.Provider>
