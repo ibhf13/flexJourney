@@ -15,26 +15,39 @@ export const ExerciseForm: React.FC<ExerciseFormProps> = ({
     defaultRestPeriod,
     onSubmit,
     onCancel,
+    onChange,
     initialData,
 }) => {
 
     const {
         control,
         handleSubmit,
-        formState: { errors, isValid },
+        formState: { isDirty, errors, isValid },
         fields,
         remove,
         addSet,
+        watch,
     } = useExerciseForm({
         initialData,
         exerciseType,
         defaultRestPeriod,
     });
 
+    const formValues = watch();
+
+    React.useEffect(() => {
+        if (onChange && isDirty) {
+            onChange();
+        }
+    }, [formValues, isDirty, onChange]);
 
     const handleFormSubmit = handleSubmit((data) => {
         onSubmit(data);
     });
+
+    const handleAddSet = () => {
+        addSet();
+    };
 
     return (
         <Box component="form" onSubmit={handleFormSubmit} noValidate>
@@ -46,14 +59,17 @@ export const ExerciseForm: React.FC<ExerciseFormProps> = ({
                         index={index}
                         exerciseType={exerciseType}
                         defaultRestPeriod={defaultRestPeriod}
-                        onRemove={index > 0 ? () => remove(index) : undefined}
+                        onRemove={index > 0 ? () => {
+                            remove(index);
+                            if (onChange) onChange();
+                        } : undefined}
                         isRemovable={index > 0}
                     />
                 ))}
 
                 <Button
                     startIcon={<AddIcon />}
-                    onClick={addSet}
+                    onClick={handleAddSet}
                     variant="outlined"
                     fullWidth
                 >
