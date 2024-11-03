@@ -16,7 +16,7 @@ export interface Exercise {
   videoUrl: string
   level: DifficultyLevel
   type: string
-  defaultRestPeriod: number // in seconds
+  defaultRestPeriod: number
   category: string
 }
 

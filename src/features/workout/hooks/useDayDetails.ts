@@ -13,7 +13,6 @@ export const useDayDetails = (planId: string | undefined, dayId: string | undefi
                 throw new Error('Missing required parameters')
             }
 
-            // Use cached plan if available
             const plan = selectedPlan?.id === planId
                 ? selectedPlan
                 : await fetchWorkoutPlanById(planId)
@@ -22,7 +21,6 @@ export const useDayDetails = (planId: string | undefined, dayId: string | undefi
                 throw new Error('Workout plan not found')
             }
 
-            // Update context with the latest plan
             if (!selectedPlan || selectedPlan.id !== plan.id) {
                 selectPlan(plan)
             }

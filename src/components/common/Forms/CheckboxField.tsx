@@ -10,6 +10,7 @@ const CheckboxField = ({
   labelPlacement = 'end',
   ...props
 }: CheckboxFieldProps) => {
+
   return (
     <FormControl error={error} required={required} disabled={disabled}>
       <FormControlLabel

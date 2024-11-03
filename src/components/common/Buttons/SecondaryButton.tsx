@@ -8,6 +8,7 @@ const SecondaryButton = ({
   variant = 'text',
   ...props
 }: SecondaryButtonProps) => {
+
   return (
     <Button variant={variant} color="secondary" disabled={disabled || isLoading} {...props}>
       {isLoading ? (

@@ -10,6 +10,7 @@ import {
 } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
 import { DialogPopupProps } from './types'
+
 const DialogPopup = ({
   open,
   onClose,
@@ -26,6 +27,7 @@ const DialogPopup = ({
 }: DialogPopupProps) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
   const handleBackdropClick = (event: React.MouseEvent) => {
     if (preventBackdropClick) {
       event.stopPropagation()
@@ -33,6 +35,7 @@ const DialogPopup = ({
       onClose()
     }
   }
+
   return (
     <Dialog
       open={open}

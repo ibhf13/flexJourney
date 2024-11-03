@@ -15,7 +15,6 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({ exercises }) => {
     const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null)
 
     const sortedExercises = useMemo(() => {
-        console.log('Reordering exercises:', { exercises, completedExercises })
         return reorderExercises(exercises, completedExercises)
     }, [exercises, completedExercises])
 

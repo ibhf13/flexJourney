@@ -21,7 +21,6 @@ let theme = createTheme({
     }) as Theme['shadows'],
 })
 
-// Make typography responsive
 theme = responsiveFontSizes(theme)
 
 export default theme

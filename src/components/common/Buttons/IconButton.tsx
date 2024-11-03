@@ -9,6 +9,7 @@ const IconButton = ({
   disabled,
   ...props
 }: IconButtonProps) => {
+
   return (
     <Button
       startIcon={iconPosition === 'start' && !isLoading ? icon : null}

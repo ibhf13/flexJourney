@@ -7,6 +7,7 @@ export const GridContainer = ({
   columns = 12,
   ...props
 }: GridContainerProps) => {
+
   return (
     <Box
       display="grid"
@@ -26,6 +27,7 @@ export const GridContainer = ({
 }
 
 export const GridItem = ({ children, xs = 12, sm, md, lg, xl, ...props }: GridItemProps) => {
+
   return (
     <Box
       gridColumn={{

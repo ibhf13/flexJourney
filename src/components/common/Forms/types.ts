@@ -5,7 +5,6 @@ import {
 } from '@mui/material'
 
 export interface BaseFieldProps {
-  // Make sure these properties are compatible with MUI types
   label?: MuiTextFieldProps['label']
   error?: MuiTextFieldProps['error']
   helperText?: MuiTextFieldProps['helperText']

@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Typography, Box, useTheme } from '@mui/material'
+import { Typography, Box } from '@mui/material'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
@@ -13,7 +13,6 @@ import { useNotification } from '@/features/Feedback'
 import { useNavigate } from 'react-router-dom'
 
 const HomePage = () => {
-  const theme = useTheme()
   const navigate = useNavigate()
   const { showNotification } = useNotification()
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -23,7 +22,7 @@ const HomePage = () => {
       message: "Welcome to FitLife! Let's begin your fitness journey.",
       severity: 'success',
     })
-    navigate('/plan') // Navigate to plan selection page
+    navigate('/plan')
   }
 
   const workoutLevels = [
@@ -39,7 +38,7 @@ const HomePage = () => {
         sx={{
           py: { xs: 4, md: 8 },
           textAlign: 'center',
-          color: 'common.white', // Add this for better contrast on dark background
+          color: 'common.white',
         }}
       >
         <Typography
@@ -56,7 +55,7 @@ const HomePage = () => {
           variant="h5"
           sx={{
             mb: 4,
-            color: 'grey.400', // Lighter grey for better readability
+            color: 'grey.400',
           }}
         >
           Personalized workouts, expert guidance, and a supportive community

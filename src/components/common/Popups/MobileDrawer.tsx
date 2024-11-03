@@ -24,10 +24,10 @@ const MobileDrawer = ({
 }: MobileDrawerProps) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const isVertical = anchor === 'bottom' || anchor === 'top'
 
   if (!isMobile) return null
 
-  const isVertical = anchor === 'bottom' || anchor === 'top'
 
   return (
     <Drawer

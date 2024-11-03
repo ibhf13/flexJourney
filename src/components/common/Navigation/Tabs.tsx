@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom'
 import { CustomTabsProps, TabPanelProps } from './types'
 
 export const TabPanel = ({ children, value, index, ...other }: TabPanelProps) => {
+
   return (
     <Box
       role="tabpanel"
@@ -28,7 +29,6 @@ const Tabs = ({
 }: CustomTabsProps) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-
   const mobileVariant = isMobile ? 'scrollable' : variant
 
   const handleChange = (_: React.SyntheticEvent, newValue: string | number) => {

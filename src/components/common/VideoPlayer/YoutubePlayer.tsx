@@ -12,7 +12,7 @@ export const YoutubePlayer: React.FC<YoutubePlayerProps> = ({
     width = '100%',
     height = '315'
 }) => {
-    // Extract video ID from URL
+
     const getVideoId = (url: string): string => {
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
         const match = url.match(regExp);

@@ -20,6 +20,7 @@ const RadioGroup = ({
   onChange,
   ...props
 }: RadioGroupProps) => {
+
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     onChange?.(event.target.value)
   }
