@@ -1,6 +1,6 @@
 import { createContext, useContext, useReducer, ReactNode, useCallback } from 'react'
-import { Exercise } from '../types/WorkoutTypes'
-import { useWorkoutContext } from './WorkoutContext'
+import { Exercise } from '../types/ExerciseTypes'
+import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
 
 interface ExerciseContextState {
     exercises: Exercise[]

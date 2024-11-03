@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import { Control } from 'react-hook-form';
-import { ExerciseFormData } from '../../../types/ExerciseTypes';
+import { ExerciseFormData } from '@/features/exercises/types/ExerciseTypes';
 import { FormTextField } from '@/components/common/FormTextField';
 
 interface ExerciseSetFormProps {

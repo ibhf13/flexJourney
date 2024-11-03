@@ -1,9 +1,9 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Box, Typography, Container, Alert, CircularProgress } from '@mui/material'
-import { useExerciseContext } from '@/features/workout/contexts/ExerciseContext'
+import { useExerciseContext } from '@/features/exercises/contexts/ExerciseContext'
 import { useDayDetails } from '@/features/workout/hooks/useDayDetails'
-import { ExerciseList } from '@/features/workout/components/exercises/ExerciseList'
+import { ExerciseList } from '@/features/exercises/components/ExerciseList'
 
 export const ExerciseListPage = () => {
     const { planId, dayId } = useParams<{ planId: string; dayId: string }>()

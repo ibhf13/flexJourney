@@ -1,8 +1,8 @@
 import { useCallback } from 'react'
-import { useWorkoutContext } from '../contexts/WorkoutContext'
-import { useExerciseContext } from '../contexts/ExerciseContext'
-import { ExerciseFormData } from '../types/ExerciseTypes'
-import { Exercise } from '../types/WorkoutTypes'
+import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
+import { useExerciseContext } from '@/features/exercises/contexts/ExerciseContext'
+import { ExerciseFormData } from '@/features/exercises/types/ExerciseTypes'
+import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 
 export const useExerciseCompletion = () => {
     const { completeExercise, updateExerciseProgress } = useWorkoutContext()

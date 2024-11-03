@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Dialog, DialogContent, Grid, Box, useTheme, useMediaQuery } from '@mui/material';
-import { Exercise } from '../../types/WorkoutTypes';
-import { ExerciseForm } from './forms/ExerciseForm';
-import { ExerciseFormData } from '../../types/ExerciseTypes';
-import { useExerciseCompletion } from '../../hooks/useExerciseCompletion';
+import { Exercise } from '@/features/exercises/types/ExerciseTypes';
+import { ExerciseForm } from '../forms/ExerciseForm';
+import { ExerciseFormData } from '@/features/exercises/types/ExerciseTypes';
+import { useExerciseCompletion } from '@/features/exercises/hooks/useExerciseCompletion';
 import { useNotification } from '@/features/Feedback';
-import { ExerciseModalHeader } from './components/ExerciseModalHeader';
-import { ExerciseDetails } from './components/ExerciseDetails';
-import { ExerciseVideo } from './components/ExerciseVideo';
-import { useUnsavedChanges } from '../../hooks/useUnsavedChanges';
+import { useUnsavedChanges } from '@/features/exercises/hooks/useUnsavedChanges';
+import { ExerciseModalHeader } from './ExerciseModalHeader';
+import { ExerciseDetails } from './ExerciseDetails';
+import { ExerciseVideo } from './ExerciseVideo';
 
 interface ExerciseDetailModalProps {
     exercise: Exercise;

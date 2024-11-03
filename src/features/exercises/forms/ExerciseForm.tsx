@@ -6,8 +6,8 @@ import {
     Typography,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
-import { useExerciseForm } from '@/features/workout/hooks/useExerciseForm';
-import { ExerciseFormProps } from '@/features/workout/types/ExerciseTypes';
+import { useExerciseForm } from '@/features/exercises/hooks/useExerciseForm';
+import { ExerciseFormProps } from '@/features/exercises/types/ExerciseTypes';
 import { ExerciseSetForm } from './ExerciseSetForm';
 
 export const ExerciseForm: React.FC<ExerciseFormProps> = ({
