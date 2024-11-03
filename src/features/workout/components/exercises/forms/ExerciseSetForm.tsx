@@ -1,4 +1,3 @@
-import React from 'react';
 import {
     Box,
     Stack,
@@ -15,7 +14,7 @@ import { FormTextField } from '@/components/common/FormTextField';
 interface ExerciseSetFormProps {
     control: Control<ExerciseFormData>;
     index: number;
-    exerciseType: 'weight' | 'cardio' | 'bodyweight' | 'cable' | 'machine';
+    exerciseType: string;
     defaultRestPeriod: number;
     onRemove?: () => void;
     isRemovable?: boolean;

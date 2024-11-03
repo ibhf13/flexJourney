@@ -12,7 +12,7 @@ export interface ExerciseFormData {
 }
 
 export type ExerciseFormProps = {
-    exerciseType: 'weight' | 'cardio' | 'bodyweight' | 'cable' | 'machine';
+    exerciseType: string;
     defaultRestPeriod: number;
     onSubmit: (data: ExerciseFormData) => void;
     onCancel: () => void;

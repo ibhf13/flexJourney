@@ -6,7 +6,7 @@ import { exerciseSetSchema } from '../utils/validationSchemas';
 
 interface UseExerciseFormProps {
     initialData?: ExerciseFormData;
-    exerciseType: 'weight' | 'cardio' | 'bodyweight' | 'cable' | 'machine';
+    exerciseType: string;
     defaultRestPeriod: number;
 }
 

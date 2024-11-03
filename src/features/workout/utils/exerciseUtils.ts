@@ -4,7 +4,6 @@ export const reorderExercises = (
     exercises: Exercise[],
     completedExercises: string[]
 ): Exercise[] => {
-    console.log('Completed exercises:', completedExercises)
     return [...exercises].sort((a, b) => {
         const aCompleted = completedExercises.includes(a.id)
         const bCompleted = completedExercises.includes(b.id)

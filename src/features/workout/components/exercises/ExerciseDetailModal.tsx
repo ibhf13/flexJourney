@@ -1,27 +1,14 @@
-import React, { useState, useEffect } from 'react';
-import {
-    Dialog,
-    DialogContent,
-    DialogTitle,
-    Grid,
-    Typography,
-    IconButton,
-    Accordion,
-    AccordionSummary,
-    AccordionDetails,
-    Box,
-    useTheme,
-    useMediaQuery,
-} from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import React, { useState } from 'react';
+import { Dialog, DialogContent, Grid, Box, useTheme, useMediaQuery } from '@mui/material';
 import { Exercise } from '../../types/WorkoutTypes';
 import { ExerciseForm } from './forms/ExerciseForm';
 import { ExerciseFormData } from '../../types/ExerciseTypes';
-import { YoutubePlayer } from '@/components/common/VideoPlayer/YoutubePlayer';
-import { MediaWithSkeleton } from '../common/MediaWithSkeleton';
 import { useExerciseCompletion } from '../../hooks/useExerciseCompletion';
 import { useNotification } from '@/features/Feedback';
+import { ExerciseModalHeader } from './components/ExerciseModalHeader';
+import { ExerciseDetails } from './components/ExerciseDetails';
+import { ExerciseVideo } from './components/ExerciseVideo';
+import { useUnsavedChanges } from '../../hooks/useUnsavedChanges';
 
 interface ExerciseDetailModalProps {
     exercise: Exercise;
@@ -39,6 +26,12 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
     const [hasChanges, setHasChanges] = useState(false);
     const { handleExerciseComplete } = useExerciseCompletion();
     const { showNotification } = useNotification();
+
+    const { handleCloseWithConfirmation } = useUnsavedChanges({
+        hasChanges,
+        setHasChanges,
+        onClose,
+    });
 
     const handleFormSubmit = async (data: ExerciseFormData) => {
         try {
@@ -60,95 +53,42 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
         }
     };
 
-    const handleChange = () => {
-        setHasChanges(true);
-    }
-
-    useEffect(() => {
-        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-            if (hasChanges) {
-                e.preventDefault();
-                e.returnValue = '';
-            }
-        };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-    }, [hasChanges]);
-
-    const handleCloseWithConfirmation = () => {
-        if (hasChanges) {
-            if (window.confirm('You have unsaved changes. Are you sure you want to close?')) {
-                setHasChanges(false);
-                onClose();
-            }
-        } else {
-            onClose();
-        }
-    };
-
     return (
-        <>
-            <Dialog
-                open={open}
+        <Dialog
+            open={open}
+            onClose={handleCloseWithConfirmation}
+            maxWidth="lg"
+            fullWidth
+            fullScreen={isMobile}
+        >
+            <ExerciseModalHeader
+                title={exercise.title}
                 onClose={handleCloseWithConfirmation}
-                maxWidth="lg"
-                fullWidth
-                fullScreen={isMobile}
-            >
-                <DialogTitle>
-                    <Box display="flex" justifyContent="space-between" alignItems="center">
-                        <Typography variant="h6">{exercise.title}</Typography>
-                        <IconButton onClick={onClose} size="small">
-                            <CloseIcon />
-                        </IconButton>
-                    </Box>
-                </DialogTitle>
+            />
 
-                <DialogContent>
-                    <Grid container spacing={3}>
-                        <Grid item xs={12} md={6}>
-                            <Box mb={3}>
-                                <MediaWithSkeleton
-                                    height={300}
-                                    imageUrl={exercise.imageUrl}
-                                    mediaStyles={{
-                                        borderRadius: theme.shape.borderRadius,
-                                        boxShadow: theme.shadows[4],
-                                    }}
-                                />
-                            </Box>
-                            <Typography variant="h6" gutterBottom>
-                                Description
-                            </Typography>
-                            <Typography variant="body1" paragraph>
-                                {exercise.description}
-                            </Typography>
-                        </Grid>
-
-                        <Grid item xs={12} md={6}>
-                            <Accordion defaultExpanded>
-                                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                                    <Typography variant="h6">Exercise Video</Typography>
-                                </AccordionSummary>
-                                <AccordionDetails>
-                                    <YoutubePlayer videoUrl={exercise.videoUrl} />
-                                </AccordionDetails>
-                            </Accordion>
-
-                            <Box mt={3}>
-                                <ExerciseForm
-                                    exerciseType={exercise.type as any}
-                                    defaultRestPeriod={exercise.defaultRestPeriod}
-                                    onSubmit={handleFormSubmit}
-                                    onCancel={onClose}
-                                    onChange={handleChange}
-                                />
-                            </Box>
-                        </Grid>
+            <DialogContent>
+                <Grid container spacing={3}>
+                    <Grid item xs={12} md={6}>
+                        <ExerciseDetails
+                            imageUrl={exercise.imageUrl}
+                            description={exercise.description}
+                        />
                     </Grid>
-                </DialogContent>
-            </Dialog>
-        </>
+
+                    <Grid item xs={12} md={6}>
+                        <ExerciseVideo videoUrl={exercise.videoUrl} />
+                        <Box mt={3}>
+                            <ExerciseForm
+                                exerciseType={exercise.type}
+                                defaultRestPeriod={exercise.defaultRestPeriod}
+                                onSubmit={handleFormSubmit}
+                                onCancel={onClose}
+                                onChange={() => setHasChanges(true)}
+                            />
+                        </Box>
+                    </Grid>
+                </Grid>
+            </DialogContent>
+        </Dialog>
     );
 };
