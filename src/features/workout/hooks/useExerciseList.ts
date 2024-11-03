@@ -12,7 +12,6 @@ export const useExerciseList = (day: WorkoutDay | null) => {
             try {
                 setLoading(true)
                 setExercises(day.exercises)
-                // Sync completed exercises
                 completedExercises.forEach(id => {
                     toggleExerciseCompletion(id)
                 })

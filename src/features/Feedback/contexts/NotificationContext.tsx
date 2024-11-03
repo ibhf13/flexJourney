@@ -13,7 +13,6 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
 
   const hideNotification = useCallback(() => {
     setNotification((prev) => (prev ? { ...prev, open: false } : null))
-    // Clean up the notification after animation
     setTimeout(() => {
       setNotification(null)
     }, 300)

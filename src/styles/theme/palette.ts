@@ -1,6 +1,5 @@
 import { PaletteOptions } from '@mui/material';
 
-// Define custom colors as constants
 const PRIMARY = {
   lighter: '#E9DBFF',
   light: '#CBB2FC',

@@ -32,7 +32,6 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
     setUserMenuAnchor(null)
   }
 
-
   return (
     <AppBar
       position="fixed"

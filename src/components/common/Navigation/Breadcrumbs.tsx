@@ -9,6 +9,7 @@ const Breadcrumbs = ({
   separator = <NavigateNextIcon fontSize="small" />,
   className,
 }: BreadcrumbsProps) => {
+
   return (
     <MuiBreadcrumbs
       separator={separator}

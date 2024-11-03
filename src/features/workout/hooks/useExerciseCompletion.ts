@@ -11,7 +11,6 @@ export const useExerciseCompletion = () => {
     const handleExerciseComplete = useCallback(
         async (exercise: Exercise, formData: ExerciseFormData, onSuccess?: () => void) => {
             try {
-                // Calculate the latest weight and reps from the sets
                 const lastSet = formData.sets[formData.sets.length - 1]
                 if (lastSet) {
                     updateExerciseProgress(
@@ -21,11 +20,8 @@ export const useExerciseCompletion = () => {
                     )
                 }
 
-                // Mark exercise as complete in both contexts
                 completeExercise(exercise.id)
                 toggleExerciseCompletion(exercise.id)
-
-                // Call success callback if provided
                 onSuccess?.()
                 return true
             } catch (error) {

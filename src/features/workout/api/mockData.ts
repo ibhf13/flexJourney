@@ -709,7 +709,7 @@ export const fetchWorkoutPlans = (): Promise<WorkoutPlan[]> => {
   return new Promise((resolve) => {
     setTimeout(() => {
       resolve(WORKOUT_PLANS)
-    }, 1000) // Simulate network delay
+    }, 1000)
   })
 }
 

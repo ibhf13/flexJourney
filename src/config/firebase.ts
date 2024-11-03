@@ -13,7 +13,6 @@ const firebaseConfig = {
   measurementId: env.FIREBASE_MEASUREMENT_ID,
 }
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig)
 export const auth = getAuth(app)
 export const analytics = getAnalytics(app)

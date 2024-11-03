@@ -15,6 +15,7 @@ const SideDrawer = ({
   actions,
   customDrawerProps,
 }: SideDrawerProps) => {
+
   return (
     <Drawer
       anchor={anchor}
