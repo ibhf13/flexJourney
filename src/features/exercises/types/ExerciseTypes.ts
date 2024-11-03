@@ -10,6 +10,7 @@ export interface Exercise {
     type: string
     defaultRestPeriod: number
     category: string
+    isCompleted?: boolean
 }
 
 export interface ExerciseSet {

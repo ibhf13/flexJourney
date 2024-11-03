@@ -11,7 +11,7 @@ interface ExerciseListProps {
 }
 
 export const ExerciseList: React.FC<ExerciseListProps> = ({ exercises }) => {
-    const { completedExercises } = useWorkoutContext()
+    const { completedExercises, selectedPlan, selectedDay } = useWorkoutContext()
     const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null)
 
     const sortedExercises = useMemo(() => {
@@ -42,9 +42,10 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({ exercises }) => {
                 ))}
             </Grid>
 
-            {selectedExercise && (
+            {selectedExercise && selectedPlan && (
                 <ExerciseDetailModal
                     exercise={selectedExercise}
+                    day={selectedPlan.days[selectedDay]}
                     open={!!selectedExercise}
                     onClose={handleModalClose}
                 />
