@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
     Dialog,
     DialogContent,
@@ -20,8 +20,8 @@ import { ExerciseForm } from './forms/ExerciseForm';
 import { ExerciseFormData } from '../../types/ExerciseTypes';
 import { YoutubePlayer } from '@/components/common/VideoPlayer/YoutubePlayer';
 import { MediaWithSkeleton } from '../common/MediaWithSkeleton';
-import { ConfirmationDialog } from '@/components/common/dialogs/ConfirmationDialog';
-import { useExerciseContext } from '../../contexts/ExerciseContext';
+import { useExerciseCompletion } from '../../hooks/useExerciseCompletion';
+import { useNotification } from '@/features/Feedback';
 
 interface ExerciseDetailModalProps {
     exercise: Exercise;
@@ -36,39 +36,62 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
 }) => {
     const theme = useTheme();
     const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-    const [showConfirmation, setShowConfirmation] = useState(false);
     const [hasChanges, setHasChanges] = useState(false);
-    const { toggleExerciseCompletion } = useExerciseContext();
+    const { handleExerciseComplete } = useExerciseCompletion();
+    const { showNotification } = useNotification();
 
-    const handleFormSubmit = (data: ExerciseFormData) => {
-        toggleExerciseCompletion(exercise.id);
-        setHasChanges(false);
-        onClose();
-    };
-
-    const handleCancel = () => {
-        if (hasChanges) {
-            setShowConfirmation(true);
-        } else {
-            onClose();
+    const handleFormSubmit = async (data: ExerciseFormData) => {
+        try {
+            const result = await handleExerciseComplete(exercise, data);
+            if (result) {
+                setHasChanges(false);
+                onClose();
+                showNotification({
+                    message: 'Exercise completed successfully!',
+                    severity: 'success'
+                });
+            }
+        } catch (error) {
+            console.error('Error completing exercise:', error);
+            showNotification({
+                message: 'An error occurred while saving',
+                severity: 'error'
+            });
         }
     };
 
-    const handleConfirmClose = () => {
-        setShowConfirmation(false);
-        setHasChanges(false);
-        onClose();
-    };
+    const handleChange = () => {
+        setHasChanges(true);
+    }
 
-    const handleCancelClose = () => {
-        setShowConfirmation(false);
+    useEffect(() => {
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (hasChanges) {
+                e.preventDefault();
+                e.returnValue = '';
+            }
+        };
+
+        window.addEventListener('beforeunload', handleBeforeUnload);
+        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+    }, [hasChanges]);
+
+    const handleCloseWithConfirmation = () => {
+        if (hasChanges) {
+            if (window.confirm('You have unsaved changes. Are you sure you want to close?')) {
+                setHasChanges(false);
+                onClose();
+            }
+        } else {
+            onClose();
+        }
     };
 
     return (
         <>
             <Dialog
                 open={open}
-                onClose={handleCancel}
+                onClose={handleCloseWithConfirmation}
                 maxWidth="lg"
                 fullWidth
                 fullScreen={isMobile}
@@ -76,7 +99,7 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
                 <DialogTitle>
                     <Box display="flex" justifyContent="space-between" alignItems="center">
                         <Typography variant="h6">{exercise.title}</Typography>
-                        <IconButton onClick={handleCancel} size="small">
+                        <IconButton onClick={onClose} size="small">
                             <CloseIcon />
                         </IconButton>
                     </Box>
@@ -118,22 +141,14 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
                                     exerciseType={exercise.type as any}
                                     defaultRestPeriod={exercise.defaultRestPeriod}
                                     onSubmit={handleFormSubmit}
-                                    onCancel={handleCancel}
-                                    onChange={() => setHasChanges(true)}
+                                    onCancel={onClose}
+                                    onChange={handleChange}
                                 />
                             </Box>
                         </Grid>
                     </Grid>
                 </DialogContent>
             </Dialog>
-
-            <ConfirmationDialog
-                open={showConfirmation}
-                title="Discard Changes?"
-                message="You have unsaved changes. Are you sure you want to close without saving?"
-                onConfirm={handleConfirmClose}
-                onCancel={handleCancelClose}
-            />
         </>
     );
 };

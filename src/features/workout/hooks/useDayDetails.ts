@@ -1,58 +1,39 @@
-import { useState, useEffect } from 'react'
+import { useQuery } from '@tanstack/react-query'
 import { WorkoutDay } from '../types/WorkoutTypes'
 import { useWorkoutContext } from '../contexts/WorkoutContext'
-
-interface DayDetailsState {
-    isLoading: boolean
-    error: Error | null
-    currentDay: WorkoutDay | null
-}
+import { fetchWorkoutPlanById } from '../api/mockData'
 
 export const useDayDetails = (planId: string | undefined, dayId: string | undefined) => {
-    const { selectedPlan } = useWorkoutContext()
-    const [state, setState] = useState<DayDetailsState>({
-        isLoading: false,
-        error: null,
-        currentDay: null,
-    })
+    const { selectedPlan, selectPlan } = useWorkoutContext()
 
-    useEffect(() => {
-        const loadDay = () => {
-            if (!planId || !dayId || !selectedPlan) {
-                setState((prev) => ({
-                    ...prev,
-                    error: new Error('Missing required parameters'),
-                }))
-                return
+    return useQuery({
+        queryKey: ['workoutDay', planId, dayId],
+        queryFn: async (): Promise<WorkoutDay> => {
+            if (!planId || !dayId) {
+                throw new Error('Missing required parameters')
             }
 
-            if (selectedPlan.id !== planId) {
-                setState((prev) => ({
-                    ...prev,
-                    error: new Error('Selected plan does not match the requested plan'),
-                }))
-                return
+            // Use cached plan if available
+            const plan = selectedPlan?.id === planId
+                ? selectedPlan
+                : await fetchWorkoutPlanById(planId)
+
+            if (!plan) {
+                throw new Error('Workout plan not found')
             }
 
-            const day = selectedPlan.days.find((d) => d.id === dayId)
+            // Update context with the latest plan
+            if (!selectedPlan || selectedPlan.id !== plan.id) {
+                selectPlan(plan)
+            }
+
+            const day = plan.days.find(d => d.id === dayId)
             if (!day) {
-                setState((prev) => ({
-                    ...prev,
-                    error: new Error('Workout day not found'),
-                }))
-                return
+                throw new Error('Workout day not found')
             }
 
-            setState((prev) => ({
-                ...prev,
-                currentDay: day,
-                isLoading: false,
-            }))
-        }
-
-        setState((prev) => ({ ...prev, isLoading: true }))
-        loadDay()
-    }, [planId, dayId, selectedPlan])
-
-    return state
+            return day
+        },
+        enabled: Boolean(planId && dayId),
+    })
 }

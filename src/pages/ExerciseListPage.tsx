@@ -1,26 +1,22 @@
 import { useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Box, Typography, Container, Grid, Alert, CircularProgress } from '@mui/material'
-import { ExerciseCard } from '@/features/workout/components/exercises/ExerciseCard'
+import { Box, Typography, Container, Alert, CircularProgress } from '@mui/material'
 import { useExerciseContext } from '@/features/workout/contexts/ExerciseContext'
 import { useDayDetails } from '@/features/workout/hooks/useDayDetails'
+import { ExerciseList } from '@/features/workout/components/exercises/ExerciseList'
 
 export const ExerciseListPage = () => {
     const { planId, dayId } = useParams<{ planId: string; dayId: string }>()
-    const { currentDay, isLoading: isDayLoading, error: dayError } = useDayDetails(planId, dayId)
-    const { exercises, completedExercises, setExercises, toggleExerciseCompletion } = useExerciseContext()
+    const { data: currentDay, isLoading, error } = useDayDetails(planId, dayId)
+    const { exercises, setExercises } = useExerciseContext()
 
     useEffect(() => {
-        if (currentDay) {
+        if (currentDay?.exercises) {
             setExercises(currentDay.exercises)
         }
     }, [currentDay, setExercises])
 
-    const handleExerciseSelect = (exerciseId: string) => {
-        toggleExerciseCompletion(exerciseId)
-    }
-
-    if (isDayLoading) {
+    if (isLoading) {
         return (
             <Box display="flex" justifyContent="center" alignItems="center" minHeight="60vh">
                 <CircularProgress />
@@ -28,10 +24,10 @@ export const ExerciseListPage = () => {
         )
     }
 
-    if (dayError) {
+    if (error) {
         return (
             <Container maxWidth="lg" sx={{ mt: 4 }}>
-                <Alert severity="error">{dayError.message}</Alert>
+                <Alert severity="error">{error.message}</Alert>
             </Container>
         )
     }
@@ -53,17 +49,9 @@ export const ExerciseListPage = () => {
                 {currentDay.description}
             </Typography>
 
-            <Grid container spacing={3} sx={{ mt: 2 }}>
-                {exercises.map((exercise) => (
-                    <Grid item xs={12} sm={6} md={4} key={exercise.id}>
-                        <ExerciseCard
-                            exercise={exercise}
-                            onSelect={() => handleExerciseSelect(exercise.id)}
-                            isCompleted={completedExercises.has(exercise.id)}
-                        />
-                    </Grid>
-                ))}
-            </Grid>
+            <Box sx={{ mt: 2 }}>
+                <ExerciseList exercises={exercises} />
+            </Box>
         </Container>
     )
 }
