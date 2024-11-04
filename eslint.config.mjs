@@ -76,14 +76,19 @@ export default [
         'warn',
         {
           groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-          'newlines-between': 'always',
+          'builtin': 'always',
+          'external': 'always',
+          'internal': 'always',
+          'parent': 'always',
+          'sibling': 'always',
+          'index': 'always',
           alphabetize: {
             order: 'asc',
             caseInsensitive: true,
           },
         },
       ],
-      'import/no-duplicates': 'warn',
+      'import/no-duplicates': 'error',
       'import/no-unresolved': 'error',
       'import/no-cycle': 'warn',
 
@@ -94,7 +99,22 @@ export default [
       'prefer-const': 'warn',
       'no-var': 'error',
       'object-shorthand': 'warn',
-      eqeqeq: ['warn', 'always'],
+      'eqeqeq': ['warn', 'always'],
+
+      // Spacing and formatting rules
+      'padding-line-between-statements': [
+        'error',
+        { blankLine: 'always', prev: '*', next: 'return' },
+        { blankLine: 'always', prev: ['const', 'let', 'var'], next: '*' },
+        { blankLine: 'any', prev: ['const', 'let', 'var'], next: ['const', 'let', 'var'] },
+        { blankLine: 'always', prev: 'directive', next: '*' },
+        { blankLine: 'always', prev: 'block-like', next: '*' }
+      ],
+      'no-multiple-empty-lines': ['error', { max: 1, maxEOF: 0, maxBOF: 0 }],
+      'lines-between-class-members': ['error', 'always', { exceptAfterSingleLine: true }],
+      'object-curly-spacing': ['error', 'always'],
+      'array-bracket-spacing': ['error', 'never'],
+      'comma-spacing': ['error', { before: false, after: true }],
     },
   },
   prettier,
