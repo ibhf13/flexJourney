@@ -1,9 +1,11 @@
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useExerciseCompletion } from '@/features/exercises/hooks/useExerciseCompletion'
 import { useUnsavedChanges } from '@/features/exercises/hooks/useUnsavedChanges'
 import { Exercise, ExerciseFormData } from '@/features/exercises/types/ExerciseTypes'
 import { useNotification } from '@/features/Feedback'
+import { historyService } from '@/features/history/services/historyService'
+import { TrainingHistoryEntry } from '@/features/history/types/HistoryTypes'
 import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
-import { useTrainingHistory } from '@/features/workout/hooks/useTrainingHistory'
 import { WorkoutDay } from '@/features/workout/types/WorkoutTypes'
 import { Box, Dialog, DialogContent, Grid, useMediaQuery, useTheme } from '@mui/material'
 import React, { useState } from 'react'
@@ -31,7 +33,8 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
     const { handleExerciseComplete } = useExerciseCompletion();
     const { showNotification } = useNotification();
     const { selectedPlan } = useWorkoutContext()
-    const { saveExerciseLog, isLoading: isSaving } = useTrainingHistory()
+    const { user } = useAuthContext()
+    const [isSubmitting, setIsSubmitting] = useState(false)
 
     const { handleCloseWithConfirmation } = useUnsavedChanges({
         hasChanges,
@@ -50,23 +53,27 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
                 return
             }
 
-            if (!day) {
+            if (!user) {
                 showNotification({
-                    message: 'No workout day selected',
+                    message: 'You must be logged in to save progress',
                     severity: 'error'
                 })
 
                 return
             }
 
-            if (isSaving) return
+            if (isSubmitting) return
+            setIsSubmitting(true)
 
-            await saveExerciseLog(
-                selectedPlan.id,
-                selectedPlan.title,
-                day.id,
-                day.title,
-                {
+            const historyEntry: TrainingHistoryEntry = {
+                id: crypto.randomUUID(),
+                planId: selectedPlan.id,
+                planName: selectedPlan.title,
+                dayId: day.id,
+                dayName: day.title,
+                userId: user.uid,
+                date: new Date().toISOString(),
+                exercises: [{
                     exerciseId: exercise.id,
                     exerciseName: exercise.title,
                     sets: data.sets.map(set => ({
@@ -76,8 +83,10 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
                         unit: exercise.type === 'cardio' ? 'sec' : 'kg'
                     })),
                     completedAt: new Date().toISOString()
-                }
-            )
+                }]
+            }
+
+            await historyService.saveTrainingHistory(user.uid, historyEntry)
 
             const completed = handleExerciseComplete(exercise, day, data)
 
@@ -96,6 +105,8 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
                 message: 'Failed to save exercise progress',
                 severity: 'error'
             })
+        } finally {
+            setIsSubmitting(false)
         }
     };
 
@@ -126,7 +137,7 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
                     </Grid>
 
                     <Grid item xs={12} md={6}>
-                        <ExerciseVideo videoUrl={exercise.videoUrl} />
+                        <ExerciseVideo title={exercise.title} videoUrl={exercise.videoUrl} />
                         <Box mt={3}>
                             <ExerciseForm
                                 exerciseType={exercise.type}
