@@ -2,11 +2,13 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { useNotification } from '@/features/Feedback'
 import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
-import { trainingHistoryService } from '../services/trainingHistoryService'
-import { ExerciseLog, TrainingHistoryEntry } from '../types/TrainingHistoryTypes'
+import { historyService } from '../services/historyService'
+import { ExerciseLog, HistoryFilters, TrainingHistoryEntry } from '../types/HistoryTypes'
 
-export const useTrainingHistory = () => {
+export const useHistory = () => {
     const [isLoading, setIsLoading] = useState(false)
+    const [error, setError] = useState<string | null>(null)
+    const [history, setHistory] = useState<TrainingHistoryEntry[]>([])
     const { currentUser } = useAuthContext()
     const { showNotification } = useNotification()
 
@@ -38,7 +40,7 @@ export const useTrainingHistory = () => {
                 userId: currentUser.uid
             }
 
-            await trainingHistoryService.saveTrainingHistory(currentUser.uid, entry)
+            await historyService.saveTrainingHistory(currentUser.uid, entry)
             showNotification({
                 message: 'Progress saved successfully',
                 severity: 'success'
@@ -55,8 +57,42 @@ export const useTrainingHistory = () => {
         }
     }
 
+    const fetchHistory = async (filters?: HistoryFilters) => {
+        if (!currentUser) {
+            setError('User not authenticated')
+            showNotification({
+                message: 'Please sign in to view your history',
+                severity: 'error'
+            })
+
+            return
+        }
+
+        setIsLoading(true)
+        setError(null)
+        
+        try {
+            const data = await historyService.getTrainingHistory(currentUser.uid, filters)
+
+            setHistory(data)
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'An unknown error occurred'
+
+            setError(errorMessage)
+            showNotification({
+                message: 'Failed to fetch history. Please try again.',
+                severity: 'error'
+            })
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
     return {
         isLoading,
-        saveExerciseLog
+        error,
+        history,
+        saveExerciseLog,
+        fetchHistory
     }
 }

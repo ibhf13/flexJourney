@@ -1,15 +1,15 @@
 export interface ExerciseSet {
     weight: number
     reps: number
-    time: number
-    unit: 'kg' | 'sec'
+    time?: number
+    unit: 'kg' | 'lbs' | 'sec'
 }
 
 export interface ExerciseLog {
     exerciseId: string
     exerciseName: string
     sets: ExerciseSet[]
-    completedAt: string
+    completedAt: string // ISO string format
 }
 
 export interface TrainingHistoryEntry {
@@ -19,6 +19,12 @@ export interface TrainingHistoryEntry {
     dayId: string
     dayName: string
     exercises: ExerciseLog[]
-    date: string
+    date: string // ISO string format
     userId: string
+}
+
+export interface HistoryFilters {
+    startDate?: Date
+    endDate?: Date
+    planId?: string
 }
