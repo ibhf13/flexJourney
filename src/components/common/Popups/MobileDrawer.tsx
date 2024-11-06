@@ -1,13 +1,13 @@
+import CloseIcon from '@mui/icons-material/Close'
 import {
-  Drawer,
   Box,
+  Divider,
+  Drawer,
   IconButton,
   Typography,
-  Divider,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
 import { MobileDrawerProps } from './types'
 
 const MobileDrawer = ({

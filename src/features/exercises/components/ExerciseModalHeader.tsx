@@ -1,6 +1,6 @@
-import React from 'react';
-import { DialogTitle, Typography, IconButton, Box } from '@mui/material';
-import CloseIcon from '@mui/icons-material/Close';
+import CloseIcon from '@mui/icons-material/Close'
+import { Box, DialogTitle, IconButton, Typography } from '@mui/material'
+import React from 'react'
 
 interface ExerciseModalHeaderProps {
     title: string;

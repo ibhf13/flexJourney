@@ -1,5 +1,5 @@
-import { WorkoutPlan } from '../types/WorkoutTypes'
 import { BaseCard, BaseCardContent } from '@/components/common/Cards'
+import { WorkoutPlan } from '../types/WorkoutTypes'
 
 
 interface PlanCardProps {

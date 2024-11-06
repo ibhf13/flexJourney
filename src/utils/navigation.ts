@@ -1,10 +1,10 @@
+import { useNavigationContext } from '@/contexts/NavigationContext'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
-import { useNavigation } from '@/contexts/NavigationContext'
 
 export const useRouteChange = () => {
   const location = useLocation()
-  const { setActiveRoute, closeAllMenus } = useNavigation()
+  const { setActiveRoute, closeAllMenus } = useNavigationContext()
 
   useEffect(() => {
     setActiveRoute(location.pathname)

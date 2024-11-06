@@ -1,4 +1,4 @@
-import { Box, CircularProgress, Alert } from '@mui/material'
+import { Alert, Box, CircularProgress } from '@mui/material'
 
 interface LoadingErrorWrapperProps {
     isLoading: boolean

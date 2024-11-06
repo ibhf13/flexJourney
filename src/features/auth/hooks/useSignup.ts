@@ -1,7 +1,7 @@
+import { useAuthContext } from '@/contexts/AuthContext'
+import { useNotification } from '@/features/Feedback'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useAuth } from '@/contexts/AuthContext'
-import { useNotification } from '@/features/Feedback'
 import { useAuthError } from './useAuthError'
 
 interface SignupFormData {
@@ -13,7 +13,7 @@ interface SignupFormData {
 export const useSignup = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
-  const { register, googleSignIn } = useAuth()
+  const { register, googleSignIn } = useAuthContext()
   const navigate = useNavigate()
   const { showNotification } = useNotification()
   const { getErrorMessage } = useAuthError()

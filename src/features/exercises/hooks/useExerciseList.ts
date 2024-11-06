@@ -1,7 +1,7 @@
-import { useEffect, useCallback } from 'react'
 import { useExerciseContext } from '@/features/exercises/contexts/ExerciseContext'
 import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
 import { WorkoutDay } from '@/features/workout/types/WorkoutTypes'
+import { useCallback, useEffect } from 'react'
 
 export const useExerciseList = (day: WorkoutDay | null) => {
     const { setExercises, setLoading, setError, toggleExerciseCompletion } = useExerciseContext()

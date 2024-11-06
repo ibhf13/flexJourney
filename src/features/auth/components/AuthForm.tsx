@@ -1,8 +1,8 @@
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Button, CircularProgress, TextField, Typography } from '@mui/material'
+import { styled } from '@mui/material/styles'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { yupResolver } from '@hookform/resolvers/yup'
-import { TextField, Button, Typography, CircularProgress } from '@mui/material'
-import { styled } from '@mui/material/styles'
 
 interface AuthFormProps {
     mode: 'login' | 'signup'

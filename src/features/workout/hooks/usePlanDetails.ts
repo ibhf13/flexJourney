@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
-import { WorkoutPlan } from '../types/WorkoutTypes'
-import { useWorkoutContext } from '../contexts/WorkoutContext'
+import { useEffect, useState } from 'react'
 import { fetchWorkoutPlanById } from '../api/mockData'
+import { useWorkoutContext } from '../contexts/WorkoutContext'
+import { WorkoutPlan } from '../types/WorkoutTypes'
 
 interface PlanDetailsState {
     isLoading: boolean
@@ -22,20 +22,24 @@ export const usePlanDetails = (planId: string | undefined) => {
             if (!planId) return
             if (selectedPlan?.id === planId) {
                 setState(prev => ({ ...prev, currentPlan: selectedPlan }))
+
                 return
             }
 
             try {
                 setState(prev => ({ ...prev, isLoading: true }))
                 const plan = await fetchWorkoutPlanById(planId)
+
                 if (!plan) {
                     setState(prev => ({
                         ...prev,
                         error: new Error('Workout plan not found'),
                         isLoading: false
                     }))
+
                     return
                 }
+
                 selectPlan(plan)
                 setState(prev => ({
                     ...prev,

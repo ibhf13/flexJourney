@@ -1,8 +1,8 @@
-import { useCallback } from 'react'
-import { signOut } from 'firebase/auth'
-import { auth } from '@/config/firebase'
-import { useNavigate } from 'react-router-dom'
+import { auth } from '@/config/firebase/firebase'
 import { useNotification } from '@/features/Feedback'
+import { signOut } from 'firebase/auth'
+import { useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { useAuthError } from './useAuthError'
 
 export const useLogout = () => {

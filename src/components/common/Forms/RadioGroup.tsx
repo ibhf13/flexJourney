@@ -1,10 +1,10 @@
 import {
-  Radio,
-  RadioGroup as MuiRadioGroup,
-  FormControlLabel,
   FormControl,
-  FormLabel,
+  FormControlLabel,
   FormHelperText,
+  FormLabel,
+  RadioGroup as MuiRadioGroup,
+  Radio,
 } from '@mui/material'
 import { RadioGroupProps } from './types'
 

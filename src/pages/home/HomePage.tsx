@@ -1,15 +1,14 @@
-import { useState } from 'react'
-import { Typography, Box } from '@mui/material'
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
-import TrendingUpIcon from '@mui/icons-material/TrendingUp'
-import PlayCircleIcon from '@mui/icons-material/PlayCircle'
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
-
-import { Container, GridContainer, GridItem, Paper } from '@/components/common/StructureComponents'
 import { PrimaryButton, SecondaryButton } from '@/components/common/Buttons'
+import { SelectField, TextField } from '@/components/common/Forms'
 import { DialogPopup } from '@/components/common/Popups'
-import { TextField, SelectField } from '@/components/common/Forms'
+import { Container, GridContainer, GridItem, Paper } from '@/components/common/StructureComponents'
 import { useNotification } from '@/features/Feedback'
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
+import PlayCircleIcon from '@mui/icons-material/PlayCircle'
+import TrendingUpIcon from '@mui/icons-material/TrendingUp'
+import { Box, Typography } from '@mui/material'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 
 const HomePage = () => {

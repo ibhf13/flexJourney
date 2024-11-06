@@ -1,5 +1,5 @@
-import { Button, Divider, Typography } from '@mui/material'
 import GoogleIcon from '@mui/icons-material/Google'
+import { Button, Divider, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 
 interface SocialLoginButtonsProps {

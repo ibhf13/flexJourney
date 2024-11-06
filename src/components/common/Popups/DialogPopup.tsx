@@ -1,14 +1,14 @@
+import CloseIcon from '@mui/icons-material/Close'
 import {
   Dialog,
-  DialogTitle,
-  DialogContent,
   DialogActions,
+  DialogContent,
+  DialogTitle,
   IconButton,
   Typography,
-  useTheme,
   useMediaQuery,
+  useTheme,
 } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close'
 import { DialogPopupProps } from './types'
 
 const DialogPopup = ({
@@ -91,4 +91,5 @@ const DialogPopup = ({
     </Dialog>
   )
 }
+
 export default DialogPopup

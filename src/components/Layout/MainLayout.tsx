@@ -1,11 +1,11 @@
+import { useNavigationContext } from '@/contexts/NavigationContext'
 import { Box } from '@mui/material'
 import { Outlet } from 'react-router-dom'
 import Header from './Header'
 import Sidebar from './Sidebar'
-import { useNavigation } from '@/contexts/NavigationContext'
 
 const MainLayout = () => {
-  const { isSidebarOpen, toggleSidebar } = useNavigation()
+  const { isSidebarOpen, toggleSidebar } = useNavigationContext()
 
   return (
     <Box

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react'
-import { WorkoutPlan } from '../types/WorkoutTypes'
+import { useEffect, useState } from 'react'
 import { fetchWorkoutPlans } from '../api/mockData'
+import { WorkoutPlan } from '../types/WorkoutTypes'
 
 export const useWorkoutPlans = () => {
     const [plans, setPlans] = useState<WorkoutPlan[]>([])
@@ -12,6 +12,7 @@ export const useWorkoutPlans = () => {
             try {
                 setIsLoading(true)
                 const data = await fetchWorkoutPlans()
+
                 setPlans(data)
             } catch (err) {
                 setError(err as Error)

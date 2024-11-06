@@ -1,5 +1,5 @@
-import React, { createContext, useContext, useState, useCallback } from 'react'
-import { NavigationState, NavigationContextType } from '@/contexts/types/navigationType'
+import { NavigationContextType, NavigationState } from '@/contexts/types/navigationType'
+import React, { createContext, useCallback, useContext, useState } from 'react'
 
 const initialState: NavigationState = {
   isMobileMenuOpen: false,
@@ -11,11 +11,7 @@ const initialState: NavigationState = {
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined)
 
-interface NavigationProviderProps {
-  children: React.ReactNode
-}
-
-export const NavigationProvider: React.FC<NavigationProviderProps> = ({ children }) => {
+export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [state, setState] = useState<NavigationState>(initialState)
 
   const toggleMobileMenu = useCallback(() => {
@@ -76,7 +72,7 @@ export const NavigationProvider: React.FC<NavigationProviderProps> = ({ children
   return <NavigationContext.Provider value={value}>{children}</NavigationContext.Provider>
 }
 
-export const useNavigation = () => {
+export const useNavigationContext = () => {
   const context = useContext(NavigationContext)
 
   if (context === undefined) {

@@ -1,9 +1,9 @@
-import { Box, Typography, Chip } from '@mui/material'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { Exercise } from '../types/ExerciseTypes'
-import { DifficultyLevel } from '@/features/workout/types/WorkoutTypes'
 import { BaseCard, BaseCardContent } from '@/components/common/Cards'
+import { DifficultyLevel } from '@/features/workout/types/WorkoutTypes'
+import CheckCircleIcon from '@mui/icons-material/CheckCircle'
+import { Box, Chip, Typography } from '@mui/material'
 import { alpha } from '@mui/material/styles'
+import { Exercise } from '../types/ExerciseTypes'
 
 interface ExerciseCardProps {
     exercise: Exercise

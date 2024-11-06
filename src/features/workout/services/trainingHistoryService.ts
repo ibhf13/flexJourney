@@ -1,12 +1,12 @@
-import { db } from '@/config/firebase'
+import { db } from '@/config/firebase/firebase'
 import {
-    doc,
-    setDoc,
     collection,
-    query,
-    where,
+    doc,
     getDocs,
-    serverTimestamp
+    query,
+    serverTimestamp,
+    setDoc,
+    where
 } from 'firebase/firestore'
 import { TrainingHistoryEntry } from '../types/TrainingHistoryTypes'
 
@@ -38,6 +38,7 @@ export const trainingHistoryService = {
             )
 
             const snapshot = await getDocs(q)
+
             return snapshot.docs.map(doc => ({
                 id: doc.id,
                 ...doc.data()

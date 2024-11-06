@@ -1,26 +1,18 @@
-import React, { createContext, useContext, useState, useEffect } from 'react'
+import { auth } from '@/config/firebase/firebase'
 import {
   createUserWithEmailAndPassword,
-  signInWithEmailAndPassword,
-  signOut,
-  onAuthStateChanged,
-  updateProfile,
-  sendPasswordResetEmail,
   GoogleAuthProvider,
+  onAuthStateChanged,
+  sendPasswordResetEmail,
+  signInWithEmailAndPassword,
   signInWithPopup,
+  signOut,
+  updateProfile,
 } from 'firebase/auth'
-import { auth } from '../config/firebase'
-import { AuthContextType, User } from '../features/auth/types/AuthTypes'
+import React, { createContext, useContext, useEffect, useState } from 'react'
+import { AuthContextType, User } from './types/AuthTypes'
 
 const AuthContext = createContext<AuthContextType | null>(null)
-
-export const useAuth = () => {
-  const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error('useAuth must be used within an AuthProvider')
-  }
-  return context
-}
 
 export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null)
@@ -50,6 +42,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         setCurrentUser(null)
         setIsAuthenticated(false)
       }
+
       setLoading(false)
     })
 
@@ -71,6 +64,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setError(null)
       const { user } = await createUserWithEmailAndPassword(auth, email, password)
+
       await updateProfile(user, { displayName })
       setIsAuthenticated(true)
     } catch (err) {
@@ -104,6 +98,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setError(null)
       const provider = new GoogleAuthProvider()
+
       await signInWithPopup(auth, provider)
       setIsAuthenticated(true)
     } catch (err) {
@@ -126,4 +121,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   }
 
   return <AuthContext.Provider value={value}>{!loading && children}</AuthContext.Provider>
+}
+
+export const useAuthContext = () => {
+  const context = useContext(AuthContext)
+
+  if (!context) {
+    throw new Error('useAuthContext must be used within an AuthProvider')
+  }
+
+  return context
 }

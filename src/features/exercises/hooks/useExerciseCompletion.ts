@@ -1,9 +1,9 @@
-import { useCallback } from 'react'
-import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
 import { useExerciseContext } from '@/features/exercises/contexts/ExerciseContext'
-import { Exercise } from '@/features/exercises/types/ExerciseTypes'
+import { Exercise, ExerciseFormData } from '@/features/exercises/types/ExerciseTypes'
+import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
 import { WorkoutDay } from '@/features/workout/types/WorkoutTypes'
-import { ExerciseFormData } from '../types/ExerciseTypes'
+import { useCallback } from 'react'
+
 
 export const useExerciseCompletion = () => {
     const { completeExercise, updateExerciseProgress } = useWorkoutContext()
@@ -14,6 +14,7 @@ export const useExerciseCompletion = () => {
             try {
                 // Update exercise progress with the latest set data
                 const lastSet = formData.sets[formData.sets.length - 1]
+
                 if (lastSet) {
                     updateExerciseProgress(
                         exercise.id,
@@ -29,6 +30,7 @@ export const useExerciseCompletion = () => {
                 return true
             } catch (error) {
                 console.error('Failed to complete exercise:', error)
+
                 return false
             }
         },

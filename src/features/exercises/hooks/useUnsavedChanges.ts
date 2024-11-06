@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect } from 'react'
 
 interface UseUnsavedChangesProps {
     hasChanges: boolean;
@@ -20,6 +20,7 @@ export const useUnsavedChanges = ({
         };
 
         window.addEventListener('beforeunload', handleBeforeUnload);
+
         return () => window.removeEventListener('beforeunload', handleBeforeUnload);
     }, [hasChanges]);
 

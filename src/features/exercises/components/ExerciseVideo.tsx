@@ -1,15 +1,15 @@
-import React, { useState } from 'react';
+import { YoutubePlayer } from '@/components/common/VideoPlayer/YoutubePlayer'
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import {
     Accordion,
-    AccordionSummary,
     AccordionDetails,
-    Typography,
-    Box,
+    AccordionSummary,
     Alert,
-    Button
-} from '@mui/material';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
-import { YoutubePlayer } from '@/components/common/VideoPlayer/YoutubePlayer';
+    Box,
+    Button,
+    Typography
+} from '@mui/material'
+import React, { useState } from 'react'
 
 interface ExerciseVideoProps {
     videoUrl: string;

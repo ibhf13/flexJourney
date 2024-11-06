@@ -1,5 +1,5 @@
-import { Snackbar, Alert } from '@mui/material'
-import { NotificationProps } from '../types'
+import { Alert, Snackbar } from '@mui/material'
+import { NotificationProps } from '../types/types'
 
 const SnackbarNotification = ({
   message,
@@ -13,6 +13,7 @@ const SnackbarNotification = ({
     if (reason === 'clickaway') {
       return
     }
+
     onClose()
   }
 

@@ -1,5 +1,5 @@
-import { WorkoutDay } from '../types/WorkoutTypes'
 import { BaseCard, BaseCardContent } from '@/components/common/Cards'
+import { WorkoutDay } from '../types/WorkoutTypes'
 
 interface WorkoutDayCardProps {
     day: WorkoutDay

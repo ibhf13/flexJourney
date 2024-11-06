@@ -1,11 +1,11 @@
-import { useParams, useNavigate } from 'react-router-dom'
-import { Container, Grid, Typography, Box, Alert } from '@mui/material'
-import { WorkoutDayCard } from '@/features/workout/components/WorkoutDayCard'
-import { WorkoutDay } from '@/features/workout/types/WorkoutTypes'
-import { usePlanDetails } from '@/features/workout/hooks/usePlanDetails'
 import { LoadingErrorWrapper } from '@/features/workout/components/common/LoadingErrorWrapper'
+import { WorkoutDayCard } from '@/features/workout/components/WorkoutDayCard'
+import { usePlanDetails } from '@/features/workout/hooks/usePlanDetails'
+import { WorkoutDay } from '@/features/workout/types/WorkoutTypes'
+import { Alert, Box, Container, Grid, Typography } from '@mui/material'
+import { useNavigate, useParams } from 'react-router-dom'
 
-export const PlanDetailsPage = () => {
+export const PlanDayPage = () => {
     const { planId } = useParams<{ planId: string }>()
     const navigate = useNavigate()
     const { isLoading, error, currentPlan } = usePlanDetails(planId)

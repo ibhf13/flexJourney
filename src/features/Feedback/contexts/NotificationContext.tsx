@@ -1,6 +1,6 @@
-import { createContext, useContext, useState, useCallback } from 'react'
-import { NotificationContextType, NotificationProps } from '../types'
+import { createContext, useCallback, useContext, useState } from 'react'
 import SnackbarNotification from '../components/SnackbarNotification'
+import { NotificationContextType, NotificationProps } from '../types/types'
 
 const NotificationContext = createContext<NotificationContextType | undefined>(undefined)
 
@@ -26,10 +26,12 @@ export const NotificationProvider = ({ children }: { children: React.ReactNode }
   )
 }
 
-export const useNotification = () => {
+export const useNotificationContext = () => {
   const context = useContext(NotificationContext)
+
   if (!context) {
     throw new Error('useNotification must be used within a NotificationProvider')
   }
+
   return context
 }

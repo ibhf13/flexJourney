@@ -1,11 +1,11 @@
-import React from 'react'
-import { Link as RouterLink } from 'react-router-dom'
-import { Container, Box, Typography, Link, Divider } from '@mui/material'
 import GoogleIcon from '@mui/icons-material/Google'
 import LoadingButton from '@mui/lab/LoadingButton'
+import { Box, Container, Divider, Link, Typography } from '@mui/material'
+import React from 'react'
+import { Link as RouterLink } from 'react-router-dom'
 import AuthForm from '../features/auth/components/AuthForm'
-import { signupSchema } from '../features/auth/utils/validationSchemas'
 import { useSignup } from '../features/auth/hooks/useSignup'
+import { signupSchema } from '../features/auth/utils/validationSchemas'
 
 const Signup: React.FC = () => {
   const { isLoading, isGoogleLoading, handleSignup, handleGoogleSignIn } = useSignup()

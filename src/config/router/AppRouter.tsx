@@ -1,9 +1,9 @@
+import { useAuthContext } from '@/contexts/AuthContext'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
-import { useAuth } from '@/contexts/AuthContext'
-import { publicRoutes, privateRoutes } from './routes'
+import { privateRoutes, publicRoutes } from './routes'
 
 const AppRouter = () => {
-  const { isAuthenticated } = useAuth()
+  const { isAuthenticated } = useAuthContext()
 
   const router = createBrowserRouter([
     ...publicRoutes,

@@ -1,8 +1,8 @@
 import {
+  BoxProps,
+  CardProps as MuiCardProps,
   ContainerProps as MuiContainerProps,
   PaperProps as MuiPaperProps,
-  CardProps as MuiCardProps,
-  BoxProps,
   Theme,
 } from '@mui/material'
 import { SxProps } from '@mui/system'

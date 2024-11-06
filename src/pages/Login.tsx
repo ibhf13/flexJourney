@@ -1,11 +1,11 @@
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
+import { Box, Container, Link, Paper, Typography } from '@mui/material'
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-import { Container, Box, Typography, Link, Paper } from '@mui/material'
 import AuthForm from '../features/auth/components/AuthForm'
 import SocialLoginButtons from '../features/auth/components/SocialLoginButtons'
-import { loginSchema } from '../features/auth/utils/validationSchemas'
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import { useLoginHandler } from '../features/auth/hooks/useLoginHandler'
+import { loginSchema } from '../features/auth/utils/validationSchemas'
 
 const Login: React.FC = () => {
   const { isLoading, handleLogin, handleGoogleSignIn } = useLoginHandler()

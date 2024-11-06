@@ -1,8 +1,8 @@
-import React from 'react';
-import { Box, Typography } from '@mui/material';
-import { MediaWithSkeleton } from '@/components/common/Cards';
-import { DifficultyChip } from '@/components/common/Forms/DifficultyChip';
-import { Chip } from '@mui/material';
+import { MediaWithSkeleton } from '@/components/common/Cards'
+import { DifficultyChip } from '@/components/common/Forms/DifficultyChip'
+import { Box, Chip, Typography } from '@mui/material'
+import React from 'react'
+
 
 interface ExerciseDetailsProps {
     imageUrl: string;

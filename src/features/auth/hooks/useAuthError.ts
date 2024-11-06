@@ -22,6 +22,7 @@ export const useAuthError = () => {
     if (error instanceof FirebaseError) {
       return AUTH_ERROR_CODES[error.code] || error.message
     }
+
     return 'An unexpected error occurred'
   }
 

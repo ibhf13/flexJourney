@@ -1,6 +1,6 @@
-import React from 'react';
-import { TextField, TextFieldProps } from '@mui/material';
-import { Control, Controller, RegisterOptions } from 'react-hook-form';
+import { TextField, TextFieldProps } from '@mui/material'
+import React from 'react'
+import { Control, Controller, RegisterOptions } from 'react-hook-form'
 
 interface FormTextFieldProps extends Omit<TextFieldProps, 'name'> {
     name: string;
@@ -28,6 +28,7 @@ export const FormTextField: React.FC<FormTextFieldProps> = ({
                     helperText={error?.message}
                     onChange={(e) => {
                         const value = e.target.value;
+
                         if (textFieldProps.type === 'number') {
                             field.onChange(value === '' ? '' : Number(value));
                         } else {

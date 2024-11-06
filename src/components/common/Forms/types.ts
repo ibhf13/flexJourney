@@ -1,7 +1,7 @@
 import {
-  TextFieldProps as MuiTextFieldProps,
-  SelectProps as MuiSelectProps,
   CheckboxProps as MuiCheckboxProps,
+  SelectProps as MuiSelectProps,
+  TextFieldProps as MuiTextFieldProps,
 } from '@mui/material'
 
 export interface BaseFieldProps {

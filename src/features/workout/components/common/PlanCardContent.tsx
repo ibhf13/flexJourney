@@ -1,6 +1,6 @@
-import { CardContent, Typography, Box } from '@mui/material'
-import { WorkoutPlan } from '../../types/WorkoutTypes'
+import { Box, CardContent, Typography } from '@mui/material'
 import { DifficultyChip } from '../../../../components/common/Forms/DifficultyChip'
+import { WorkoutPlan } from '../../types/WorkoutTypes'
 
 interface PlanCardContentProps {
     plan: WorkoutPlan
