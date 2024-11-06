@@ -1,9 +1,9 @@
 import { Card, CardActionArea } from '@mui/material'
-import { sharedCardStyles } from './cardStyles'
 import { useCallback } from 'react'
-import { BaseCardProps } from './types'
 import CardSkeleton from './CardSkeleton'
+import { sharedCardStyles } from './cardStyles'
 import MediaWithSkeleton from './MediaWithSkeleton'
+import { BaseCardProps } from './types'
 
 const BaseCard = ({
     title,

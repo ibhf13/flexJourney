@@ -1,5 +1,5 @@
-import { Drawer, Box, IconButton, Typography, Divider } from '@mui/material'
 import CloseIcon from '@mui/icons-material/Close'
+import { Box, Divider, Drawer, IconButton, Typography } from '@mui/material'
 import { SideDrawerProps } from './types'
 
 const SideDrawer = ({
@@ -23,7 +23,7 @@ const SideDrawer = ({
       onClose={onClose}
       PaperProps={{
         sx: {
-          width: width,
+          width,
           maxWidth: '100%',
         },
       }}

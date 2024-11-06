@@ -1,15 +1,15 @@
+import { FormTextField } from '@/components/common/FormTextField'
+import { ExerciseFormData } from '@/features/exercises/types/ExerciseTypes'
+import DeleteIcon from '@mui/icons-material/Delete'
 import {
     Box,
-    Stack,
-    Typography,
     IconButton,
     Paper,
+    Stack,
     Tooltip,
-} from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import { Control } from 'react-hook-form';
-import { ExerciseFormData } from '@/features/exercises/types/ExerciseTypes';
-import { FormTextField } from '@/components/common/FormTextField';
+    Typography,
+} from '@mui/material'
+import { Control } from 'react-hook-form'
 
 interface ExerciseSetFormProps {
     control: Control<ExerciseFormData>;

@@ -1,4 +1,4 @@
-import { Tabs as MuiTabs, Tab, useTheme, useMediaQuery, Box } from '@mui/material'
+import { Box, Tabs as MuiTabs, Tab, useMediaQuery, useTheme } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { CustomTabsProps, TabPanelProps } from './types'
 

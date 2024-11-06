@@ -1,4 +1,4 @@
-import { Card, CardContent, Box, Skeleton } from '@mui/material'
+import { Box, Card, CardContent, Skeleton } from '@mui/material'
 import { sharedCardStyles } from './cardStyles'
 import { CardSkeletonProps } from './types'
 

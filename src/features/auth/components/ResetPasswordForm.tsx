@@ -1,7 +1,7 @@
+import { LoadingButton } from '@mui/lab'
+import { Box, TextField } from '@mui/material'
 import React from 'react'
 import { useForm } from 'react-hook-form'
-import { TextField, Box } from '@mui/material'
-import { LoadingButton } from '@mui/lab'
 
 interface ResetPasswordFormProps {
   onSubmit: (email: string) => Promise<void>

@@ -1,9 +1,9 @@
+import ResetPasswordForm from '@/features/auth/components/ResetPasswordForm'
+import { useResetPassword } from '@/features/auth/hooks/useResetPassword'
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
+import { Box, Container, Link, Paper, Typography } from '@mui/material'
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
-import { Container, Box, Typography, Link, Paper } from '@mui/material'
-import { useResetPassword } from '@/features/auth/hooks/useResetPassword'
-import ResetPasswordForm from '@/features/auth/components/ResetPasswordForm'
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 
 const ResetPassword: React.FC = () => {
   const { isLoading, isEmailSent, handleResetPassword } = useResetPassword()

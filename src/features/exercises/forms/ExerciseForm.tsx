@@ -1,14 +1,14 @@
-import React from 'react';
+import { useExerciseForm } from '@/features/exercises/hooks/useExerciseForm'
+import { ExerciseFormProps } from '@/features/exercises/types/ExerciseTypes'
+import AddIcon from '@mui/icons-material/Add'
 import {
     Box,
     Button,
     Stack,
     Typography,
-} from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import { useExerciseForm } from '@/features/exercises/hooks/useExerciseForm';
-import { ExerciseFormProps } from '@/features/exercises/types/ExerciseTypes';
-import { ExerciseSetForm } from './ExerciseSetForm';
+} from '@mui/material'
+import React from 'react'
+import { ExerciseSetForm } from './ExerciseSetForm'
 
 export const ExerciseForm: React.FC<ExerciseFormProps> = ({
     exerciseType,

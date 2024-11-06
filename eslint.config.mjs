@@ -1,9 +1,8 @@
-import eslint from '@eslint/js'
-import tseslint from 'typescript-eslint'
 import prettier from 'eslint-config-prettier'
+import importPlugin from 'eslint-plugin-import'
 import react from 'eslint-plugin-react'
 import reactHooks from 'eslint-plugin-react-hooks'
-import importPlugin from 'eslint-plugin-import'
+import tseslint from 'typescript-eslint'
 
 export default [
   {
@@ -65,29 +64,12 @@ export default [
       'react/prop-types': 'off',
       'react/react-in-jsx-scope': 'off',
       'react/jsx-uses-react': 'off',
-      'react/jsx-props-no-spreading': 'warn',
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
       'react/jsx-curly-brace-presence': ['warn', { props: 'never', children: 'never' }],
       'react/self-closing-comp': ['warn', { component: true, html: true }],
 
       // Import rules
-      'import/order': [
-        'warn',
-        {
-          groups: ['builtin', 'external', 'internal', 'parent', 'sibling', 'index'],
-          'builtin': 'always',
-          'external': 'always',
-          'internal': 'always',
-          'parent': 'always',
-          'sibling': 'always',
-          'index': 'always',
-          alphabetize: {
-            order: 'asc',
-            caseInsensitive: true,
-          },
-        },
-      ],
       'import/no-duplicates': 'error',
       'import/no-unresolved': 'error',
       'import/no-cycle': 'warn',

@@ -1,6 +1,6 @@
-import { createContext, useContext, useReducer, ReactNode, useCallback } from 'react'
-import { Exercise } from '../types/ExerciseTypes'
 import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
+import { createContext, ReactNode, useCallback, useContext, useReducer } from 'react'
+import { Exercise } from '../types/ExerciseTypes'
 
 interface ExerciseContextState {
     exercises: Exercise[]
@@ -44,11 +44,13 @@ function exerciseReducer(state: ExerciseContextState, action: ExerciseAction): E
             }
         case 'TOGGLE_COMPLETION':
             const newCompletedExercises = new Set(state.completedExercises)
+
             if (newCompletedExercises.has(action.payload)) {
                 newCompletedExercises.delete(action.payload)
             } else {
                 newCompletedExercises.add(action.payload)
             }
+
             return { ...state, completedExercises: newCompletedExercises }
         case 'SET_LOADING':
             return { ...state, isLoading: action.payload }
@@ -104,8 +106,10 @@ export function ExerciseProvider({ children }: { children: ReactNode }) {
 
 export const useExerciseContext = () => {
     const context = useContext(ExerciseContext)
+
     if (context === undefined) {
         throw new Error('useExerciseContext must be used within an ExerciseProvider')
     }
+
     return context
 }

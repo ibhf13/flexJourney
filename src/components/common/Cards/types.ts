@@ -1,5 +1,5 @@
+import { SxProps, Theme } from "@mui/material"
 import { ReactNode } from "react"
-import { Theme, SxProps } from "@mui/material"
 
 
 export interface BaseCardProps {

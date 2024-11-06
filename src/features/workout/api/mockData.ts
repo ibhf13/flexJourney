@@ -926,6 +926,7 @@ export const fetchWorkoutPlanById = (planId: string): Promise<WorkoutPlan | unde
   return new Promise((resolve) => {
     setTimeout(() => {
       const plan = WORKOUT_PLANS.find((p) => p.id === planId);
+
       resolve(plan);
     }, 1000)
   });

@@ -1,12 +1,12 @@
-import { RouteObject } from 'react-router-dom'
 import MainLayout from '@/components/Layout/MainLayout'
 import HomePage from '@/pages/home/HomePage'
 import Login from '@/pages/Login'
-import Signup from '@/pages/Signup'
+import { ExercisePage } from '@/pages/plans/ExercisePage'
+import { PlanDayPage } from '@/pages/plans/PlanDayPage'
+import { PlanPage } from '@/pages/plans/PlanPage'
 import ResetPassword from '@/pages/ResetPassword'
-import { PlanSelectionPage } from '@/pages/workout/PlanSelectionPage'
-import { PlanDetailsPage } from '@/pages/workout/PlanDetailsPage'
-import { ExerciseListPage } from '@/pages/ExerciseListPage'
+import Signup from '@/pages/Signup'
+import { RouteObject } from 'react-router-dom'
 
 export const publicRoutes = [
     {
@@ -33,15 +33,15 @@ export const privateRoutes: RouteObject = {
         },
         {
             path: 'plan',
-            element: <PlanSelectionPage />,
+            element: <PlanPage />,
         },
         {
             path: '/plan/:planId',
-            element: <PlanDetailsPage />,
+            element: <PlanDayPage />,
         },
         {
             path: '/plan/:planId/day/:dayId',
-            element: <ExerciseListPage />
+            element: <ExercisePage />
         }
     ],
 }

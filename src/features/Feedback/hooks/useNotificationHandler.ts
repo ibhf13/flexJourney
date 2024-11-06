@@ -1,9 +1,9 @@
 import { useCallback } from 'react'
-import { useNotification } from '../contexts/NotificationContext'
-import { NotificationSeverity } from '../types'
+import { useNotificationContext } from '../contexts/NotificationContext'
+import { NotificationSeverity } from '../types/types'
 
 export const useNotificationHandler = () => {
-  const { showNotification } = useNotification()
+  const { showNotification } = useNotificationContext()
 
   const showMessage = useCallback(
     (message: string, severity: NotificationSeverity = 'info', duration?: number) => {

@@ -1,5 +1,5 @@
-import { Alert as MuiAlert, AlertTitle } from '@mui/material'
-import { AlertProps } from '../types'
+import { AlertTitle, Alert as MuiAlert } from '@mui/material'
+import { AlertProps } from '../types/types'
 
 const Alert = ({
   severity = 'info',

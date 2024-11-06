@@ -1,7 +1,7 @@
-import { useState } from 'react'
-import { sendPasswordResetEmail } from 'firebase/auth'
-import { auth } from '@/config/firebase'
+import { auth } from '@/config/firebase/firebase'
 import { useNotification } from '@/features/Feedback'
+import { sendPasswordResetEmail } from 'firebase/auth'
+import { useState } from 'react'
 import { useAuthError } from './useAuthError'
 
 export const useResetPassword = () => {

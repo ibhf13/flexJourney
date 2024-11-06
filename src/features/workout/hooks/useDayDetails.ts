@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
-import { WorkoutDay } from '../types/WorkoutTypes'
-import { useWorkoutContext } from '../contexts/WorkoutContext'
 import { fetchWorkoutPlanById } from '../api/mockData'
+import { useWorkoutContext } from '../contexts/WorkoutContext'
+import { WorkoutDay } from '../types/WorkoutTypes'
 
 export const useDayDetails = (planId: string | undefined, dayId: string | undefined) => {
     const { selectedPlan, selectPlan } = useWorkoutContext()
@@ -26,6 +26,7 @@ export const useDayDetails = (planId: string | undefined, dayId: string | undefi
             }
 
             const day = plan.days.find(d => d.id === dayId)
+
             if (!day) {
                 throw new Error('Workout day not found')
             }

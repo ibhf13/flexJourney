@@ -1,4 +1,4 @@
-import { CardContent, Typography, Box, Chip } from '@mui/material'
+import { Box, CardContent, Chip, Typography } from '@mui/material'
 import { DifficultyChip } from '../Forms/DifficultyChip'
 import { ellipsisTextStyles } from './cardStyles'
 import { BaseCardContentProps } from './types'

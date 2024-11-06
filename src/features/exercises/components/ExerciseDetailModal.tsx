@@ -1,17 +1,16 @@
-import React, { useState } from 'react';
-import { Dialog, DialogContent, Grid, Box, useTheme, useMediaQuery } from '@mui/material';
-import { Exercise } from '@/features/exercises/types/ExerciseTypes';
-import { ExerciseForm } from '../forms/ExerciseForm';
-import { ExerciseFormData } from '@/features/exercises/types/ExerciseTypes';
-import { useExerciseCompletion } from '@/features/exercises/hooks/useExerciseCompletion';
-import { useNotification } from '@/features/Feedback';
-import { useUnsavedChanges } from '@/features/exercises/hooks/useUnsavedChanges';
-import { ExerciseModalHeader } from './ExerciseModalHeader';
-import { ExerciseDetails } from './ExerciseDetails';
-import { ExerciseVideo } from './ExerciseVideo';
-import { useTrainingHistory } from '@/features/workout/hooks/useTrainingHistory'
+import { useExerciseCompletion } from '@/features/exercises/hooks/useExerciseCompletion'
+import { useUnsavedChanges } from '@/features/exercises/hooks/useUnsavedChanges'
+import { Exercise, ExerciseFormData } from '@/features/exercises/types/ExerciseTypes'
+import { useNotification } from '@/features/Feedback'
 import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
+import { useTrainingHistory } from '@/features/workout/hooks/useTrainingHistory'
 import { WorkoutDay } from '@/features/workout/types/WorkoutTypes'
+import { Box, Dialog, DialogContent, Grid, useMediaQuery, useTheme } from '@mui/material'
+import React, { useState } from 'react'
+import { ExerciseForm } from '../forms/ExerciseForm'
+import { ExerciseDetails } from './ExerciseDetails'
+import { ExerciseModalHeader } from './ExerciseModalHeader'
+import { ExerciseVideo } from './ExerciseVideo'
 
 interface ExerciseDetailModalProps {
     exercise: Exercise;
@@ -47,6 +46,7 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
                     message: 'No workout plan selected',
                     severity: 'error'
                 })
+
                 return
             }
 
@@ -55,6 +55,7 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
                     message: 'No workout day selected',
                     severity: 'error'
                 })
+
                 return
             }
 

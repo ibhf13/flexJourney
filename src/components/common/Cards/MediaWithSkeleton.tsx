@@ -1,6 +1,6 @@
+import fallbackImage from '@/assets/images/dumbells.jpg'
 import { CardMedia, Skeleton } from '@mui/material'
 import { useState } from 'react'
-import fallbackImage from '@/assets/images/dumbells.jpg'
 
 interface MediaWithSkeletonProps {
     imageUrl?: string

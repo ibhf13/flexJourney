@@ -1,4 +1,4 @@
-import { Select, FormControl, InputLabel, MenuItem, FormHelperText } from '@mui/material'
+import { FormControl, FormHelperText, InputLabel, MenuItem, Select } from '@mui/material'
 import { SelectFieldProps } from './types'
 
 const SelectField = ({

@@ -1,6 +1,6 @@
-import { Breadcrumbs as MuiBreadcrumbs, Link, Typography, Box } from '@mui/material'
-import { Link as RouterLink } from 'react-router-dom'
 import NavigateNextIcon from '@mui/icons-material/NavigateNext'
+import { Box, Link, Breadcrumbs as MuiBreadcrumbs, Typography } from '@mui/material'
+import { Link as RouterLink } from 'react-router-dom'
 import { BreadcrumbsProps } from './types'
 
 const Breadcrumbs = ({

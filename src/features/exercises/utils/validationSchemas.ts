@@ -1,4 +1,4 @@
-import * as yup from 'yup';
+import * as yup from 'yup'
 
 const exerciseSetSchema = yup.object().shape({
     sets: yup.array().of(
@@ -39,4 +39,4 @@ const exerciseSetSchema = yup.object().shape({
     ).required().min(1, 'At least one set is required'),
 });
 
-export { exerciseSetSchema };
+export { exerciseSetSchema }

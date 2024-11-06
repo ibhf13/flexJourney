@@ -1,4 +1,4 @@
-import { Container as MuiContainer, Box } from '@mui/material'
+import { Box, Container as MuiContainer } from '@mui/material'
 import { ContainerProps } from './types'
 
 const Container = ({

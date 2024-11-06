@@ -1,13 +1,13 @@
-import { useState } from 'react'
-import { useAuth } from '@/contexts/AuthContext'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useNotification } from '@/features/Feedback'
-import { trainingHistoryService } from '../services/trainingHistoryService'
-import { TrainingHistoryEntry, ExerciseLog } from '../types/TrainingHistoryTypes'
+import { useState } from 'react'
 import { v4 as uuidv4 } from 'uuid'
+import { trainingHistoryService } from '../services/trainingHistoryService'
+import { ExerciseLog, TrainingHistoryEntry } from '../types/TrainingHistoryTypes'
 
 export const useTrainingHistory = () => {
     const [isLoading, setIsLoading] = useState(false)
-    const { currentUser } = useAuth()
+    const { currentUser } = useAuthContext()
     const { showNotification } = useNotification()
 
     const saveExerciseLog = async (

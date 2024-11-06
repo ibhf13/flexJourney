@@ -1,28 +1,28 @@
-import { useState } from 'react'
+import { useAuthContext } from '@/contexts/AuthContext'
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
+import MenuIcon from '@mui/icons-material/Menu'
 import {
   AppBar,
-  Toolbar,
-  IconButton,
-  Box,
-  useTheme,
-  useMediaQuery,
   Avatar,
+  Box,
+  IconButton,
+  Toolbar,
   Typography,
+  useMediaQuery,
+  useTheme,
 } from '@mui/material'
-import MenuIcon from '@mui/icons-material/Menu'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { PrimaryButton } from '../common/Buttons'
 import { HeaderProps } from './types'
 import UserMenu from './UserMenu'
-import { PrimaryButton } from '../common/Buttons'
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
-import { useAuth } from '@/contexts/AuthContext'
 
 
 const Header = ({ toggleSidebar }: HeaderProps) => {
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null)
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
-  const isAuthenticated = useAuth()
+  const isAuthenticated = useAuthContext()
 
   const handleUserMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setUserMenuAnchor(event.currentTarget)

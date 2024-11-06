@@ -1,8 +1,8 @@
-import { useForm, useFieldArray, Resolver } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import { v4 as uuidv4 } from 'uuid';
-import { ExerciseFormData } from '../types/ExerciseTypes';
-import { exerciseSetSchema } from '../utils/validationSchemas';
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Resolver, useFieldArray, useForm } from 'react-hook-form'
+import { v4 as uuidv4 } from 'uuid'
+import { ExerciseFormData } from '../types/ExerciseTypes'
+import { exerciseSetSchema } from '../utils/validationSchemas'
 
 interface UseExerciseFormProps {
     initialData?: ExerciseFormData;

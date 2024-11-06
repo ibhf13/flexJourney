@@ -1,13 +1,13 @@
-import { List, ListItem, ListItemIcon, ListItemText, ListItemButton } from '@mui/material'
+import { useNavigationContext } from '@/contexts/NavigationContext'
 import {
-  Home as HomeIcon,
-  FitnessCenter as WorkoutIcon,
   History as HistoryIcon,
+  Home as HomeIcon,
   Person as ProfileIcon,
+  FitnessCenter as WorkoutIcon,
 } from '@mui/icons-material'
+import { List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { NavigationProps } from './types'
-import { useNavigation } from '@/contexts/NavigationContext'
 
 const navigationItems = [
   { label: 'Home', path: '/', icon: <HomeIcon /> },
@@ -18,7 +18,7 @@ const navigationItems = [
 ]
 
 const Navigation = ({ orientation = 'horizontal' }: NavigationProps) => {
-  const { activeRoute, setActiveRoute } = useNavigation()
+  const { activeRoute, setActiveRoute } = useNavigationContext()
 
   const handleNavigation = (path: string) => {
     setActiveRoute(path)

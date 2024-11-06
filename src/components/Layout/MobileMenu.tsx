@@ -1,24 +1,24 @@
+import { useAuthContext } from '@/contexts/AuthContext'
+import { useNavigationContext } from '@/contexts/NavigationContext'
 import {
+  History as HistoryIcon,
+  Home as HomeIcon,
+  Person as ProfileIcon,
+  FitnessCenter as WorkoutIcon,
+} from '@mui/icons-material'
+import {
+  Box,
+  Divider,
   List,
   ListItem,
+  ListItemButton,
   ListItemIcon,
   ListItemText,
-  ListItemButton,
-  Divider,
-  Box,
 } from '@mui/material'
-import {
-  Home as HomeIcon,
-  FitnessCenter as WorkoutIcon,
-  History as HistoryIcon,
-  Person as ProfileIcon,
-} from '@mui/icons-material'
 import { Link } from 'react-router-dom'
+import { PrimaryButton } from '../common/Buttons'
 import { SideDrawer } from '../common/Popups'
 import { SidebarProps } from './types'
-import { PrimaryButton } from '../common/Buttons'
-import { useNavigation } from '@/contexts/NavigationContext'
-import { useAuth } from '@/contexts/AuthContext'
 
 const navigationItems = [
   { label: 'Home', path: '/', icon: <HomeIcon /> },
@@ -29,8 +29,8 @@ const navigationItems = [
 ]
 
 const MobileMenu = ({ open, onClose }: SidebarProps) => {
-  const isAuthenticated = useAuth()
-  const { activeRoute } = useNavigation()
+  const isAuthenticated = useAuthContext()
+  const { activeRoute } = useNavigationContext()
 
   return (
     <SideDrawer open={open} onClose={onClose} title="Menu" anchor="left" width={280}>

@@ -1,13 +1,13 @@
-import { Container, Grid, Typography } from '@mui/material'
-import { useNavigate } from 'react-router-dom'
-import { PlanCard } from '@features/workout/components/PlanCard'
 import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
 import { useWorkoutPlans } from '@/features/workout/hooks/useWorkoutPlans'
+import { PlanCard } from '@features/workout/components/PlanCard'
+import { Container, Grid, Typography } from '@mui/material'
+import { useNavigate } from 'react-router-dom'
 
 import { WorkoutPlan } from '@/features/workout/types/WorkoutTypes'
 import { LoadingErrorWrapper } from '@features/workout/components/common/LoadingErrorWrapper'
 
-export const PlanSelectionPage = () => {
+export const PlanPage = () => {
   const navigate = useNavigate()
   const { plans, isLoading, error } = useWorkoutPlans()
   const { selectPlan } = useWorkoutContext()

@@ -1,4 +1,4 @@
-import { FormControlLabel, Checkbox, FormControl, FormHelperText } from '@mui/material'
+import { Checkbox, FormControl, FormControlLabel, FormHelperText } from '@mui/material'
 import { CheckboxFieldProps } from './types'
 
 const CheckboxField = ({

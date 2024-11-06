@@ -1,6 +1,6 @@
-import { createContext, useContext, useReducer, ReactNode, useEffect } from 'react'
+import { createContext, ReactNode, useContext, useEffect, useReducer } from 'react'
 import { WorkoutPlan } from '../types/WorkoutTypes'
-import { saveToLocalStorage, loadFromLocalStorage } from '../utils/storage'
+import { loadFromLocalStorage, saveToLocalStorage } from '../utils/storage'
 
 interface WorkoutContextState {
     selectedPlan: WorkoutPlan | null
@@ -121,6 +121,7 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         const storedState = loadFromLocalStorage('workoutState')
+
         if (storedState) {
             dispatch({ type: 'LOAD_STORED_STATE', payload: storedState })
         }
@@ -146,8 +147,10 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
 
 export const useWorkoutContext = () => {
     const context = useContext(WorkoutContext)
+
     if (context === undefined) {
         throw new Error('useWorkoutContext must be used within a WorkoutProvider')
     }
+
     return context
 }

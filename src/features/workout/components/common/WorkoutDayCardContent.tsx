@@ -1,7 +1,7 @@
-import { CardContent, Typography, Box, Chip } from '@mui/material'
-import { WorkoutDay } from '../../types/WorkoutTypes'
-import { DifficultyChip } from '../../../../components/common/Forms/DifficultyChip'
+import { Box, CardContent, Chip, Typography } from '@mui/material'
 import { ellipsisTextStyles } from '../../../../components/common/Cards/cardStyles'
+import { DifficultyChip } from '../../../../components/common/Forms/DifficultyChip'
+import { WorkoutDay } from '../../types/WorkoutTypes'
 
 interface WorkoutDayCardContentProps {
     day: WorkoutDay
