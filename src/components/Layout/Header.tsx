@@ -1,4 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useProfileContext } from '@/features/profile/contexts/ProfileContext'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import MenuIcon from '@mui/icons-material/Menu'
 import {
@@ -23,6 +24,8 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const isAuthenticated = useAuthContext()
+  const { user } = useAuthContext()
+  const { profile } = useProfileContext()
 
   const handleUserMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setUserMenuAnchor(event.currentTarget)
@@ -101,6 +104,8 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
               }}
             >
               <Avatar
+                src={profile?.photoURL || ''}
+                alt={profile?.displayName}
                 sx={{
                   width: 32,
                   height: 32,

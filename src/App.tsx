@@ -1,7 +1,8 @@
 import { AuthProvider } from '@/contexts/AuthContext'
 import { NavigationProvider } from '@/contexts/NavigationContext'
 import { ExerciseProvider } from '@/features/exercises/contexts/ExerciseContext'
-import { NotificationProvider } from '@/features/Feedback'
+import { NotificationProvider } from '@/features/Feedback/contexts/NotificationContext'
+import { ProfileProvider } from '@/features/profile/contexts/ProfileContext'
 import { WorkoutProvider } from '@/features/workout/contexts/WorkoutContext'
 import GlobalStyles from '@/styles/globalStyles'
 import theme from '@/styles/theme'
@@ -27,13 +28,15 @@ function App() {
         <MuiGlobalStyles styles={GlobalStyles} />
         <NavigationProvider>
           <AuthProvider>
-            <NotificationProvider>
-              <WorkoutProvider>
-                <ExerciseProvider>
-                  <AppRouter />
-                </ExerciseProvider>
-              </WorkoutProvider>
-            </NotificationProvider>
+            <ProfileProvider>
+              <NotificationProvider>
+                <WorkoutProvider>
+                  <ExerciseProvider>
+                    <AppRouter />
+                  </ExerciseProvider>
+                </WorkoutProvider>
+              </NotificationProvider>
+            </ProfileProvider>
           </AuthProvider>
         </NavigationProvider>
       </ThemeProvider>

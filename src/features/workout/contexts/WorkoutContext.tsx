@@ -1,4 +1,7 @@
+import { useAuthContext } from '@/contexts/AuthContext'
+import { Timestamp } from 'firebase/firestore'
 import { createContext, ReactNode, useContext, useEffect, useReducer } from 'react'
+import { saveWorkoutSession } from '../api/firestoreApi'
 import { WorkoutPlan } from '../types/WorkoutTypes'
 import { loadFromLocalStorage, saveToLocalStorage } from '../utils/storage'
 
@@ -29,6 +32,7 @@ interface WorkoutContextValue extends WorkoutContextState {
     resetWorkout: () => void
     updateExerciseProgress: (exerciseId: string, weight: number, reps: number) => void
     selectedDay: number
+    completeWorkout: (exercises: any[]) => Promise<void>
 }
 
 const initialState: WorkoutContextState = {
@@ -118,6 +122,7 @@ function workoutReducer(state: WorkoutContextState, action: WorkoutAction): Work
 
 export function WorkoutProvider({ children }: { children: ReactNode }) {
     const [state, dispatch] = useReducer(workoutReducer, initialState)
+    const { user } = useAuthContext()
 
     useEffect(() => {
         const storedState = loadFromLocalStorage('workoutState')
@@ -131,11 +136,35 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
         saveToLocalStorage('workoutState', state)
     }, [state])
 
+    const completeWorkout = async (exercises: any[]) => {
+        if (!user?.uid || !state.selectedPlan) return
+
+        try {
+            const workoutData = {
+                date: Timestamp.now(),
+                duration: 60, // Calculate actual duration
+                type: state.selectedPlan.title,
+                exercises: exercises.map(ex => ({
+                    name: ex.name,
+                    sets: ex.sets,
+                    reps: ex.reps,
+                    weight: state.exerciseProgress[ex.id]?.weight || 0
+                })),
+                calories: 300 // Calculate actual calories
+            }
+
+            await saveWorkoutSession(user.uid, workoutData)
+        } catch (error) {
+            console.error('Error saving workout:', error)
+        }
+    }
+
     const value: WorkoutContextValue = {
         ...state,
         selectPlan: (plan) => dispatch({ type: 'SELECT_PLAN', payload: plan }),
         selectDay: (dayIndex) => dispatch({ type: 'SELECT_DAY', payload: dayIndex }),
         completeExercise: (exerciseId) => dispatch({ type: 'COMPLETE_EXERCISE', payload: exerciseId }),
+        completeWorkout,
         resetWorkout: () => dispatch({ type: 'RESET_WORKOUT' }),
         updateExerciseProgress: (exerciseId: string, weight: number, reps: number) =>
             dispatch({ type: 'UPDATE_EXERCISE_PROGRESS', payload: { exerciseId, weight, reps } }),

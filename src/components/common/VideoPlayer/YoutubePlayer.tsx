@@ -1,13 +1,12 @@
-import {
-    Box
-} from '@mui/material'
+import { Box } from '@mui/material'
 import React from 'react'
 
 interface YoutubePlayerProps {
     videoUrl: string;
+    onError?: (error: Error) => void;
 }
 
-export const YoutubePlayer: React.FC<YoutubePlayerProps> = ({ videoUrl }) => {
+export const YoutubePlayer: React.FC<YoutubePlayerProps> = ({ videoUrl, onError }) => {
     // Extract video ID from URL
     const getVideoId = (url: string) => {
         const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
@@ -19,6 +18,10 @@ export const YoutubePlayer: React.FC<YoutubePlayerProps> = ({ videoUrl }) => {
     const videoId = getVideoId(videoUrl);
 
     if (!videoId) return null;
+
+    const handleIframeError = () => {
+        onError?.(new Error('Failed to load video'));
+    };
 
     return (
         <Box
@@ -41,6 +44,7 @@ export const YoutubePlayer: React.FC<YoutubePlayerProps> = ({ videoUrl }) => {
                 title="Exercise video"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 loading="lazy"
+                onError={handleIframeError}
             />
         </Box>
     );

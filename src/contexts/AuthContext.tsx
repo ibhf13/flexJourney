@@ -1,4 +1,5 @@
 import { auth } from '@/config/firebase/firebase'
+import { createInitialProfile } from '@/features/profile/utils/profileSeeder'
 import {
   createUserWithEmailAndPassword,
   GoogleAuthProvider,
@@ -66,6 +67,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
       const { user } = await createUserWithEmailAndPassword(auth, email, password)
 
       await updateProfile(user, { displayName })
+      
+      // Create initial profile in Firestore
+      await createInitialProfile(user.uid, user.email, displayName)
+      
       setIsAuthenticated(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'An error occurred during registration')
@@ -98,8 +103,15 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     try {
       setError(null)
       const provider = new GoogleAuthProvider()
-
-      await signInWithPopup(auth, provider)
+      const result = await signInWithPopup(auth, provider)
+      
+      // Create initial profile for Google sign-in users if they don't have one
+      await createInitialProfile(
+        result.user.uid,
+        result.user.email,
+        result.user.displayName
+      )
+      
       setIsAuthenticated(true)
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Google sign-in failed')
