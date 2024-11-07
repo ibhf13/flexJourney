@@ -2,7 +2,10 @@ import { PrimaryButton, SecondaryButton } from '@/components/common/Buttons'
 import { SelectField, TextField } from '@/components/common/Forms'
 import { DialogPopup } from '@/components/common/Popups'
 import { Container, GridContainer, GridItem, Paper } from '@/components/common/StructureComponents'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { useNotification } from '@/features/Feedback'
+import { seedExercises } from '@/features/workout/api/exerciseService'
+import { seedWorkoutPlans } from '@/features/workout/api/workoutService'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
@@ -15,6 +18,9 @@ const HomePage = () => {
   const navigate = useNavigate()
   const { showNotification } = useNotification()
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [isSeeding, setIsSeeding] = useState(false)
+  const [isExerciseSeeding, setIsExerciseSeeding] = useState(false)
+  const { user } = useAuthContext()
 
   const handleGetStarted = () => {
     showNotification({
@@ -29,6 +35,44 @@ const HomePage = () => {
     { value: 'intermediate', label: 'Intermediate' },
     { value: 'advanced', label: 'Advanced' },
   ]
+
+  const handleSeedData = async () => {
+    try {
+      setIsSeeding(true)
+      await seedWorkoutPlans()
+      showNotification({
+        message: 'Workout plans seeded successfully!',
+        severity: 'success',
+      })
+    } catch (error) {
+      showNotification({
+        message: 'Failed to seed workout plans',
+        severity: 'error',
+      })
+      console.error('Seeding error:', error)
+    } finally {
+      setIsSeeding(false)
+    }
+  }
+
+  const handleSeedExercises = async () => {
+    try {
+      setIsExerciseSeeding(true)
+      await seedExercises()
+      showNotification({
+        message: 'Exercises seeded successfully!',
+        severity: 'success',
+      })
+    } catch (error) {
+      showNotification({
+        message: 'Failed to seed exercises',
+        severity: 'error',
+      })
+      console.error('Seeding error:', error)
+    } finally {
+      setIsExerciseSeeding(false)
+    }
+  }
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -117,9 +161,25 @@ const HomePage = () => {
 
       {/* Quick Start Section */}
       <Paper sx={{ mt: 4, p: 4, bgcolor: 'background.paper' }}>
-        <Typography variant="h4" gutterBottom>
-          Quick Start
-        </Typography>
+        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
+          <Typography variant="h4">Quick Start</Typography>
+            <Box sx={{ display: 'flex', gap: 2 }}>
+              <SecondaryButton 
+                onClick={handleSeedData}
+                disabled={isSeeding}
+                startIcon={<FitnessCenterIcon />}
+              >
+                {isSeeding ? 'Seeding Plans...' : 'Seed Workout Plans'}
+              </SecondaryButton>
+              <SecondaryButton 
+                onClick={handleSeedExercises}
+                disabled={isExerciseSeeding}
+                startIcon={<FitnessCenterIcon />}
+              >
+                {isExerciseSeeding ? 'Seeding Exercises...' : 'Seed Exercises'}
+              </SecondaryButton>
+            </Box>
+        </Box>
         <Box
           sx={{
             display: 'flex',
