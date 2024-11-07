@@ -1,7 +1,7 @@
-import { Box, Drawer, useTheme, useMediaQuery, Divider, Typography } from '@mui/material'
-import { SidebarProps } from './types'
-import Navigation from './Navigation'
 import Logo from '@mui/icons-material/FitnessCenter'
+import { Box, Divider, Drawer, Typography, useMediaQuery, useTheme } from '@mui/material'
+import Navigation from './Navigation'
+import { SidebarProps } from './types'
 
 const SIDEBAR_WIDTH = 240
 
@@ -28,7 +28,7 @@ const Sidebar = ({ open, onClose }: SidebarProps) => {
       >
         <Logo sx={{ fontSize: 32, color: 'primary.main' }} />
         <Typography variant="h6" color="primary">
-          FitLife
+          FlexJourney
         </Typography>
       </Box>
       <Divider />
