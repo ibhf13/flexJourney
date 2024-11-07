@@ -29,7 +29,7 @@ const navigationItems = [
 ]
 
 const MobileMenu = ({ open, onClose }: SidebarProps) => {
-  const { isAuthenticated } = useAuthContext()
+  const isAuthenticated = useAuthContext()
   const { activeRoute } = useNavigationContext()
 
   return (

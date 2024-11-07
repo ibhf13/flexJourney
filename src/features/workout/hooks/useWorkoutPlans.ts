@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchWorkoutPlans } from '../api/workoutService'
+import { fetchWorkoutPlans } from '../api/mockData'
 import { WorkoutPlan } from '../types/WorkoutTypes'
 
 export const useWorkoutPlans = () => {
@@ -16,7 +16,7 @@ export const useWorkoutPlans = () => {
                 setPlans(data)
             } catch (err) {
                 setError(err as Error)
-                console.error('Error loading workout plans:', err)
+                console.error(err)
             } finally {
                 setIsLoading(false)
             }

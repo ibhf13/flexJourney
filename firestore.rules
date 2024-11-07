@@ -23,14 +23,7 @@ service cloud.firestore {
     // Public exercise data
     match /exercises/{exerciseId} {
       allow read: if isAuthenticated();
-      allow write: if true;
-    }
-
-    // Workout plans collection
-    match /workoutPlans/{planId} {
-      allow read: if isAuthenticated();
-      // Only allow write during seeding by admin
-      allow write: if true;
+      allow write: if false;
     }
   }
 }
