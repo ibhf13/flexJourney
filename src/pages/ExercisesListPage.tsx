@@ -6,7 +6,7 @@ import { ExerciseViewModal } from '@/features/exercises/components/ExerciseViewM
 import { ViewToggle } from '@/features/exercises/components/ViewToggle'
 import { useExercises } from '@/features/exercises/hooks/useExercises'
 import { Exercise } from '@/features/exercises/types/ExerciseTypes'
-import { Box, Container, Grid, List, Pagination, Paper } from '@mui/material'
+import { Box, Container, Grid, List, Pagination, Paper, useMediaQuery, useTheme } from '@mui/material'
 import { useState } from 'react'
 
 const ITEMS_PER_PAGE = 12
@@ -41,30 +41,57 @@ export const ExercisesListPage = () => {
         setSelectedExercise(null)
     }
 
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+
     return (
-        <Container maxWidth="xl" sx={{ py: 4 }}>
-            <Paper sx={{ p: 3, mb: 4 }}>
+        <Container
+            maxWidth="xl"
+            sx={{
+                py: { xs: 2, sm: 4 },
+                px: { xs: 1, sm: 3 }
+            }}
+        >
+            <Paper sx={{
+                p: { xs: 2, sm: 3 },
+                mb: { xs: 2, sm: 4 }
+            }}>
                 <Box sx={{
                     display: 'flex',
+                    flexDirection: 'row',
+                    flexWrap: 'nowrap',
+                    gap: 2,
                     justifyContent: 'space-between',
                     alignItems: 'center',
-                    mb: 3
+                    mb: 3,
+                    overflow: 'auto',
+                    '&::-webkit-scrollbar': { display: 'none' },
+                    msOverflowStyle: 'none',
+                    scrollbarWidth: 'none',
                 }}>
-                    <ViewToggle
-                        isGridView={isGridView}
-                        onViewChange={setIsGridView}
-                    />
+                    <Box sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: 2,
+                        flexShrink: 0
+                    }}>
+                        <ViewToggle
+                            isGridView={isGridView}
+                            onViewChange={setIsGridView}
+                        />
+                    </Box>
                     <ExerciseFilters
                         searchQuery={searchQuery}
                         selectedCategory={selectedCategory}
                         onSearchChange={setSearchQuery}
                         onCategoryChange={setSelectedCategory}
+                        isMobile={isMobile}
                     />
                 </Box>
 
                 <LoadingErrorWrapper isLoading={isLoading} error={error}>
                     {isGridView ? (
-                        <Grid container spacing={3}>
+                        <Grid container spacing={{ xs: 2, sm: 3 }}>
                             {paginatedExercises.map(exercise => (
                                 <Grid
                                     item
@@ -82,7 +109,12 @@ export const ExercisesListPage = () => {
                             ))}
                         </Grid>
                     ) : (
-                        <List sx={{ width: '100%' }}>
+                        <List sx={{
+                            width: '100%',
+                            '& .MuiListItem-root': {
+                                px: { xs: 1, sm: 2 }
+                            }
+                        }}>
                             {paginatedExercises.map(exercise => (
                                 <ExerciseListItem
                                     key={exercise.id}
@@ -94,12 +126,18 @@ export const ExercisesListPage = () => {
                     )}
 
                     {totalPages > 1 && (
-                        <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+                        <Box sx={{
+                            display: 'flex',
+                            justifyContent: 'center',
+                            mt: { xs: 2, sm: 4 }
+                        }}>
                             <Pagination
                                 count={totalPages}
                                 page={page}
                                 onChange={(_, value) => setPage(value)}
                                 color="primary"
+                                size={isMobile ? 'small' : 'medium'}
+                                siblingCount={isMobile ? 0 : 1}
                             />
                         </Box>
                     )}

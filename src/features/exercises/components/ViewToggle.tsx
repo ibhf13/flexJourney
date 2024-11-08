@@ -1,6 +1,6 @@
 import GridViewIcon from '@mui/icons-material/GridView'
 import ViewListIcon from '@mui/icons-material/ViewList'
-import { IconButton, Tooltip } from '@mui/material'
+import { Box, IconButton, Tooltip } from '@mui/material'
 
 interface ViewToggleProps {
     isGridView: boolean
@@ -9,9 +9,9 @@ interface ViewToggleProps {
 
 export const ViewToggle = ({ isGridView, onViewChange }: ViewToggleProps) => {
     return (
-        <div>
+        <Box>
             <Tooltip title="Grid View">
-                <IconButton 
+                <IconButton
                     color={isGridView ? 'primary' : 'default'}
                     onClick={() => onViewChange(true)}
                 >
@@ -19,13 +19,13 @@ export const ViewToggle = ({ isGridView, onViewChange }: ViewToggleProps) => {
                 </IconButton>
             </Tooltip>
             <Tooltip title="List View">
-                <IconButton 
+                <IconButton
                     color={!isGridView ? 'primary' : 'default'}
                     onClick={() => onViewChange(false)}
                 >
                     <ViewListIcon />
                 </IconButton>
             </Tooltip>
-        </div>
+        </Box>
     )
 }
