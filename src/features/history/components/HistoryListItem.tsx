@@ -3,33 +3,23 @@ import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
-import {
-    Accordion,
-    AccordionDetails,
-    AccordionSummary,
-    Box,
-    Chip,
-    IconButton,
-    Typography
-} from '@mui/material'
+import { Box, Chip, Collapse, IconButton, Stack, Typography } from '@mui/material'
+import { alpha } from '@mui/material/styles'
+import { motion } from 'framer-motion'
 import { useState } from 'react'
 import { useHistory } from '../hooks/useHistory'
 import { TrainingHistoryEntry } from '../types/HistoryTypes'
 import { EditHistoryDialog } from './EditHistoryDialog'
 
-interface EnhancedHistoryListItemProps {
+interface HistoryListItemProps {
     entry: TrainingHistoryEntry
 }
 
-export const HistoryListItem = ({ entry }: EnhancedHistoryListItemProps) => {
+export const HistoryListItem = ({ entry }: HistoryListItemProps) => {
+    const [isExpanded, setIsExpanded] = useState(false)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
     const { deleteEntry, updateEntry } = useHistory()
-
-    const totalSets = entry.exercises.reduce(
-        (sum, exercise) => sum + exercise.sets.length,
-        0
-    )
 
     const handleDelete = () => {
         deleteEntry(entry.id)
@@ -42,68 +32,179 @@ export const HistoryListItem = ({ entry }: EnhancedHistoryListItemProps) => {
     }
 
     return (
-        <>
-            <Accordion
+        <Box
+            component={motion.div}
+            layout
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            sx={{
+                width: '100%',
+                bgcolor: 'background.paper',
+                borderRadius: { xs: 2, sm: 3 },
+                border: '1px solid',
+                borderColor: (theme) => alpha(theme.palette.divider, 0.1),
+                overflow: 'hidden',
+                transition: 'all 0.2s ease',
+                '&:hover': {
+                    borderColor: 'primary.main',
+                    bgcolor: (theme) => alpha(theme.palette.background.paper, 0.6),
+                }
+            }}
+        >
+            {/* Header Section */}
+            <Box
+                onClick={() => setIsExpanded(!isExpanded)}
                 sx={{
-                    mb: 2,
-                    '&:before': {
-                        display: 'none',
-                    },
+                    p: { xs: 1.5, sm: 2 },
+                    cursor: 'pointer',
+                    flexDirection: 'column',
+                    gap: 1,
                 }}
             >
-                <AccordionSummary
-                    expandIcon={<ExpandMoreIcon />}
-                    sx={{
-                        backgroundColor: 'background.paper',
-                        borderRadius: 1,
-                    }}
+                {/* Title and Actions Row */}
+                <Stack
+                    direction="row"
+                    alignItems="center"
+                    justifyContent="space-between"
+                    spacing={1}
                 >
-                    <Box display="flex" alignItems="center" justifyContent="space-between" width="100%">
-                        <Box display="flex" alignItems="center" gap={2}>
-                            <FitnessCenterIcon color="primary" />
-                            <Typography variant="subtitle1">{entry.planName}</Typography>
-                            <Chip
-                                label={`${entry.exercises.length} exercises • ${totalSets} sets`}
-                                size="small"
-                                color="secondary"
-                            />
-                        </Box>
-                        <Box>
-                            <IconButton size="small" onClick={(e) => {
+                    <Stack
+                        direction="row"
+                        alignItems="center"
+                        spacing={1}
+                        sx={{ minWidth: 0 }} // Allows text truncation
+                    >
+                        <FitnessCenterIcon
+                            color="primary"
+                            sx={{ fontSize: { xs: 18, sm: 20 } }}
+                        />
+                        <Typography
+                            variant="subtitle2"
+                            sx={{
+                                fontWeight: 600,
+                                fontSize: { xs: '0.875rem', sm: '1rem' },
+                                color: 'text.primary',
+                                overflow: 'hidden',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                            }}
+                        >
+                            {entry.planName}
+                        </Typography>
+                    </Stack>
+
+                    <Stack
+                        direction="row"
+                        spacing={0.5}
+                        alignItems="center"
+                    >
+                        <IconButton
+                            size="small"
+                            onClick={(e) => {
                                 e.stopPropagation()
                                 setIsEditDialogOpen(true)
-                            }}>
-                                <EditIcon />
-                            </IconButton>
-                            <IconButton size="small" onClick={(e) => {
+                            }}
+                            sx={{
+                                color: 'primary.main',
+                                p: '4px',
+                            }}
+                        >
+                            <EditIcon sx={{ fontSize: '1rem' }} />
+                        </IconButton>
+                        <IconButton
+                            size="small"
+                            onClick={(e) => {
                                 e.stopPropagation()
                                 setIsDeleteDialogOpen(true)
-                            }}>
-                                <DeleteIcon />
-                            </IconButton>
-                        </Box>
-                    </Box>
-                </AccordionSummary>
-                <AccordionDetails>
-                    {entry.exercises.map((exercise) => (
-                        <Box key={exercise.exerciseId} mb={2}>
-                            <Typography variant="subtitle2" color="primary">
-                                {exercise.exerciseName}
-                            </Typography>
-                            <Box display="flex" flexWrap="wrap" gap={1} mt={1}>
-                                {exercise.sets.map((set, index) => (
-                                    <Chip
-                                        key={index}
-                                        label={`Set ${index + 1}: ${set.weight}${set.unit} × ${set.reps}`}
-                                        variant="outlined"
-                                        size="small"
-                                    />
-                                ))}
+                            }}
+                            sx={{
+                                color: 'error.main',
+                                p: '4px',
+                            }}
+                        >
+                            <DeleteIcon sx={{ fontSize: '1rem' }} />
+                        </IconButton>
+                        <IconButton
+                            size="small"
+                            sx={{
+                                p: '4px',
+                                transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)',
+                                transition: 'transform 0.3s ease',
+                            }}
+                        >
+                            <ExpandMoreIcon sx={{ fontSize: '1.25rem' }} />
+                        </IconButton>
+                    </Stack>
+                </Stack>
+            </Box>
+
+            <Collapse in={isExpanded}>
+                <Box
+                    sx={{
+                        p: { xs: 1.5, sm: 2 },
+                        pt: 0,
+                    }}
+                >
+                    <Stack spacing={1.5}>
+                        {entry.exercises.map((exercise, index) => (
+                            <Box
+                                key={exercise.exerciseId}
+                                component={motion.div}
+                                layout
+                                initial={{ opacity: 0 }}
+                                animate={{ opacity: 1 }}
+                                sx={{
+                                    p: 1.5,
+                                    borderRadius: 2,
+                                    border: '1px solid',
+                                    borderColor: 'divider',
+                                    bgcolor: (theme) => alpha(theme.palette.background.paper, 0.6),
+                                }}
+                            >
+                                <Typography
+                                    variant="body2"
+                                    sx={{
+                                        fontWeight: 500,
+                                        color: 'primary.main',
+                                        mb: 1,
+                                        fontSize: '0.875rem',
+                                    }}
+                                >
+                                    {exercise.exerciseName}
+                                </Typography>
+
+                                <Stack
+                                    direction="row"
+                                    sx={{
+                                        flexWrap: 'wrap',
+                                        gap: 1,
+                                    }}
+                                >
+                                    {exercise.sets.map((set, setIndex) => (
+                                        <Chip
+                                            key={setIndex}
+                                            label={`${set.weight}${set.unit} × ${set.reps}`}
+                                            variant="outlined"
+                                            size="small"
+                                            sx={{
+                                                height: '22px',
+                                                borderRadius: '11px',
+                                                borderColor: (theme) => alpha(theme.palette.primary.main, 0.3),
+                                                bgcolor: (theme) => alpha(theme.palette.primary.main, 0.05),
+                                                '& .MuiChip-label': {
+                                                    px: 1,
+                                                    fontSize: '0.75rem',
+                                                },
+                                            }}
+                                        />
+                                    ))}
+                                </Stack>
                             </Box>
-                        </Box>
-                    ))}
-                </AccordionDetails>
-            </Accordion>
+                        ))}
+                    </Stack>
+                </Box>
+            </Collapse>
 
             <EditHistoryDialog
                 entry={entry}
@@ -114,11 +215,11 @@ export const HistoryListItem = ({ entry }: EnhancedHistoryListItemProps) => {
 
             <ConfirmationDialog
                 open={isDeleteDialogOpen}
-                title="Delete Entry"
-                message="Are you sure you want to delete this training entry? This action cannot be undone."
+                title="Delete Workout Entry"
+                message="Are you sure you want to delete this workout entry? This action cannot be undone."
                 onConfirm={handleDelete}
                 onCancel={() => setIsDeleteDialogOpen(false)}
             />
-        </>
+        </Box>
     )
 }
