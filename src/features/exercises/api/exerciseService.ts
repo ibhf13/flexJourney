@@ -27,3 +27,25 @@ export const fetchExerciseById = async (exerciseId: string): Promise<Exercise | 
     throw error
   }
 }
+
+export const fetchCategories = async (): Promise<string[]> => {
+    try {
+        const exercisesRef = collection(db, COLLECTIONS.exercises)
+        const snapshot = await getDocs(exercisesRef)
+        
+        const categories = new Set<string>()
+
+        snapshot.docs.forEach(doc => {
+            const exercise = doc.data() as Exercise
+
+            if (exercise.category) {
+                categories.add(exercise.category)
+            }
+        })
+        
+        return Array.from(categories).sort()
+    } catch (error) {
+        console.error('Error fetching categories:', error)
+        throw error
+    }
+}
