@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { fetchWorkoutPlanById } from '../api/mockData'
+import { fetchWorkoutPlanById } from '../api/workoutService'
 import { useWorkoutContext } from '../contexts/WorkoutContext'
 import { WorkoutPlan } from '../types/WorkoutTypes'
 
