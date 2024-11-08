@@ -13,105 +13,84 @@ import {
 } from 'firebase/firestore'
 import { HistoryFilters, TrainingHistoryEntry } from '../types/HistoryTypes'
 
+const COLLECTION_PATH = (userId: string) => `users/${userId}/trainingHistory`
+
+const convertToTimestamp = (date: string | Date) => {
+    return Timestamp.fromDate(new Date(date))
+}
+
 const convertToISOString = (date: Timestamp | string | Date) => {
     if (date instanceof Timestamp) {
         return date.toDate().toISOString()
     }
 
-    if (date instanceof Date) {
-        return date.toISOString()
-    }
-
-    return date // If it's already a string, return as is
+    return date instanceof Date ? date.toISOString() : date
 }
 
 export const historyService = {
-    async saveTrainingHistory(userId: string, entry: TrainingHistoryEntry) {
-        try {
-            const historyRef = collection(db, `users/${userId}/trainingHistory`)
-            const firestoreEntry = {
-                ...entry,
-                date: Timestamp.fromDate(new Date(entry.date)),
-                exercises: entry.exercises.map(exercise => ({
-                    ...exercise,
-                    completedAt: Timestamp.fromDate(new Date(exercise.completedAt))
-                }))
-            }
-
-            await addDoc(historyRef, firestoreEntry)
-        } catch (error) {
-            console.error('Error saving training history:', error)
-            throw new Error('Failed to save training history')
+    create: async (userId: string, entry: TrainingHistoryEntry) => {
+        const historyRef = collection(db, COLLECTION_PATH(userId))
+        const firestoreEntry = {
+            ...entry,
+            date: convertToTimestamp(entry.date),
+            exercises: entry.exercises.map(exercise => ({
+                ...exercise,
+                completedAt: convertToTimestamp(exercise.completedAt)
+            }))
         }
+
+        const docRef = await addDoc(historyRef, firestoreEntry)
+
+        return docRef.id
     },
 
-    async getTrainingHistory(userId: string, filters?: HistoryFilters) {
-        try {
-            const historyRef = collection(db, `users/${userId}/trainingHistory`)
-            let q = query(historyRef, orderBy('date', 'desc'))
+    getAll: async (userId: string, filters?: HistoryFilters) => {
+        const historyRef = collection(db, COLLECTION_PATH(userId))
+        let baseQuery = query(historyRef, orderBy('date', 'desc'))
 
-            if (filters?.startDate) {
-                q = query(q, where('date', '>=', Timestamp.fromDate(filters.startDate)))
-            }
+        if (filters) {
+            const { startDate, endDate, planId } = filters
+            const conditions = []
 
-            if (filters?.endDate) {
-                q = query(q, where('date', '<=', Timestamp.fromDate(filters.endDate)))
-            }
+            if (startDate) conditions.push(where('date', '>=', convertToTimestamp(startDate)))
+            if (endDate) conditions.push(where('date', '<=', convertToTimestamp(endDate)))
+            if (planId) conditions.push(where('planId', '==', planId))
 
-            if (filters?.planId) {
-                q = query(q, where('planId', '==', filters.planId))
-            }
-
-            const querySnapshot = await getDocs(q)
-
-            return querySnapshot.docs.map(doc => {
-                const data = doc.data()
-                
-                return {
-                    ...data,
-                    id: doc.id,
-                    date: convertToISOString(data.date),
-                    exercises: data.exercises.map((exercise: any) => ({
-                        ...exercise,
-                        completedAt: convertToISOString(exercise.completedAt)
-                    }))
-                } as TrainingHistoryEntry
-            })
-        } catch (error) {
-            console.error('Error fetching training history:', error)
-            throw new Error('Failed to fetch training history')
+            baseQuery = query(historyRef, ...conditions, orderBy('date', 'desc'))
         }
+
+        const snapshot = await getDocs(baseQuery)
+
+        return snapshot.docs.map(doc => ({
+            ...doc.data(),
+            id: doc.id,
+            date: convertToISOString(doc.data().date),
+            exercises: doc.data().exercises.map((exercise: any) => ({
+                ...exercise,
+                completedAt: convertToISOString(exercise.completedAt)
+            }))
+        })) as TrainingHistoryEntry[]
     },
 
-    async deleteTrainingEntry(userId: string, entryId: string) {
-        try {
-            const entryRef = doc(db, `users/${userId}/trainingHistory/${entryId}`)
+    delete: async (userId: string, entryId: string) => {
+        const entryRef = doc(db, COLLECTION_PATH(userId), entryId)
 
-            await deleteDoc(entryRef)
-        } catch (error) {
-            console.error('Error deleting training entry:', error)
-            throw new Error('Failed to delete training entry')
-        }
+        await deleteDoc(entryRef)
+
+        return entryId
     },
 
-    async updateTrainingEntry(
-        userId: string,
-        entryId: string,
-        updates: Partial<TrainingHistoryEntry>
-    ) {
-        try {
-            const entryRef = doc(db, `users/${userId}/trainingHistory/${entryId}`)
-            const { date, ...otherUpdates } = updates
-
-            const firestoreUpdates = {
-                ...otherUpdates,
-                updatedAt: Timestamp.now()
-            }
-
-            await updateDoc(entryRef, firestoreUpdates)
-        } catch (error) {
-            console.error('Error updating training entry:', error)
-            throw new Error('Failed to update training entry')
+    update: async (userId: string, entryId: string, updates: Partial<TrainingHistoryEntry>) => {
+        const entryRef = doc(db, COLLECTION_PATH(userId), entryId)
+        const { date, ...otherUpdates } = updates
+        
+        const firestoreUpdates = {
+            ...otherUpdates,
+            updatedAt: Timestamp.now()
         }
+
+        await updateDoc(entryRef, firestoreUpdates)
+
+        return entryId
     }
 }
