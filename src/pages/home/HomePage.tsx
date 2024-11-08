@@ -3,6 +3,8 @@ import { SelectField, TextField } from '@/components/common/Forms'
 import { DialogPopup } from '@/components/common/Popups'
 import { Container, GridContainer, GridItem, Paper } from '@/components/common/StructureComponents'
 import { useNotification } from '@/features/Feedback'
+import { ProfileStats } from '@/features/profile/components/ProfileStats'
+import { useStats } from '@/features/profile/hooks/useStats'
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import PlayCircleIcon from '@mui/icons-material/PlayCircle'
@@ -17,6 +19,8 @@ const HomePage = () => {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [isSeeding, setIsSeeding] = useState(false)
   const [isExerciseSeeding, setIsExerciseSeeding] = useState(false)
+  const { stats, isLoading: statsLoading } = useStats()
+
 
   const handleGetStarted = () => {
     showNotification({
@@ -74,6 +78,9 @@ const HomePage = () => {
             Watch Demo
           </SecondaryButton>
         </Box>
+      </Box>
+      <Box sx={{ mb: 4 }}>
+        <ProfileStats stats={stats} />
       </Box>
 
       {/* Features Grid */}

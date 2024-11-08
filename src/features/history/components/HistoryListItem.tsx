@@ -149,7 +149,7 @@ export const HistoryListItem = ({ entry }: HistoryListItemProps) => {
                     <Stack spacing={1.5}>
                         {entry.exercises.map((exercise, index) => (
                             <Box
-                                key={exercise.exerciseId}
+                                key={`${exercise.exerciseId}-${index}`}
                                 component={motion.div}
                                 layout
                                 initial={{ opacity: 0 }}
