@@ -1,4 +1,5 @@
 import MainLayout from '@/components/Layout/MainLayout'
+import { ExercisesListPage } from '@/pages/ExercisesListPage'
 import { HistoryPage } from '@/pages/HistoryPage'
 import HomePage from '@/pages/home/HomePage'
 import Login from '@/pages/Login'
@@ -47,6 +48,10 @@ export const privateRoutes: RouteObject = {
         {
             path: '/history',
             element: <HistoryPage />
+        },
+        {
+            path: '/exercises',
+            element: <ExercisesListPage />
         }
     ],
 }
