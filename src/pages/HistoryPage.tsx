@@ -126,7 +126,7 @@ export const HistoryPage = () => {
                             >
                                 <DailySummary
                                     date={date}
-                                    workouts={workouts}
+                                    entries={workouts.map(workout => workout.entry)}
                                 />
                             </motion.div>
                         ))}
