@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchWorkoutPlanById } from '../api/mockData'
+import { fetchWorkoutPlanById } from '../api/workoutService'
 import { useWorkoutContext } from '../contexts/WorkoutContext'
 import { WorkoutDay } from '../types/WorkoutTypes'
 
