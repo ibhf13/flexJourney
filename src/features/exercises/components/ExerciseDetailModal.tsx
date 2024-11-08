@@ -1,3 +1,4 @@
+import { ConfirmationDialog } from '@/components/common/dialogs/ConfirmationDialog'
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useExerciseCompletion } from '@/features/exercises/hooks/useExerciseCompletion'
 import { useUnsavedChanges } from '@/features/exercises/hooks/useUnsavedChanges'
@@ -15,10 +16,10 @@ import { ExerciseModalHeader } from './ExerciseModalHeader'
 import { ExerciseVideo } from './ExerciseVideo'
 
 interface ExerciseDetailModalProps {
-    exercise: Exercise;
-    day: WorkoutDay;
-    open: boolean;
-    onClose: () => void;
+    exercise: Exercise
+    day: WorkoutDay
+    open: boolean
+    onClose: () => void
 }
 
 export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
@@ -27,20 +28,25 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
     open,
     onClose,
 }) => {
-    const theme = useTheme();
-    const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-    const [hasChanges, setHasChanges] = useState(false);
-    const { handleExerciseComplete } = useExerciseCompletion();
-    const { showNotification } = useNotification();
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+    const [hasChanges, setHasChanges] = useState(false)
+    const { handleExerciseComplete } = useExerciseCompletion()
+    const { showNotification } = useNotification()
     const { selectedPlan } = useWorkoutContext()
     const { user } = useAuthContext()
     const [isSubmitting, setIsSubmitting] = useState(false)
 
-    const { handleCloseWithConfirmation } = useUnsavedChanges({
+    const {
+        isConfirmDialogOpen,
+        handleCloseWithConfirmation,
+        handleConfirmClose,
+        handleCancelClose
+    } = useUnsavedChanges({
         hasChanges,
         setHasChanges,
         onClose,
-    });
+    })
 
     const handleFormSubmit = async (data: ExerciseFormData) => {
         try {
@@ -108,48 +114,58 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
         } finally {
             setIsSubmitting(false)
         }
-    };
+    }
 
     return (
-        <Dialog
-            open={open}
-            onClose={handleCloseWithConfirmation}
-            maxWidth="lg"
-            fullWidth
-            fullScreen={isMobile}
-        >
-            <ExerciseModalHeader
-                title={exercise.title}
+        <>
+            <Dialog
+                open={open}
                 onClose={handleCloseWithConfirmation}
-            />
+                maxWidth="lg"
+                fullWidth
+                fullScreen={isMobile}
+            >
+                <ExerciseModalHeader
+                    title={exercise.title}
+                    onClose={handleCloseWithConfirmation}
+                />
 
-            <DialogContent>
-                <Grid container spacing={3}>
-                    <Grid item xs={12} md={6}>
-                        <ExerciseDetails
-                            imageUrl={exercise.imageUrl}
-                            description={exercise.description}
-                            level={exercise.level}
-                            category={exercise.category}
-                            type={exercise.type}
-                            defaultRestPeriod={exercise.defaultRestPeriod}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12} md={6}>
-                        <ExerciseVideo title={exercise.title} videoUrl={exercise.videoUrl} />
-                        <Box mt={3}>
-                            <ExerciseForm
-                                exerciseType={exercise.type}
+                <DialogContent>
+                    <Grid container spacing={3}>
+                        <Grid item xs={12} md={6}>
+                            <ExerciseDetails
+                                imageUrl={exercise.imageUrl}
+                                description={exercise.description}
+                                level={exercise.level}
+                                category={exercise.category}
+                                type={exercise.type}
                                 defaultRestPeriod={exercise.defaultRestPeriod}
-                                onSubmit={handleFormSubmit}
-                                onCancel={onClose}
-                                onChange={() => setHasChanges(true)}
                             />
-                        </Box>
+                        </Grid>
+
+                        <Grid item xs={12} md={6}>
+                            <ExerciseVideo title={exercise.title} videoUrl={exercise.videoUrl} />
+                            <Box mt={3}>
+                                <ExerciseForm
+                                    exerciseType={exercise.type}
+                                    defaultRestPeriod={exercise.defaultRestPeriod}
+                                    onSubmit={handleFormSubmit}
+                                    onCancel={onClose}
+                                    onChange={() => setHasChanges(true)}
+                                />
+                            </Box>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </DialogContent>
-        </Dialog>
-    );
-};
+                </DialogContent>
+            </Dialog>
+
+            <ConfirmationDialog
+                open={isConfirmDialogOpen}
+                title="Unsaved Changes"
+                message="You have unsaved changes. Are you sure you want to close?"
+                onConfirm={handleConfirmClose}
+                onCancel={handleCancelClose}
+            />
+        </>
+    )
+}

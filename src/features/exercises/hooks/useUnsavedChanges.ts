@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useState } from 'react'
 
 interface UseUnsavedChangesProps {
     hasChanges: boolean;
@@ -11,29 +11,30 @@ export const useUnsavedChanges = ({
     setHasChanges,
     onClose,
 }: UseUnsavedChangesProps) => {
-    useEffect(() => {
-        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-            if (hasChanges) {
-                e.preventDefault();
-                e.returnValue = '';
-            }
-        };
-
-        window.addEventListener('beforeunload', handleBeforeUnload);
-
-        return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-    }, [hasChanges]);
+    const [isConfirmDialogOpen, setIsConfirmDialogOpen] = useState(false)
 
     const handleCloseWithConfirmation = () => {
         if (hasChanges) {
-            if (window.confirm('You have unsaved changes. Are you sure you want to close?')) {
-                setHasChanges(false);
-                onClose();
-            }
+            setIsConfirmDialogOpen(true)
         } else {
-            onClose();
+            onClose()
         }
-    };
+    }
 
-    return { handleCloseWithConfirmation };
-};
+    const handleConfirmClose = () => {
+        setHasChanges(false)
+        setIsConfirmDialogOpen(false)
+        onClose()
+    }
+
+    const handleCancelClose = () => {
+        setIsConfirmDialogOpen(false)
+    }
+
+    return {
+        isConfirmDialogOpen,
+        handleCloseWithConfirmation,
+        handleConfirmClose,
+        handleCancelClose
+    }
+}

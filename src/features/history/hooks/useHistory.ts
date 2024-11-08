@@ -88,11 +88,75 @@ export const useHistory = () => {
         }
     }
 
+    const deleteEntry = async (entryId: string) => {
+        if (!currentUser) {
+            showNotification({
+                message: 'Please sign in to delete entries',
+                severity: 'error'
+            })
+
+            return
+        }
+
+        const previousHistory = [...history]
+
+        setHistory(prev => prev.filter(entry => entry.id !== entryId))
+
+        try {
+            await historyService.deleteTrainingEntry(currentUser.uid, entryId)
+            showNotification({
+                message: 'Entry deleted successfully',
+                severity: 'success'
+            })
+        } catch (error) {
+            setHistory(previousHistory)
+            showNotification({
+                message: 'Failed to delete entry',
+                severity: 'error'
+            })
+        }
+    }
+
+    const updateEntry = async (entryId: string, updates: Partial<TrainingHistoryEntry>) => {
+        if (!currentUser) {
+            showNotification({
+                message: 'Please sign in to update entries',
+                severity: 'error'
+            })
+
+            return
+        }
+
+        const previousHistory = [...history]
+
+        setHistory(prev =>
+            prev.map(entry =>
+                entry.id === entryId ? { ...entry, ...updates } : entry
+            )
+        )
+
+        try {
+            await historyService.updateTrainingEntry(currentUser.uid, entryId, updates)
+            showNotification({
+                message: 'Entry updated successfully',
+                severity: 'success'
+            })
+        } catch (error) {
+            setHistory(previousHistory)
+            showNotification({
+                message: 'Failed to update entry',
+                severity: 'error'
+            })
+        }
+    }
+
     return {
+        history,
         isLoading,
         error,
-        history,
-        saveExerciseLog,
-        fetchHistory
+        fetchHistory,
+        deleteEntry,
+        updateEntry,
+        saveExerciseLog
     }
 }
