@@ -2,6 +2,7 @@ import { AuthProvider } from '@/contexts/AuthContext'
 import { NavigationProvider } from '@/contexts/NavigationContext'
 import { ExerciseProvider } from '@/features/exercises/contexts/ExerciseContext'
 import { NotificationProvider } from '@/features/Feedback'
+import { StreakProvider } from '@/features/streak/contexts/StreakContext'
 import { WorkoutProvider } from '@/features/workout/contexts/WorkoutContext'
 import GlobalStyles from '@/styles/globalStyles'
 import theme from '@/styles/theme'
@@ -28,11 +29,13 @@ function App() {
         <NavigationProvider>
           <AuthProvider>
             <NotificationProvider>
-              <WorkoutProvider>
-                <ExerciseProvider>
-                  <AppRouter />
-                </ExerciseProvider>
-              </WorkoutProvider>
+              <StreakProvider>
+                <WorkoutProvider>
+                  <ExerciseProvider>
+                    <AppRouter />
+                  </ExerciseProvider>
+                </WorkoutProvider>
+              </StreakProvider>
             </NotificationProvider>
           </AuthProvider>
         </NavigationProvider>

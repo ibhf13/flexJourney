@@ -6,6 +6,7 @@ import Login from '@/pages/Login'
 import { ExercisePage } from '@/pages/plans/ExercisePage'
 import { PlanDayPage } from '@/pages/plans/PlanDayPage'
 import { PlanPage } from '@/pages/plans/PlanPage'
+import ProfilePage from '@/pages/profile/ProfilePage'
 import ResetPassword from '@/pages/ResetPassword'
 import Signup from '@/pages/Signup'
 import { RouteObject } from 'react-router-dom'
@@ -52,6 +53,10 @@ export const privateRoutes: RouteObject = {
         {
             path: '/exercises',
             element: <ExercisesListPage />
-        }
+        },
+        {
+            path: '/profile',
+            element: <ProfilePage />
+        },
     ],
 }

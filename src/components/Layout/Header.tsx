@@ -1,4 +1,6 @@
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useProfile } from '@/features/profile/hooks/useProfile'
+import { StreakBadge } from '@/features/streak/components/StreakBadge'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import MenuIcon from '@mui/icons-material/Menu'
 import {
@@ -23,6 +25,8 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('md'))
   const isAuthenticated = useAuthContext()
+  const { profile } = useProfile()
+
 
   const handleUserMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setUserMenuAnchor(event.currentTarget)
@@ -91,7 +95,8 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
             Login
           </PrimaryButton>
         ) : (
-          <>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+            <StreakBadge />
             <IconButton
               onClick={handleUserMenuOpen}
               sx={{
@@ -101,6 +106,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
               }}
             >
               <Avatar
+                src={profile?.photoURL || undefined}
                 sx={{
                   width: 32,
                   height: 32,
@@ -109,7 +115,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
               />
             </IconButton>
             <UserMenu anchorEl={userMenuAnchor} onClose={handleUserMenuClose} />
-          </>
+          </Box>
         )}
       </Toolbar>
     </AppBar>
