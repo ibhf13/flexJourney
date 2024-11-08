@@ -2,10 +2,13 @@ import { db } from '@/config/firebase/firebase'
 import {
     addDoc,
     collection,
+    deleteDoc,
+    doc,
     getDocs,
     orderBy,
     query,
     Timestamp,
+    updateDoc,
     where
 } from 'firebase/firestore'
 import { HistoryFilters, TrainingHistoryEntry } from '../types/HistoryTypes'
@@ -77,6 +80,38 @@ export const historyService = {
         } catch (error) {
             console.error('Error fetching training history:', error)
             throw new Error('Failed to fetch training history')
+        }
+    },
+
+    async deleteTrainingEntry(userId: string, entryId: string) {
+        try {
+            const entryRef = doc(db, `users/${userId}/trainingHistory/${entryId}`)
+
+            await deleteDoc(entryRef)
+        } catch (error) {
+            console.error('Error deleting training entry:', error)
+            throw new Error('Failed to delete training entry')
+        }
+    },
+
+    async updateTrainingEntry(
+        userId: string,
+        entryId: string,
+        updates: Partial<TrainingHistoryEntry>
+    ) {
+        try {
+            const entryRef = doc(db, `users/${userId}/trainingHistory/${entryId}`)
+            const { date, ...otherUpdates } = updates
+
+            const firestoreUpdates = {
+                ...otherUpdates,
+                updatedAt: Timestamp.now()
+            }
+
+            await updateDoc(entryRef, firestoreUpdates)
+        } catch (error) {
+            console.error('Error updating training entry:', error)
+            throw new Error('Failed to update training entry')
         }
     }
 }
