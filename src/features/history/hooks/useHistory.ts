@@ -1,5 +1,7 @@
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useNotification } from '@/features/Feedback'
+import { useQueryClient } from '@tanstack/react-query'
+import { useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { ExerciseLog, HistoryFilters } from '../types/HistoryTypes'
 import { useHistoryQueries } from './useHistoryQueries'
@@ -7,17 +9,32 @@ import { useHistoryQueries } from './useHistoryQueries'
 export const useHistory = (filters?: HistoryFilters) => {
     const { currentUser } = useAuthContext()
     const { showNotification } = useNotification()
-    const { 
+    const queryClient = useQueryClient()
+
+    const {
         useTrainingHistory,
         useCreateHistory,
         useDeleteHistory,
-        useUpdateHistory 
+        useUpdateHistory
     } = useHistoryQueries()
 
-    const { data: history, isLoading, error } = useTrainingHistory(filters)
+    const {
+        data: history,
+        isLoading,
+        error,
+        refetch,
+        isError
+    } = useTrainingHistory(filters)
+
     const { mutateAsync: createHistory } = useCreateHistory()
     const { mutateAsync: deleteHistory } = useDeleteHistory()
     const { mutateAsync: updateHistory } = useUpdateHistory()
+
+    useEffect(() => {
+        if (currentUser?.uid) {
+            refetch()
+        }
+    }, [currentUser?.uid, refetch])
 
     const saveExerciseLog = async (
         planId: string,
@@ -45,17 +62,51 @@ export const useHistory = (filters?: HistoryFilters) => {
             userId: currentUser.uid
         }
 
-        await createHistory(entry)
+        try {
+            await createHistory(entry)
+
+            return true
+        } catch (error) {
+            console.error('Save exercise log error:', error)
+
+            return false
+        }
+    }
+
+    const fetchHistory = async () => {
+        if (currentUser?.uid) {
+            try {
+                await refetch()
+
+                return true
+            } catch (error) {
+                console.error('Fetch history error:', error)
+
+                return false
+            }
+        }
+
+        return false
     }
 
     return {
         history: history ?? [],
         isLoading,
         error,
-        fetchHistory: () => {}, // React Query handles refetching
+        isError,
+        fetchHistory,
         deleteEntry: deleteHistory,
-        updateEntry: (entryId: string, updates: any) => 
-            updateHistory({ entryId, updates }),
+        updateEntry: async (entryId: string, updates: any) => {
+            try {
+                await updateHistory({ entryId, updates })
+
+                return true
+            } catch (error) {
+                console.error('Update entry error:', error)
+
+                return false
+            }
+        },
         saveExerciseLog
     }
 }

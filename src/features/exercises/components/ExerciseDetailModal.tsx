@@ -50,18 +50,9 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
 
     const handleFormSubmit = async (data: ExerciseFormData) => {
         try {
-            if (!selectedPlan) {
+            if (!selectedPlan || !user) {
                 showNotification({
-                    message: 'No workout plan selected',
-                    severity: 'error'
-                })
-
-                return
-            }
-
-            if (!user) {
-                showNotification({
-                    message: 'You must be logged in to save progress',
+                    message: !selectedPlan ? 'No workout plan selected' : 'You must be logged in to save progress',
                     severity: 'error'
                 })
 
@@ -92,7 +83,7 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
                 }]
             }
 
-            await historyService.saveTrainingHistory(user.uid, historyEntry)
+            await historyService.create(user.uid, historyEntry)
 
             const completed = handleExerciseComplete(exercise, day, data)
 

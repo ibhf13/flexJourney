@@ -9,7 +9,7 @@ export interface ExerciseLog {
     exerciseId: string
     exerciseName: string
     sets: ExerciseSet[]
-    completedAt: string // ISO string format
+    completedAt: string
 }
 
 export interface TrainingHistoryEntry {
@@ -19,7 +19,7 @@ export interface TrainingHistoryEntry {
     dayId: string
     dayName: string
     exercises: ExerciseLog[]
-    date: string // ISO string format
+    date: string
     userId: string
 }
 
