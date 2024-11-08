@@ -1,44 +1,70 @@
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import {
     Accordion,
     AccordionDetails,
     AccordionSummary,
     Box,
-    ListItem,
+    Chip,
     Typography
 } from '@mui/material'
-import { format } from 'date-fns'
 import { TrainingHistoryEntry } from '../types/HistoryTypes'
 
-interface HistoryListItemProps {
+interface EnhancedHistoryListItemProps {
     entry: TrainingHistoryEntry
 }
 
-export const HistoryListItem = ({ entry }: HistoryListItemProps) => {
+export const HistoryListItem = ({ entry }: EnhancedHistoryListItemProps) => {
+    const totalSets = entry.exercises.reduce(
+        (sum, exercise) => sum + exercise.sets.length,
+        0
+    )
+
     return (
-        <ListItem>
-            <Accordion sx={{ width: '100%' }}>
-                <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                    <Typography variant="subtitle1">
-                        {format(new Date(entry.date), 'PPP')} - {entry.planName}
-                    </Typography>
-                </AccordionSummary>
-                <AccordionDetails>
-                    <Typography variant="body2" color="textSecondary">
-                        Day: {entry.dayName}
-                    </Typography>
-                    {entry.exercises.map((exercise) => (
-                        <Box key={exercise.exerciseId} mt={1}>
-                            <Typography variant="body1">{exercise.exerciseName}</Typography>
+        <Accordion
+            sx={{
+                mb: 2,
+                '&:before': {
+                    display: 'none',
+                },
+            }}
+        >
+            <AccordionSummary
+                expandIcon={<ExpandMoreIcon />}
+                sx={{
+                    backgroundColor: 'background.paper',
+                    borderRadius: 1,
+                }}
+            >
+                <Box display="flex" alignItems="center" gap={2}>
+                    <FitnessCenterIcon color="primary" />
+                    <Typography variant="subtitle1">{entry.planName}</Typography>
+                    <Chip
+                        label={`${entry.exercises.length} exercises • ${totalSets} sets`}
+                        size="small"
+                        color="secondary"
+                    />
+                </Box>
+            </AccordionSummary>
+            <AccordionDetails>
+                {entry.exercises.map((exercise) => (
+                    <Box key={exercise.exerciseId} mb={2}>
+                        <Typography variant="subtitle2" color="primary">
+                            {exercise.exerciseName}
+                        </Typography>
+                        <Box display="flex" flexWrap="wrap" gap={1} mt={1}>
                             {exercise.sets.map((set, index) => (
-                                <Typography key={index} variant="body2" color="textSecondary">
-                                    Set {index + 1}: {set.weight}kg x {set.reps} reps
-                                </Typography>
+                                <Chip
+                                    key={index}
+                                    label={`Set ${index + 1}: ${set.weight}${set.unit} × ${set.reps}`}
+                                    variant="outlined"
+                                    size="small"
+                                />
                             ))}
                         </Box>
-                    ))}
-                </AccordionDetails>
-            </Accordion>
-        </ListItem>
+                    </Box>
+                ))}
+            </AccordionDetails>
+        </Accordion>
     )
 }
