@@ -1,17 +1,17 @@
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useNotification } from '@/features/Feedback'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { statsService } from '../api/statsService'
-import { WorkoutStat } from '../types/StatTypes'
+import { statisticsService } from '../api/statisticsService'
+import { WorkoutStat } from '../types/StatisticsTypes'
 
-export const useStats = () => {
+export const useStatistics = () => {
     const { currentUser } = useAuthContext()
     const queryClient = useQueryClient()
     const { showNotification } = useNotification()
 
     const { data: stats, isLoading, error } = useQuery({
         queryKey: ['userStats', currentUser?.uid],
-        queryFn: () => currentUser ? statsService.getUserStats(currentUser.uid) : null,
+        queryFn: () => currentUser ? statisticsService.getUserStats(currentUser.uid) : null,
         enabled: !!currentUser,
     })
 
@@ -19,7 +19,7 @@ export const useStats = () => {
         mutationFn: (updateData: Partial<WorkoutStat>) => {
             if (!currentUser) throw new Error('No user authenticated')
 
-            return statsService.updateWorkoutStats(currentUser.uid, updateData)
+            return statisticsService.updateWorkoutStats(currentUser.uid, updateData)
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['userStats'] })
@@ -44,7 +44,7 @@ export const useStats = () => {
         }) => {
             if (!currentUser) throw new Error('No user authenticated')
 
-            return statsService.updateExerciseProgress(
+            return statisticsService.updateExerciseProgress(
                 currentUser.uid,
                 exerciseId,
                 weight,
@@ -66,7 +66,7 @@ export const useStats = () => {
         mutationFn: () => {
             if (!currentUser) throw new Error('No user authenticated')
 
-            return statsService.calculateAndUpdateStreak(currentUser.uid)
+            return statisticsService.calculateAndUpdateStreak(currentUser.uid)
         },
         onSuccess: (newStreak) => {
             queryClient.invalidateQueries({ queryKey: ['userStats'] })

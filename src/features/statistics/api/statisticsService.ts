@@ -6,9 +6,9 @@ import {
     setDoc,
     updateDoc,
 } from 'firebase/firestore'
-import { ExerciseProgress, UserStats, WorkoutStat } from '../types/StatTypes'
+import { ExerciseProgress, UserStats, WorkoutStat } from '../types/StatisticsTypes'
 
-export const statsService = {
+export const statisticsService = {
     async initializeUserStats(userId: string): Promise<UserStats> {
         const initialWorkoutStats: WorkoutStat = {
             totalWorkouts: 0,

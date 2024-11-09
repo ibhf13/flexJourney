@@ -5,7 +5,7 @@ import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
 import { Box, Grid, Paper, Stack, Typography } from '@mui/material'
-import { WorkoutStat } from '../types/StatTypes'
+import { WorkoutStat } from '../types/StatisticsTypes'
 
 interface StatBlockProps {
     label: string
@@ -41,7 +41,7 @@ const StatBlock = ({ label, value, icon, description }: StatBlockProps) => (
     </Paper>
 )
 
-export const ProfileStats = ({ stats }: { stats: WorkoutStat | undefined }) => {
+export const UserStats = ({ stats }: { stats: WorkoutStat | undefined }) => {
     const { currentStreak, highestStreak, unlockedBadges } = useStreak()
 
     return (

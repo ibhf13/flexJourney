@@ -1,12 +1,12 @@
 import { Box, Stack, Typography } from '@mui/material'
 
-interface ProfileStatItemProps {
+interface UserStatItemProps {
     icon: React.ReactNode
     label: string
     value: string | number
 }
 
-export const ProfileStatItem = ({ icon, label, value }: ProfileStatItemProps) => {
+export const UserStatItem = ({ icon, label, value }: UserStatItemProps) => {
     return (
         <Stack
             direction="row"
