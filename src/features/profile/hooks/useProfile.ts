@@ -3,7 +3,7 @@ import { useNotification } from '@/features/Feedback'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FirebaseError } from 'firebase/app'
 import { fetchUserProfile, updateUserProfile } from '../api/profileService'
-import type { UpdateProfileData } from '../types/ProfileTypes'
+import type { UpdateProfileData, UserProfile } from '../types/ProfileTypes'
 
 export const useProfile = () => {
     const { currentUser } = useAuthContext()
@@ -15,10 +15,10 @@ export const useProfile = () => {
         isLoading,
         error,
         refetch,
-    } = useQuery({
+    } = useQuery<UserProfile | null>({
         queryKey: ['profile', currentUser?.uid],
         queryFn: async () => {
-            if (!currentUser?.uid) throw new Error('User not authenticated')
+            if (!currentUser?.uid) return null
 
             return fetchUserProfile(currentUser.uid)
         },
@@ -28,6 +28,7 @@ export const useProfile = () => {
 
             return failureCount < 3
         },
+        staleTime: 5 * 60 * 1000, // Cache for 5 minutes
     })
 
     const {

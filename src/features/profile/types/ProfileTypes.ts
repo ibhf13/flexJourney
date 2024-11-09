@@ -1,27 +1,38 @@
-export interface UserProfile {
-    id: string
-    email: string
-    displayName: string
-    photoURL?: string
-    avatarUpdatedAt?: string
+export type FitnessLevel = 'Beginner' | 'Intermediate' | 'Advanced'
+export type Gender = 'Male' | 'Female' | 'Other' | 'Prefer not to say'
+
+export interface BaseProfileData {
     firstName?: string
     lastName?: string
+    displayName: string
     bio?: string
     height?: number
     weight?: number
     targetWeight?: number
-    fitnessLevel?: 'Beginner' | 'Intermediate' | 'Advanced'
+    fitnessLevel?: FitnessLevel
     fitnessGoals?: string[]
-    birthDate?: string
-    gender?: 'Male' | 'Female' | 'Other' | 'Prefer not to say'
+    gender?: Gender
     phoneNumber?: string
+}
+
+export interface UserProfile extends BaseProfileData {
+    id: string
+    email: string
+    photoURL?: string
+    avatarUpdatedAt?: string
+    birthDate?: string
     createdAt?: string
     updatedAt?: string
 }
 
-export type UpdateProfileData = Partial<Omit<UserProfile, 'id' | 'email' | 'createdAt'>>
-
-export interface ProfileFormData extends Omit<UpdateProfileData, 'photoURL' | 'birthDate'> {
+export interface ProfileFormData extends BaseProfileData {
     birthDate?: Date
     avatar?: File
+}
+
+export type UpdateProfileData = BaseProfileData & {
+    birthDate?: string
+    photoURL?: string
+    updatedAt: string
+    email?: string
 }
