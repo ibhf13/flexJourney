@@ -49,7 +49,13 @@ export const ExercisesListPage = () => {
             maxWidth="xl"
             sx={{
                 py: { xs: 2, sm: 4 },
-                px: { xs: 1, sm: 3 }
+                px: { xs: 1, sm: 3 },
+                overflow: 'auto',
+                '&::-webkit-scrollbar': {
+                    display: 'none'
+                },
+                msOverflowStyle: 'none',
+                scrollbarWidth: 'none'
             }}
         >
             <Paper sx={{

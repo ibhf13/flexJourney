@@ -33,7 +33,7 @@ service cloud.firestore {
 
     // Public exercise data
     match /exercises/{exerciseId} {
-      allow read: if isUserOwner(userId);
+      allow read: if isAuthenticated();
       allow write: if isUserOwner(userId);
     }
 
