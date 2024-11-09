@@ -47,50 +47,32 @@ export const StreakProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
     // Load initial streak data
     const loadStreakData = useCallback(async () => {
-
         if (!currentUser?.uid) {
-
             setIsLoading(false)
 
             return
         }
 
-
         try {
-
             setIsLoading(true)
             setError(null)
 
             const data = await getMockStreakData(currentUser.uid)
 
-            console.log({ data })
-
-            if (!data) {
-                const initialData = await firestoreService.initializeUserStats(currentUser.uid)
-
-                console.log({ initialData })
-
-
-                setStreakData({
-                    dates: initialData.dates || [],
-                    streak: initialData.streak || 0,
-                    lastDate: initialData.lastWorkoutDate,
-                    badges: initialData.badges,
-                    highestStreak: initialData.streak || 0,
-                })
-            } else {
-                setStreakData({
-                    dates: data.dates || [],
-                    streak: data.streak || 0,
-                    lastDate: data.lastWorkoutDate,
-                    badges: data.badges,
-                    highestStreak: data.streak || 0,
-                })
-            }
+            // Update streak data with proper fallbacks
+            setStreakData({
+                dates: data?.dates || [],
+                streak: data?.streak || 0,
+                lastDate: data?.lastWorkoutDate || null,
+                badges: data?.badges || null,
+                highestStreak: data?.highestStreak || 0,
+            })
         } catch (err) {
-            setError(err instanceof Error ? err : new Error('Failed to load streak data'))
+            const errorMessage = err instanceof Error ? err.message : 'Failed to load streak data'
+
+            setError(new Error(errorMessage))
             showNotification({
-                message: 'Failed to load streak data',
+                message: errorMessage,
                 severity: 'error',
             })
         } finally {
@@ -122,42 +104,32 @@ export const StreakProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         return newBadges
     }, [showNotification])
 
-    // Update streak
+    // Update streak with optimistic updates
     const updateStreak = useCallback(async (workoutDate: string) => {
         if (!currentUser?.uid) {
             throw new Error('User must be authenticated to update streak')
         }
 
-        try {
-            setError(null)
-            const newDates = [...new Set([...streakData.dates, workoutDate])].sort()
-            const newStreak = StreakService.calculateStreak(newDates)
-            const newHighestStreak = Math.max(streakData.highestStreak, newStreak)
+        // Optimistic update
+        const newDates = [...new Set([...streakData.dates, workoutDate])].sort()
+        const newStreak = StreakService.calculateStreak(newDates)
+        const newHighestStreak = Math.max(streakData.highestStreak, newStreak)
 
-            // Handle badge notifications and updates
+        try {
+            // Update local state immediately
+            setStreakData(prev => ({
+                ...prev,
+                dates: newDates,
+                streak: newStreak,
+                lastDate: workoutDate,
+                highestStreak: newHighestStreak,
+            }))
+
+            // Handle badge notifications
             const unlockedBadges = handleBadgeNotifications(streakData.streak, newStreak)
 
-            const updatedBadges: UserBadges = {
-                userId: currentUser.uid,
-                unlockedBadges: unlockedBadges.map(badge => ({
-                    ...badge,
-                    unlockedAt: badge.unlockedAt || new Date().toISOString(),
-                })),
-                achievements: [],
-                lastUpdated: new Date().toISOString(),
-            }
-
-            // Update Firestore
+            // Update backend
             const updatedData = await updateMockStreakData(currentUser.uid, workoutDate)
-
-            // Update local state
-            setStreakData({
-                dates: updatedData.dates,
-                streak: updatedData.streak,
-                lastDate: updatedData.lastWorkoutDate,
-                badges: updatedData.badges,
-                highestStreak: updatedData.streak || 0,
-            })
 
             // Show milestone notification if applicable
             const milestone = StreakService.getStreakMilestone(newStreak)
@@ -169,33 +141,50 @@ export const StreakProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                     autoHideDuration: 6000,
                 })
             }
-        } catch (err) {
-            const error = err instanceof Error ? err : new Error('Failed to update streak')
 
-            setError(error)
+            // Update final state with server response
+            setStreakData(prev => ({
+                ...prev,
+                badges: updatedData.badges,
+            }))
+        } catch (err) {
+            // Revert optimistic update on error
+            setStreakData(prev => ({
+                ...prev,
+                dates: streakData.dates,
+                streak: streakData.streak,
+                lastDate: streakData.lastDate,
+                highestStreak: streakData.highestStreak,
+            }))
+
+            const errorMessage = err instanceof Error ? err.message : 'Failed to update streak'
+
+            setError(new Error(errorMessage))
             showNotification({
-                message: error.message,
+                message: errorMessage,
                 severity: 'error',
             })
-            throw error
+            throw err
         }
     }, [currentUser?.uid, streakData, showNotification, handleBadgeNotifications])
 
-    // Reset streak
+    // Reset streak with optimistic updates
     const resetStreak = useCallback(async () => {
         if (!currentUser?.uid) {
             throw new Error('User must be authenticated to reset streak')
         }
 
-        try {
-            setError(null)
-            await firestoreService.resetUserStreak(currentUser.uid)
+        const previousData = { ...streakData }
 
+        try {
+            // Optimistic update
             setStreakData(prev => ({
                 ...INITIAL_STREAK_DATA,
-                badges: prev.badges, // Keep badges on reset
-                highestStreak: prev.highestStreak, // Keep highest streak record
+                badges: prev.badges,
+                highestStreak: prev.highestStreak,
             }))
+
+            await firestoreService.resetUserStreak(currentUser.uid)
 
             showNotification({
                 message: 'Streak reset. Start fresh tomorrow! 💪',
@@ -203,16 +192,19 @@ export const StreakProvider: React.FC<{ children: React.ReactNode }> = ({ childr
                 autoHideDuration: 4000,
             })
         } catch (err) {
-            const error = err instanceof Error ? err : new Error('Failed to reset streak')
+            // Revert optimistic update on error
+            setStreakData(previousData)
 
-            setError(error)
+            const errorMessage = err instanceof Error ? err.message : 'Failed to reset streak'
+
+            setError(new Error(errorMessage))
             showNotification({
-                message: error.message,
+                message: errorMessage,
                 severity: 'error',
             })
-            throw error
+            throw err
         }
-    }, [currentUser?.uid, showNotification])
+    }, [currentUser?.uid, streakData, showNotification])
 
     // Memoized values
     const unlockedBadges = useMemo(() =>
