@@ -16,7 +16,7 @@ export const ExerciseFilters = ({
     onCategoryChange,
     isMobile
 }: ExerciseFiltersProps) => {
-    const { categories, isLoading, error } = useCategories()
+    const { categories } = useCategories()
 
     return (
         <Box sx={{
@@ -24,7 +24,7 @@ export const ExerciseFilters = ({
             flexDirection: 'row',
             gap: { xs: 1, sm: 2 },
             flexShrink: 1,
-            minWidth: 0, // Allow shrinking below content size
+            minWidth: 0,
         }}>
             <TextField
                 size={isMobile ? "small" : "medium"}
@@ -33,15 +33,22 @@ export const ExerciseFilters = ({
                 onChange={(e) => onSearchChange(e.target.value)}
                 sx={{
                     minWidth: { xs: '120px', sm: '200px' },
+                    '& .MuiInputBase-root': {
+                        height: { xs: '40px', sm: '48px' }
+                    },
                     '& .MuiInputBase-input': {
-                        py: { xs: 1, sm: 1.5 },
+                        padding: '0 14px',
+                        height: '100%'
                     }
                 }}
             />
             <FormControl
                 size={isMobile ? "small" : "medium"}
                 sx={{
-                    minWidth: { xs: '100px', sm: '150px' }
+                    minWidth: { xs: '100px', sm: '150px' },
+                    '& .MuiInputBase-root': {
+                        height: { xs: '40px', sm: '48px' }
+                    }
                 }}
             >
                 <Select
