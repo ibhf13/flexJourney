@@ -1,10 +1,15 @@
 import { db } from '@/config/firebase/firebase'
 import { COLLECTIONS } from '@/config/firebase/types/firestore'
 import { cleanData } from '@/utils/dataUtils'
-import { doc, getDoc, setDoc, updateDoc } from 'firebase/firestore'
+import { doc, FirestoreError, getDoc, setDoc, updateDoc } from 'firebase/firestore'
 import { UpdateProfileData, UserProfile } from '../types/ProfileTypes'
 
+
 export const fetchUserProfile = async (userId: string): Promise<UserProfile | null> => {
+    if (!userId?.trim()) {
+        throw new Error('Invalid user ID provided')
+    }
+
     try {
         const userRef = doc(db, COLLECTIONS.users, userId)
         const userSnap = await getDoc(userRef)
@@ -15,18 +20,26 @@ export const fetchUserProfile = async (userId: string): Promise<UserProfile | nu
 
         return userSnap.data() as UserProfile
     } catch (error) {
-        console.error('Error fetching user profile:', error)
-        throw error
+        const firestoreError = error as FirestoreError
+
+        console.error(`Firestore error (${firestoreError.code}):`, firestoreError.message)
+        throw new Error('Failed to fetch user profile. Please try again later.')
     }
 }
 
 export const updateUserProfile = async (userId: string, data: UpdateProfileData): Promise<void> => {
+    if (!userId?.trim()) {
+        throw new Error('Invalid user ID provided')
+    }
+
+    if (!data || Object.keys(data).length === 0) {
+        throw new Error('No update data provided')
+    }
+
     try {
         const userRef = doc(db, COLLECTIONS.users, userId)
         const docSnap = await getDoc(userRef)
         const timestamp = new Date().toISOString()
-
-        // Clean the data using the new utility
         const cleanedData = cleanData(data)
 
         if (docSnap.exists()) {
@@ -53,7 +66,9 @@ export const updateUserProfile = async (userId: string, data: UpdateProfileData)
             await setDoc(userRef, cleanData(newUserData))
         }
     } catch (error) {
-        console.error('Error updating user profile:', error)
-        throw error
+        const firestoreError = error as FirestoreError
+
+        console.error(`Firestore error (${firestoreError.code}):`, firestoreError.message)
+        throw new Error('Failed to update user profile. Please try again later.')
     }
 }

@@ -14,10 +14,10 @@ export interface MockStreakData {
 }
 
 export const MOCK_STREAK_DATA: Record<string, MockStreakData> = {
-    'TZ5qhIjQIphdxb8VlIFhZJJ1NKy2': {
-        userId: 'TZ5qhIjQIphdxb8VlIFhZJJ1NKy2',
-        streak: 99,
-        highestStreak: 99,
+    'VvjUP3SpQGNwARNFQl1HjG725Ly1': {
+        userId: 'VvjUP3SpQGNwARNFQl1HjG725Ly1',
+        streak: 40,
+        highestStreak: 40,
         dates: [
             '2024-03-10',
             '2024-03-11',
@@ -38,7 +38,7 @@ export const MOCK_STREAK_DATA: Record<string, MockStreakData> = {
         ],
         lastWorkoutDate: '2024-03-18T10:30:00Z',
         badges: {
-            userId: 'TZ5qhIjQIphdxb8VlIFhZJJ1NKy2',
+            userId: 'VvjUP3SpQGNwARNFQl1HjG725Ly1',
             unlockedBadges: [
                 { ...MOCK_BADGES[0], unlockedAt: '2024-03-10T08:00:00Z' },
                 { ...MOCK_BADGES[1], unlockedAt: '2024-03-12T15:30:00Z' }
