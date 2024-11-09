@@ -1,4 +1,4 @@
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
+import AppLogo from '@/components/Layout/AppLogo'
 import { Box, Container, Link, Paper, Typography } from '@mui/material'
 import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
@@ -23,10 +23,7 @@ const Login: React.FC = () => {
         }}
       >
         <Box sx={{ mb: 3, display: 'flex', alignItems: 'center', gap: 1 }}>
-          <FitnessCenterIcon sx={{ fontSize: 40, color: 'primary.main' }} />
-          <Typography variant="h4" component="h1" fontWeight="bold">
-            FitLife
-          </Typography>
+          <AppLogo redirect="/login" />
         </Box>
         <Paper elevation={3} sx={{ p: 3, width: '100%', maxWidth: 400 }}>
           <AuthForm

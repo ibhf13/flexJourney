@@ -5,8 +5,8 @@ const initialState: NavigationState = {
   isMobileMenuOpen: false,
   isProfileMenuOpen: false,
   isWorkoutDrawerOpen: false,
-  isSidebarOpen: false,
-  activeRoute: '/',
+  isSidebarOpen: true,
+  activeRoute: window.location.pathname,
 }
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined)
