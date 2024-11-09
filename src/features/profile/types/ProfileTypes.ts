@@ -34,5 +34,6 @@ export type UpdateProfileData = BaseProfileData & {
     birthDate?: string
     photoURL?: string
     updatedAt: string
+    avatarUpdatedAt?: string
     email?: string
 }

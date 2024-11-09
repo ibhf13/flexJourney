@@ -15,6 +15,7 @@ const navigationItems = [
   { label: 'Exercises', path: '/exercises', icon: <WorkoutIcon /> },
   { label: 'History', path: '/history', icon: <HistoryIcon /> },
   { label: 'Profile', path: '/profile', icon: <ProfileIcon /> },
+  { label: 'Statistics', path: '/statistics', icon: <HistoryIcon /> },
 ]
 
 const Navigation = ({ orientation = 'horizontal' }: NavigationProps) => {

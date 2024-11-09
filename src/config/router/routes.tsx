@@ -6,9 +6,10 @@ import Login from '@/pages/Login'
 import { ExercisePage } from '@/pages/plans/ExercisePage'
 import { PlanDayPage } from '@/pages/plans/PlanDayPage'
 import { PlanPage } from '@/pages/plans/PlanPage'
-import ProfilePage from '@/pages/profile/ProfilePage'
+import ProfilePage from '@/pages/ProfilePage'
 import ResetPassword from '@/pages/ResetPassword'
 import Signup from '@/pages/Signup'
+import { StatisticsPage } from '@/pages/StatisticsPage'
 import { RouteObject } from 'react-router-dom'
 
 export const publicRoutes = [
@@ -57,6 +58,10 @@ export const privateRoutes: RouteObject = {
         {
             path: '/profile',
             element: <ProfilePage />
+        },
+        {
+            path: '/statistics',
+            element: <StatisticsPage />
         },
     ],
 }

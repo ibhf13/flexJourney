@@ -21,7 +21,6 @@ export const useProfileAvatar = (options: UploadAvatarOptions = {}) => {
         maxSizeMB = 1,
         acceptedTypes = ['image/jpeg', 'image/png', 'image/webp'],
         onSuccess,
-        onProgress,
     } = options
 
     const validateFile = (file: File): string | null => {
@@ -121,6 +120,7 @@ export const useProfileAvatar = (options: UploadAvatarOptions = {}) => {
 
                 // Prepare update data with minimum required fields
                 const updateData: UpdateProfileData = {
+                    displayName: currentUser.displayName || '',
                     photoURL: base64String,
                     avatarUpdatedAt: new Date().toISOString(),
                     updatedAt: new Date().toISOString(), // Required by rules
