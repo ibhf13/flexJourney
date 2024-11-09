@@ -26,7 +26,7 @@ export const useSignup = () => {
         message: 'Account created successfully!',
         severity: 'success',
       })
-      navigate('/dashboard')
+      navigate('/')
     } catch (error) {
       showNotification({
         message: getErrorMessage(error),
@@ -45,7 +45,7 @@ export const useSignup = () => {
         message: 'Signed in successfully with Google!',
         severity: 'success',
       })
-      navigate('/dashboard')
+      navigate('/')
     } catch (error) {
       showNotification({
         message: getErrorMessage(error),
