@@ -14,9 +14,7 @@ import {
 } from '@mui/material'
 import { useProfileForm } from '../hooks/useProfileForm'
 import { UserProfile } from '../types/ProfileTypes'
-
-const FITNESS_LEVELS = ['Beginner', 'Intermediate', 'Advanced']
-const GENDERS = ['Male', 'Female', 'Other', 'Prefer not to say']
+import { FITNESS_LEVELS, GENDERS } from '../utils/profileConstants'
 
 interface ProfileFormProps {
     open: boolean
@@ -75,7 +73,12 @@ export const ProfileForm = ({
             </DialogTitle>
 
             <DialogContent>
-                <Box component="form" noValidate sx={{ mt: 2 }}>
+                <Box
+                    component="form"
+                    noValidate
+                    onSubmit={handleSubmit}
+                    sx={{ mt: 2 }}
+                >
                     <Grid container spacing={2}>
                         <Grid item xs={12} sm={6}>
                             <FormTextField
