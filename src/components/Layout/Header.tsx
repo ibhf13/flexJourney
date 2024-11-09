@@ -50,7 +50,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
         <IconButton
           color="primary"
           onClick={toggleSidebar}
-          sx={{ mr: 2, display: { xs: 'flex', md: isDesktop ? 'flex' : 'none' } }}
+          sx={{ mr: { xs: 1, md: 2 }, display: { xs: 'flex', md: isDesktop ? 'flex' : 'none' } }}
         >
           <MenuIcon />
         </IconButton>
