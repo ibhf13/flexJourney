@@ -13,7 +13,7 @@ import {
 } from 'firebase/firestore'
 import { HistoryFilters, TrainingHistoryEntry } from '../types/HistoryTypes'
 
-const COLLECTION_PATH = (userId: string) => `users/${userId}/trainingHistory`
+const COLLECTION_NAME = 'trainingHistory'
 
 const convertToTimestamp = (date: string | Date) => {
     return Timestamp.fromDate(new Date(date))
@@ -29,7 +29,7 @@ const convertToISOString = (date: Timestamp | string | Date) => {
 
 export const historyService = {
     create: async (userId: string, entry: TrainingHistoryEntry) => {
-        const historyRef = collection(db, COLLECTION_PATH(userId))
+        const historyRef = collection(db, 'users', userId, COLLECTION_NAME)
         const firestoreEntry = {
             ...entry,
             date: convertToTimestamp(entry.date),
@@ -45,7 +45,7 @@ export const historyService = {
     },
 
     getAll: async (userId: string, filters?: HistoryFilters) => {
-        const historyRef = collection(db, COLLECTION_PATH(userId))
+        const historyRef = collection(db, 'users', userId, COLLECTION_NAME)
         let baseQuery = query(historyRef, orderBy('date', 'desc'))
 
         if (filters) {
@@ -73,7 +73,7 @@ export const historyService = {
     },
 
     delete: async (userId: string, entryId: string) => {
-        const entryRef = doc(db, COLLECTION_PATH(userId), entryId)
+        const entryRef = doc(db, 'users', userId, COLLECTION_NAME, entryId)
 
         await deleteDoc(entryRef)
 
@@ -81,9 +81,9 @@ export const historyService = {
     },
 
     update: async (userId: string, entryId: string, updates: Partial<TrainingHistoryEntry>) => {
-        const entryRef = doc(db, COLLECTION_PATH(userId), entryId)
+        const entryRef = doc(db, 'users', userId, COLLECTION_NAME, entryId)
         const { date, ...otherUpdates } = updates
-        
+
         const firestoreUpdates = {
             ...otherUpdates,
             updatedAt: Timestamp.now()
