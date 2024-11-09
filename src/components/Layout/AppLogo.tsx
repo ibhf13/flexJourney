@@ -1,4 +1,4 @@
-import logoImage from '@/assets/images/logo.png'
+import logoImage from '@/assets/images/logo2.png'
 import { Box } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
@@ -18,7 +18,7 @@ const AppLogo = ({ redirect = '/' }: AppLogoProps) => {
             onClick={handleLogoClick}
             sx={{
                 cursor: 'pointer',
-                width: { xs: 150, md: 200 },
+                width: { xs: 80, md: 100 },
                 height: { xs: 50, md: 60 },
             }}
         >
