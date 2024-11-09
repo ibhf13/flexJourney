@@ -5,11 +5,11 @@ import { historyService } from '../services/historyService'
 import { HistoryFilters, TrainingHistoryEntry } from '../types/HistoryTypes'
 
 const HISTORY_KEYS = {
-    all: ['training-history'] as const,
+    all: ['trainingHistory'] as const,
     list: (userId: string, filters?: HistoryFilters) =>
-        [...HISTORY_KEYS.all, userId, filters] as const,
+        [...HISTORY_KEYS.all, 'list', userId, JSON.stringify(filters)] as const,
     detail: (userId: string, entryId: string) =>
-        [...HISTORY_KEYS.all, userId, entryId] as const,
+        [...HISTORY_KEYS.all, 'detail', userId, entryId] as const,
 }
 
 export const useHistoryQueries = () => {
@@ -20,17 +20,17 @@ export const useHistoryQueries = () => {
     const useTrainingHistory = (filters?: HistoryFilters) => {
         return useQuery({
             queryKey: HISTORY_KEYS.list(currentUser?.uid ?? '', filters),
-            queryFn: () => {
+            queryFn: async () => {
                 if (!currentUser?.uid) {
-                    return Promise.reject(new Error('No user authenticated'))
+                    return []
                 }
 
                 return historyService.getAll(currentUser.uid, filters)
             },
             enabled: !!currentUser?.uid,
-            staleTime: 5 * 60 * 1000, // 5 minutes
+            staleTime: 5 * 60 * 1000,
             retry: 2,
-            refetchOnWindowFocus: true,
+            refetchOnWindowFocus: false,
             refetchOnReconnect: true,
         })
     }
@@ -45,7 +45,7 @@ export const useHistoryQueries = () => {
                 return historyService.create(currentUser.uid, entry)
             },
             onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: HISTORY_KEYS.all })
+                queryClient.invalidateQueries({ queryKey: ['training-history'] })
                 showNotification({
                     message: 'Training history saved successfully',
                     severity: 'success'
@@ -71,7 +71,7 @@ export const useHistoryQueries = () => {
                 return historyService.delete(currentUser.uid, entryId)
             },
             onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: HISTORY_KEYS.all })
+                queryClient.invalidateQueries({ queryKey: ['training-history'] })
                 showNotification({
                     message: 'Entry deleted successfully',
                     severity: 'success'
@@ -100,7 +100,7 @@ export const useHistoryQueries = () => {
                 return historyService.update(currentUser.uid, entryId, updates)
             },
             onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: HISTORY_KEYS.all })
+                queryClient.invalidateQueries({ queryKey: ['training-history'] })
                 showNotification({
                     message: 'Entry updated successfully',
                     severity: 'success'

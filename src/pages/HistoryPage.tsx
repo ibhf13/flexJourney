@@ -1,73 +1,88 @@
-import { LoadingErrorWrapper } from '@/components/common/Error/LoadingErrorWrapper'
 import { DailySummary } from '@/features/history/components/DailySummary'
 import { useHistory } from '@/features/history/hooks/useHistory'
 import { groupHistoryByDate } from '@/features/history/utils/dateUtils'
 import { Box, CircularProgress, Container, Typography } from '@mui/material'
 import { motion } from 'framer-motion'
-import { useEffect } from 'react'
-
-
 
 export const HistoryPage = () => {
-    const { history, isLoading, error, isError, fetchHistory } = useHistory()
-
-    useEffect(() => {
-        const loadHistory = async () => {
-            await fetchHistory()
-        }
-
-        loadHistory()
-    }, [fetchHistory])
+    const { history, isLoading, error, isError } = useHistory()
 
     const groupedHistory = groupHistoryByDate(history)
 
-    if (isLoading) {
+    const renderContent = () => {
+        if (isLoading) {
+            return (
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    minHeight="60vh"
+                >
+                    <CircularProgress />
+                </Box>
+            )
+        }
+
+        if (isError || error) {
+            return (
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    minHeight="60vh"
+                    p={2}
+                    textAlign="center"
+                >
+                    <Typography color="error">
+                        Error loading workout history. Please try again.
+                    </Typography>
+                </Box>
+            )
+        }
+
+        if (!history.length) {
+            return (
+                <Box
+                    display="flex"
+                    justifyContent="center"
+                    alignItems="center"
+                    minHeight="60vh"
+                    p={2}
+                    textAlign="center"
+                >
+                    <Typography>
+                        No workout history found. Start working out to see your progress!
+                    </Typography>
+                </Box>
+            )
+        }
+
         return (
             <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                minHeight="100vh"
+                sx={{
+                    display: 'flex',
+                    flexDirection: 'column',
+                    gap: { xs: 2, md: 3 },
+                    p: { xs: 1, md: 0 },
+                    width: '100%',
+                }}
             >
-                <CircularProgress />
+                {groupedHistory.map(({ date, workouts }, index) => (
+                    <motion.div
+                        key={date}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: index * 0.1 }}
+                    >
+                        <DailySummary
+                            date={date}
+                            entries={workouts.map(workout => workout.entry)}
+                        />
+                    </motion.div>
+                ))}
             </Box>
         )
     }
-
-    if (isError || error) {
-        return (
-            <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                minHeight="100vh"
-                p={2}
-                textAlign="center"
-            >
-                <Typography color="error">
-                    Error loading workout history. Please try again.
-                </Typography>
-            </Box>
-        )
-    }
-
-    if (!history.length) {
-        return (
-            <Box
-                display="flex"
-                justifyContent="center"
-                alignItems="center"
-                minHeight="100vh"
-                p={2}
-                textAlign="center"
-            >
-                <Typography>
-                    No workout history found. Start working out to see your progress!
-                </Typography>
-            </Box>
-        )
-    }
-
 
     return (
         <Container
@@ -107,31 +122,7 @@ export const HistoryPage = () => {
                     Workout History
                 </Typography>
 
-                <LoadingErrorWrapper isLoading={isLoading} error={error}>
-                    <Box
-                        sx={{
-                            display: 'flex',
-                            flexDirection: 'column',
-                            gap: { xs: 2, md: 3 },
-                            p: { xs: 1, md: 0 },
-                            width: '100%',
-                        }}
-                    >
-                        {groupedHistory.map(({ date, workouts }, index) => (
-                            <motion.div
-                                key={date}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                transition={{ delay: index * 0.1 }}
-                            >
-                                <DailySummary
-                                    date={date}
-                                    entries={workouts.map(workout => workout.entry)}
-                                />
-                            </motion.div>
-                        ))}
-                    </Box>
-                </LoadingErrorWrapper>
+                {renderContent()}
             </Box>
         </Container>
     )

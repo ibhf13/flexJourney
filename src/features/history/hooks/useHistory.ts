@@ -1,7 +1,6 @@
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useNotification } from '@/features/Feedback'
 import { useQueryClient } from '@tanstack/react-query'
-import { useEffect } from 'react'
 import { v4 as uuidv4 } from 'uuid'
 import { ExerciseLog, HistoryFilters } from '../types/HistoryTypes'
 import { useHistoryQueries } from './useHistoryQueries'
@@ -23,18 +22,13 @@ export const useHistory = (filters?: HistoryFilters) => {
         isLoading,
         error,
         refetch,
-        isError
+        isError,
+        isFetching
     } = useTrainingHistory(filters)
 
     const { mutateAsync: createHistory } = useCreateHistory()
     const { mutateAsync: deleteHistory } = useDeleteHistory()
     const { mutateAsync: updateHistory } = useUpdateHistory()
-
-    useEffect(() => {
-        if (currentUser?.uid) {
-            refetch()
-        }
-    }, [currentUser?.uid, refetch])
 
     const saveExerciseLog = async (
         planId: string,
@@ -64,6 +58,7 @@ export const useHistory = (filters?: HistoryFilters) => {
 
         try {
             await createHistory(entry)
+            queryClient.invalidateQueries({ queryKey: ['training-history'] })
 
             return true
         } catch (error) {
@@ -89,16 +84,30 @@ export const useHistory = (filters?: HistoryFilters) => {
         return false
     }
 
+    const deleteEntry = async (id: string) => {
+        try {
+            await deleteHistory(id)
+            queryClient.invalidateQueries({ queryKey: ['training-history'] })
+
+            return true
+        } catch (error) {
+            console.error('Delete entry error:', error)
+
+            return false
+        }
+    }
+
     return {
         history: history ?? [],
-        isLoading,
+        isLoading: isLoading || isFetching,
         error,
         isError,
         fetchHistory,
-        deleteEntry: deleteHistory,
+        deleteEntry,
         updateEntry: async (entryId: string, updates: any) => {
             try {
                 await updateHistory({ entryId, updates })
+                queryClient.invalidateQueries({ queryKey: ['trainingHistory'] })
 
                 return true
             } catch (error) {
