@@ -1,7 +1,6 @@
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useProfile } from '@/features/profile/hooks/useProfile'
 import { StreakBadge } from '@/features/streak/components/StreakBadge'
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import MenuIcon from '@mui/icons-material/Menu'
 import {
   AppBar,
@@ -9,24 +8,22 @@ import {
   Box,
   IconButton,
   Toolbar,
-  Typography,
   useMediaQuery,
   useTheme,
 } from '@mui/material'
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { PrimaryButton } from '../common/Buttons'
+import AppLogo from './AppLogo'
 import { HeaderProps } from './types'
 import UserMenu from './UserMenu'
-
 
 const Header = ({ toggleSidebar }: HeaderProps) => {
   const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null)
   const theme = useTheme()
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'))
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
   const isAuthenticated = useAuthContext()
   const { profile } = useProfile()
-
 
   const handleUserMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setUserMenuAnchor(event.currentTarget)
@@ -42,42 +39,23 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
       elevation={1}
       sx={{
         height: 64,
-        backgroundColor: '#121212',
+        backgroundColor: 'background.paper',
         borderBottom: '1px solid',
         borderColor: 'divider',
-        width: { md: `calc(100% - 240px)` },
-        ml: { md: '240px' },
+        width: '100%',
+        zIndex: (theme) => theme.zIndex.drawer + 1,
       }}
     >
       <Toolbar sx={{ height: '100%' }}>
-        {isMobile && (
-          <IconButton color="primary" onClick={toggleSidebar} sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
-        )}
+        <IconButton
+          color="primary"
+          onClick={toggleSidebar}
+          sx={{ mr: 2, display: { xs: 'flex', md: isDesktop ? 'flex' : 'none' } }}
+        >
+          <MenuIcon />
+        </IconButton>
 
-        {isMobile && (
-          <Link
-            to="/"
-            style={{
-              textDecoration: 'none',
-              color: 'inherit',
-              display: 'flex',
-              alignItems: 'center',
-            }}
-          >
-            <FitnessCenterIcon sx={{ color: 'primary.main', fontSize: 28, mr: 1 }} />
-            <Typography
-              variant="h6"
-              sx={{
-                color: 'primary.main',
-                fontWeight: 600,
-              }}
-            >
-              FitLife
-            </Typography>
-          </Link>
-        )}
+        <AppLogo />
 
         <Box sx={{ flexGrow: 1 }} />
 
@@ -87,10 +65,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
             href="/login"
             variant="contained"
             size="large"
-            sx={{
-              borderRadius: 2,
-              px: 3,
-            }}
+            sx={{ borderRadius: 2, px: 3 }}
           >
             Login
           </PrimaryButton>

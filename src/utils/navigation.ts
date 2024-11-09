@@ -6,8 +6,11 @@ export const useRouteChange = () => {
   const location = useLocation()
   const { setActiveRoute, closeAllMenus } = useNavigationContext()
 
+  // Set initial route on mount and when location changes
   useEffect(() => {
-    setActiveRoute(location.pathname)
+    const currentPath = location.pathname
+
+    setActiveRoute(currentPath)
     closeAllMenus()
   }, [location.pathname, setActiveRoute, closeAllMenus])
 }
