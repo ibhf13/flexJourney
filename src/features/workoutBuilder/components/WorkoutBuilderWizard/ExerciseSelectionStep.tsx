@@ -2,7 +2,23 @@ import { LoadingErrorWrapper } from '@/components/common/Error/LoadingErrorWrapp
 import { useExercises } from '@/features/exercises/hooks/useExercises'
 import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import DeleteIcon from '@mui/icons-material/Delete'
-import { Box, Button, Chip, IconButton, Tab, Tabs, TextField, Typography } from '@mui/material'
+import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
+import SearchIcon from '@mui/icons-material/Search'
+import {
+    Box,
+    Button,
+    Chip,
+    Divider,
+    Fade,
+    IconButton,
+    InputAdornment,
+    Paper,
+    Tab,
+    Tabs,
+    TextField,
+    Tooltip,
+    Typography
+} from '@mui/material'
 import { useState } from 'react'
 import { useWorkoutBuilderContext } from '../../contexts/WorkoutBuilderContext'
 
@@ -39,86 +55,160 @@ export const ExerciseSelectionStep = () => {
     )
 
     const currentDayExercises = workoutPlan.days?.[currentDayIndex]?.exercises || []
+    const hasSelectedExercises = currentDayExercises.length > 0
 
     return (
         <LoadingErrorWrapper isLoading={isLoading} error={error}>
-            <Box sx={{ maxWidth: 800, mx: 'auto' }}>
-                <Tabs
-                    value={currentDayIndex}
-                    onChange={(_, newValue) => setCurrentDayIndex(newValue)}
-                    variant="scrollable"
-                    scrollButtons="auto"
-                    sx={{ mb: 3 }}
-                >
-                    {workoutPlan.days?.map((day, index) => (
-                        <Tab key={day.id} label={day.title} value={index} />
-                    ))}
-                </Tabs>
+            <Box sx={{ maxWidth: 1000, mx: 'auto' }}>
+                <Paper elevation={2} sx={{ mb: 3, borderRadius: 2 }}>
+                    <Tabs
+                        value={currentDayIndex}
+                        onChange={(_, newValue) => setCurrentDayIndex(newValue)}
+                        variant="scrollable"
+                        scrollButtons="auto"
+                        sx={{
+                            px: 2,
+                            '& .MuiTabs-indicator': {
+                                height: 3,
+                                borderRadius: '3px 3px 0 0'
+                            }
+                        }}
+                    >
+                        {workoutPlan?.days?.map((day, index) => (
+                            <Tab
+                                key={day.id}
+                                label={
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                                        <span>{day.title}</span>
+                                        {workoutPlan?.days?.[index]?.exercises?.length && (
+                                            <Chip
+                                                size="small"
+                                                label={workoutPlan.days?.[index]?.exercises.length}
+                                                color="primary"
+                                            />
+                                        )}
+                                    </Box>
+                                }
+                                value={index}
+                            />
+                        ))}
+                    </Tabs>
+                </Paper>
 
                 <TextField
                     fullWidth
-                    label="Search Exercises"
+                    placeholder="Search exercises..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
-                    sx={{ mb: 3 }}
+                    sx={{
+                        mb: 3,
+                        '& .MuiOutlinedInput-root': {
+                            borderRadius: 2
+                        }
+                    }}
+                    InputProps={{
+                        startAdornment: (
+                            <InputAdornment position="start">
+                                <SearchIcon color="action" />
+                            </InputAdornment>
+                        ),
+                    }}
                 />
 
-                <Box sx={{ display: 'flex', gap: 2, flexWrap: 'wrap', mb: 4 }}>
-                    {filteredExercises.map(exercise => (
-                        <Chip
-                            key={exercise.id}
-                            label={exercise.title}
-                            onClick={() => handleExerciseAdd(exercise)}
-                            clickable
-                            color={currentDayExercises.some(e => e.id === exercise.id) ? 'primary' : 'default'}
-                        />
-                    ))}
-                </Box>
-
-                <Typography variant="h6" gutterBottom>
-                    Selected Exercises for {workoutPlan.days?.[currentDayIndex]?.title}
-                </Typography>
-
-                <Box sx={{ mb: 4 }}>
-                    {currentDayExercises.map((exercise) => {
-                        const exerciseDetails = exercises.find(e => e.id === exercise.id)
-
-                        return (
-                            <Box
+                <Paper elevation={2} sx={{ p: 3, mb: 4, borderRadius: 2 }}>
+                    <Typography variant="h6" gutterBottom sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+                        <FitnessCenterIcon color="primary" />
+                        Available Exercises
+                    </Typography>
+                    <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
+                        {filteredExercises.map(exercise => (
+                            <Tooltip
                                 key={exercise.id}
-                                sx={{
-                                    display: 'flex',
-                                    alignItems: 'center',
-                                    justifyContent: 'space-between',
-                                    p: 2,
-                                    mb: 1,
-                                    border: '1px solid',
-                                    borderColor: 'divider',
-                                    borderRadius: 1
-                                }}
+                                title={currentDayExercises.some(e => e.id === exercise.id)
+                                    ? "Already added"
+                                    : "Click to add"}
+                                arrow
                             >
-                                <Typography>{exerciseDetails?.title}</Typography>
-                                <IconButton
-                                    onClick={() => handleExerciseRemove(exercise.id)}
-                                    size="small"
-                                >
-                                    <DeleteIcon />
-                                </IconButton>
-                            </Box>
-                        )
-                    })}
-                </Box>
+                                <Chip
+                                    label={exercise.title}
+                                    onClick={() => handleExerciseAdd(exercise)}
+                                    clickable
+                                    color={currentDayExercises.some(e => e.id === exercise.id) ? 'primary' : 'default'}
+                                    sx={{
+                                        transition: 'all 0.2s ease-in-out',
+                                        '&:hover': {
+                                            transform: 'translateY(-2px)',
+                                            boxShadow: 1
+                                        }
+                                    }}
+                                />
+                            </Tooltip>
+                        ))}
+                    </Box>
+                </Paper>
 
-                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                <Fade in={hasSelectedExercises}>
+                    <Paper elevation={2} sx={{ p: 3, mb: 4, borderRadius: 2 }}>
+                        <Typography variant="h6" gutterBottom>
+                            Selected Exercises for {workoutPlan.days?.[currentDayIndex]?.title}
+                        </Typography>
+                        <Box>
+                            {currentDayExercises.map((exercise, index) => {
+                                const exerciseDetails = exercises.find(e => e.id === exercise.id)
+
+                                return (
+                                    <Box key={exercise.id}>
+                                        <Box
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                justifyContent: 'space-between',
+                                                p: 2,
+                                                '&:hover': {
+                                                    bgcolor: 'action.hover',
+                                                    borderRadius: 1
+                                                }
+                                            }}
+                                        >
+                                            <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
+                                                <Typography variant="body2" color="text.secondary">
+                                                    {index + 1}.
+                                                </Typography>
+                                                <Typography>{exerciseDetails?.title}</Typography>
+                                            </Box>
+                                            <Tooltip title="Remove exercise" arrow>
+                                                <IconButton
+                                                    onClick={() => handleExerciseRemove(exercise.id)}
+                                                    size="small"
+                                                    color="error"
+                                                >
+                                                    <DeleteIcon />
+                                                </IconButton>
+                                            </Tooltip>
+                                        </Box>
+                                        {index < currentDayExercises.length - 1 && (
+                                            <Divider />
+                                        )}
+                                    </Box>
+                                )
+                            })}
+                        </Box>
+                    </Paper>
+                </Fade>
+
+                <Box sx={{ display: 'flex', justifyContent: 'space-between', gap: 2 }}>
                     <Button
                         variant="outlined"
                         onClick={() => setCurrentStep('days')}
+                        size="large"
                     >
                         Back
                     </Button>
                     <Button
                         variant="contained"
                         onClick={() => setCurrentStep('review')}
+                        size="large"
+                        disabled={!hasSelectedExercises}
                     >
                         Review Plan
                     </Button>
