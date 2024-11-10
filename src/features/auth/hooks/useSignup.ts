@@ -1,6 +1,6 @@
 import { useAuthContext } from '@/contexts/AuthContext'
 import { useNotification } from '@/features/Feedback'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthError } from './useAuthError'
 
@@ -13,10 +13,16 @@ interface SignupFormData {
 export const useSignup = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
-  const { register, googleSignIn } = useAuthContext()
+  const { register, googleSignIn, isAuthenticated } = useAuthContext()
   const navigate = useNavigate()
   const { showNotification } = useNotification()
   const { getErrorMessage } = useAuthError()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate('/', { replace: true })
+    }
+  }, [isAuthenticated, navigate])
 
   const handleSignup = async (data: SignupFormData) => {
     try {
@@ -26,7 +32,6 @@ export const useSignup = () => {
         message: 'Account created successfully!',
         severity: 'success',
       })
-      navigate('/')
     } catch (error) {
       showNotification({
         message: getErrorMessage(error),
@@ -45,7 +50,6 @@ export const useSignup = () => {
         message: 'Signed in successfully with Google!',
         severity: 'success',
       })
-      navigate('/')
     } catch (error) {
       showNotification({
         message: getErrorMessage(error),
