@@ -1,15 +1,7 @@
 import { Exercise } from "@/features/exercises/types/ExerciseTypes"
+import { FieldValue } from 'firebase/firestore'
 
 export type DifficultyLevel = 'Beginner' | 'Intermediate' | 'Advanced'
-
-export interface WorkoutSet {
-  id: string
-  repetitions?: number
-  weight?: number
-  time?: number
-  unit: 'kg' | 'sec'
-}
-
 
 export interface WorkoutDay {
   id: string
@@ -27,4 +19,7 @@ export interface WorkoutPlan {
   imageUrl: string
   level: DifficultyLevel
   days: WorkoutDay[]
+  userId?: string
+  createdAt: Date | FieldValue
+  updatedAt: Date | FieldValue
 }
