@@ -1,3 +1,4 @@
+import { useExerciseProgress } from '@/features/exercises/hooks/useExerciseProgress'
 import WhatshotIcon from '@mui/icons-material/Whatshot'
 import { Box, Chip, Tooltip, Typography, useTheme } from '@mui/material'
 import { motion } from 'framer-motion'
@@ -6,8 +7,9 @@ import { useStreak } from '../contexts/StreakContext'
 export const StreakBadge = () => {
     const theme = useTheme()
     const { currentStreak } = useStreak()
+    const { areAllExercisesCompleted } = useExerciseProgress()
 
-    if (!currentStreak) return null
+    if (!currentStreak || !areAllExercisesCompleted) return null
 
     return (
         <Tooltip
