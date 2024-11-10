@@ -3,7 +3,7 @@ import { useAuthContext } from '@/contexts/AuthContext'
 import { useExerciseCompletion } from '@/features/exercises/hooks/useExerciseCompletion'
 import { useUnsavedChanges } from '@/features/exercises/hooks/useUnsavedChanges'
 import { Exercise, ExerciseFormData } from '@/features/exercises/types/ExerciseTypes'
-import { useNotification } from '@/features/Feedback'
+import { useNotificationContext } from '@/features/Feedback'
 import { historyService } from '@/features/history/services/historyService'
 import { TrainingHistoryEntry } from '@/features/history/types/HistoryTypes'
 import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
@@ -32,7 +32,7 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
     const isMobile = useMediaQuery(theme.breakpoints.down('md'))
     const [hasChanges, setHasChanges] = useState(false)
     const { handleExerciseComplete } = useExerciseCompletion()
-    const { showNotification } = useNotification()
+    const { showNotification } = useNotificationContext()
     const { selectedPlan } = useWorkoutContext()
     const { user } = useAuthContext()
     const [isSubmitting, setIsSubmitting] = useState(false)

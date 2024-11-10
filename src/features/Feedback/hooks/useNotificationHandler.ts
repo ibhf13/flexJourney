@@ -1,5 +1,5 @@
+import { useNotificationContext } from '@/features/Feedback'
 import { useCallback } from 'react'
-import { useNotificationContext } from '../contexts/NotificationContext'
 import { NotificationSeverity } from '../types/types'
 
 export const useNotificationHandler = () => {

@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotification } from '@/features/Feedback'
+import { useNotificationContext } from '@/features/Feedback'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthError } from './useAuthError'
@@ -14,7 +14,7 @@ export const useLoginHandler = () => {
   const [authSuccess, setAuthSuccess] = useState(false)
   const { login, googleSignIn, currentUser } = useAuthContext()
   const navigate = useNavigate()
-  const { showNotification } = useNotification()
+  const { showNotification } = useNotificationContext()
   const { getErrorMessage } = useAuthError()
 
   useEffect(() => {

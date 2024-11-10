@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotification } from '@/features/Feedback'
+import { useNotificationContext } from '@/features/Feedback'
 import { useQueryClient } from '@tanstack/react-query'
 import { v4 as uuidv4 } from 'uuid'
 import { ExerciseLog, HistoryFilters } from '../types/HistoryTypes'
@@ -7,7 +7,7 @@ import { useHistoryQueries } from './useHistoryQueries'
 
 export const useHistory = (filters?: HistoryFilters) => {
     const { currentUser } = useAuthContext()
-    const { showNotification } = useNotification()
+    const { showNotification } = useNotificationContext()
     const queryClient = useQueryClient()
 
     const {

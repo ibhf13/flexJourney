@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotification } from '@/features/Feedback'
+import { useNotificationContext } from '@/features/Feedback'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { updateUserProfile } from '../api/profileService'
@@ -15,7 +15,7 @@ interface UploadAvatarOptions {
 export const useProfileAvatar = (options: UploadAvatarOptions = {}) => {
     const [uploadProgress, setUploadProgress] = useState(0)
     const { currentUser } = useAuthContext()
-    const { showNotification } = useNotification()
+    const { showNotification } = useNotificationContext()
     const queryClient = useQueryClient()
     const {
         maxSizeMB = 1,

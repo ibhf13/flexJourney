@@ -1,5 +1,5 @@
 import { auth } from '@/config/firebase/firebase'
-import { useNotification } from '@/features/Feedback'
+import { useNotificationContext } from '@/features/Feedback'
 import { signOut } from 'firebase/auth'
 import { useCallback } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -7,7 +7,7 @@ import { useAuthError } from './useAuthError'
 
 export const useLogout = () => {
   const navigate = useNavigate()
-  const { showNotification } = useNotification()
+  const { showNotification } = useNotificationContext()
   const { getErrorMessage } = useAuthError()
 
   const handleLogout = useCallback(async () => {
