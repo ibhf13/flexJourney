@@ -30,7 +30,11 @@ export const PlanPage = () => {
         <Grid container spacing={3}>
           {plans.map((plan) => (
             <Grid item xs={12} sm={6} md={4} key={plan.id}>
-              <PlanCard plan={plan} onClick={handlePlanSelect} />
+              <PlanCard
+                plan={plan}
+                onClick={handlePlanSelect}
+                onDelete={refreshPlans}
+              />
             </Grid>
           ))}
           <Grid item xs={12} sm={6} md={4}>

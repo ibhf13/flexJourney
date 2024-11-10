@@ -3,16 +3,16 @@ import {
     Dialog,
     DialogActions,
     DialogContent,
+    DialogContentText,
     DialogTitle,
-    Typography,
 } from '@mui/material'
 
 interface ConfirmationDialogProps {
-    open: boolean;
-    title: string;
-    message: string;
-    onConfirm: () => void;
-    onCancel: () => void;
+    open: boolean
+    title: string
+    message: string
+    onConfirm: () => void
+    onCancel: () => void
 }
 
 export const ConfirmationDialog = ({
@@ -22,19 +22,18 @@ export const ConfirmationDialog = ({
     onConfirm,
     onCancel,
 }: ConfirmationDialogProps) => (
-
-    <Dialog open={open} onClose={onCancel} maxWidth="xs" fullWidth>
+    <Dialog open={open} onClose={onCancel}>
         <DialogTitle>{title}</DialogTitle>
         <DialogContent>
-            <Typography>{message}</Typography>
+            <DialogContentText>{message}</DialogContentText>
         </DialogContent>
         <DialogActions>
-            <Button onClick={onCancel} color="inherit">
+            <Button onClick={onCancel} color="primary">
                 Cancel
             </Button>
-            <Button onClick={onConfirm} color="primary" variant="contained">
-                Confirm
+            <Button onClick={onConfirm} color="error" variant="contained">
+                Delete
             </Button>
         </DialogActions>
     </Dialog>
-);
+)
