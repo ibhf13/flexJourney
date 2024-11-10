@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotification } from '@/features/Feedback'
+import { useNotificationContext } from '@/features/Feedback'
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import * as BadgeService from '../services/badgeService'
 import { firestoreService } from '../services/firestoreService'
@@ -40,7 +40,7 @@ const StreakContext = createContext<StreakContextType | undefined>(undefined)
 
 export const StreakProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { currentUser } = useAuthContext()
-    const { showNotification } = useNotification()
+    const { showNotification } = useNotificationContext()
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<Error | null>(null)
     const [streakData, setStreakData] = useState<StreakData>(INITIAL_STREAK_DATA)

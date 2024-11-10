@@ -1,8 +1,9 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotification } from '@/features/Feedback'
+import { useNotificationContext } from '@/features/Feedback'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { historyService } from '../services/historyService'
 import { HistoryFilters, TrainingHistoryEntry } from '../types/HistoryTypes'
+
 
 const HISTORY_KEYS = {
     all: ['trainingHistory'] as const,
@@ -14,7 +15,7 @@ const HISTORY_KEYS = {
 
 export const useHistoryQueries = () => {
     const queryClient = useQueryClient()
-    const { showNotification } = useNotification()
+    const { showNotification } = useNotificationContext()
     const { currentUser } = useAuthContext()
 
     const useTrainingHistory = (filters?: HistoryFilters) => {

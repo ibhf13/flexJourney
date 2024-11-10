@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotification } from '@/features/Feedback'
+import { useNotificationContext } from '@/features/Feedback'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FirebaseError } from 'firebase/app'
 import { fetchUserProfile, updateUserProfile } from '../api/profileService'
@@ -8,7 +8,7 @@ import type { UpdateProfileData, UserProfile } from '../types/ProfileTypes'
 export const useProfile = () => {
     const { currentUser } = useAuthContext()
     const queryClient = useQueryClient()
-    const { showNotification } = useNotification()
+    const { showNotification } = useNotificationContext()
 
     const {
         data: profile,

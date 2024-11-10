@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotification } from '@/features/Feedback'
+import { useNotificationContext } from '@/features/Feedback'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
@@ -17,7 +17,7 @@ export const useProfileForm = ({ initialData, onSuccess }: UseProfileFormProps =
     const [isDirty, setIsDirty] = useState(false)
     const { currentUser } = useAuthContext()
     const queryClient = useQueryClient()
-    const { showNotification } = useNotification()
+    const { showNotification } = useNotificationContext()
 
     // Convert the initial data to match the form data structure
     const convertedInitialData: Partial<ProfileFormData> = {

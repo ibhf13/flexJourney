@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotification } from '@/features/Feedback'
+import { useNotificationContext } from '@/features/Feedback'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthError } from './useAuthError'
@@ -15,7 +15,7 @@ export const useSignup = () => {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const { register, googleSignIn, isAuthenticated } = useAuthContext()
   const navigate = useNavigate()
-  const { showNotification } = useNotification()
+  const { showNotification } = useNotificationContext()
   const { getErrorMessage } = useAuthError()
 
   useEffect(() => {

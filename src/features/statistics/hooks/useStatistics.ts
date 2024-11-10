@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotification } from '@/features/Feedback'
+import { useNotificationContext } from '@/features/Feedback'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { statisticsService } from '../api/statisticsService'
 import { WorkoutStat } from '../types/StatisticsTypes'
@@ -7,7 +7,7 @@ import { WorkoutStat } from '../types/StatisticsTypes'
 export const useStatistics = () => {
     const { currentUser } = useAuthContext()
     const queryClient = useQueryClient()
-    const { showNotification } = useNotification()
+    const { showNotification } = useNotificationContext()
 
     const { data: stats, isLoading, error } = useQuery({
         queryKey: ['userStats', currentUser?.uid],

@@ -1,5 +1,5 @@
 import { auth } from '@/config/firebase/firebase'
-import { useNotification } from '@/features/Feedback'
+import { useNotificationContext } from '@/features/Feedback'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import { useState } from 'react'
 import { useAuthError } from './useAuthError'
@@ -7,7 +7,7 @@ import { useAuthError } from './useAuthError'
 export const useResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isEmailSent, setIsEmailSent] = useState(false)
-  const { showNotification } = useNotification()
+  const { showNotification } = useNotificationContext()
   const { getErrorMessage } = useAuthError()
 
   const handleResetPassword = async (email: string) => {
