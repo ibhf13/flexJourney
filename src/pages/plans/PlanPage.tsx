@@ -1,17 +1,16 @@
 import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
 import { useWorkoutPlans } from '@/features/workout/hooks/useWorkoutPlans'
+import { WorkoutPlan } from '@/features/workout/types/WorkoutTypes'
+import { WorkoutBuilderCard } from '@/features/workoutBuilder/components/WorkoutBuilderCard'
+import { LoadingErrorWrapper } from '@features/workout/components/common/LoadingErrorWrapper'
 import { PlanCard } from '@features/workout/components/PlanCard'
 import { Container, Grid, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
-import { WorkoutPlan } from '@/features/workout/types/WorkoutTypes'
-import { LoadingErrorWrapper } from '@features/workout/components/common/LoadingErrorWrapper'
-
 export const PlanPage = () => {
   const navigate = useNavigate()
-  const { plans, isLoading, error } = useWorkoutPlans()
+  const { plans, isLoading, error, refreshPlans } = useWorkoutPlans()
   const { selectPlan } = useWorkoutContext()
-
 
   const handlePlanSelect = (plan: WorkoutPlan) => {
     selectPlan(plan)
@@ -34,6 +33,9 @@ export const PlanPage = () => {
               <PlanCard plan={plan} onClick={handlePlanSelect} />
             </Grid>
           ))}
+          <Grid item xs={12} sm={6} md={4}>
+            <WorkoutBuilderCard onPlanCreated={refreshPlans} />
+          </Grid>
         </Grid>
       </Container>
     </LoadingErrorWrapper>

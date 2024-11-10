@@ -1,10 +1,15 @@
 import { PageContainer } from '@/components/common/StructureComponents/PageContainer'
+import { useAuthContext } from '@/contexts/AuthContext'
 import { QuickActions } from '@/features/home/components/QuickActions'
+import { SeedDataButton } from '@/features/home/components/SeedDataButton'
 import { WelcomeSection } from '@/features/home/components/WelcomeSection'
 import { Box } from '@mui/material'
 import { motion } from 'framer-motion'
 
 const HomePage = () => {
+  const { user } = useAuthContext()
+
+  const allowSeed = user?.uid === 'TZ5qhIjQIphdxb8VlIFhZJJ1NKy2' || 'VvjUP3SpQGNwARNFQl1HjG725Ly1'
 
   return (
     <PageContainer>
@@ -21,6 +26,7 @@ const HomePage = () => {
       >
         <WelcomeSection />
         <QuickActions />
+        {allowSeed && <SeedDataButton />}
       </Box>
     </PageContainer>
   )

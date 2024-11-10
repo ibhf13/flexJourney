@@ -11,6 +11,7 @@ import CssBaseline from '@mui/material/CssBaseline'
 import { ThemeProvider } from '@mui/material/styles'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import AppRouter from './config/router/AppRouter'
+import { WorkoutBuilderProvider } from './features/workoutBuilder/contexts/WorkoutBuilderContext'
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -32,7 +33,9 @@ function App() {
               <StreakProvider>
                 <WorkoutProvider>
                   <ExerciseProvider>
-                    <AppRouter />
+                    <WorkoutBuilderProvider>
+                      <AppRouter />
+                    </WorkoutBuilderProvider>
                   </ExerciseProvider>
                 </WorkoutProvider>
               </StreakProvider>
