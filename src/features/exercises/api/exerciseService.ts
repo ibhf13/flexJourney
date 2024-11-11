@@ -8,7 +8,7 @@ export const fetchExercises = async (): Promise<Exercise[]> => {
   try {
     const exercisesRef = collection(db, COLLECTIONS.exercises)
     const snapshot = await getDocs(exercisesRef)
-    
+
     return snapshot.docs.map(doc => doc.data() as Exercise)
   } catch (error) {
     console.error('Error fetching exercises:', error)
@@ -20,7 +20,7 @@ export const fetchExerciseById = async (exerciseId: string): Promise<Exercise | 
   try {
     const exerciseRef = doc(db, COLLECTIONS.exercises, exerciseId)
     const snapshot = await getDoc(exerciseRef)
-    
+
     return snapshot.exists() ? (snapshot.data() as Exercise) : undefined
   } catch (error) {
     console.error('Error fetching exercise:', error)
@@ -29,23 +29,23 @@ export const fetchExerciseById = async (exerciseId: string): Promise<Exercise | 
 }
 
 export const fetchCategories = async (): Promise<string[]> => {
-    try {
-        const exercisesRef = collection(db, COLLECTIONS.exercises)
-        const snapshot = await getDocs(exercisesRef)
-        
-        const categories = new Set<string>()
+  try {
+    const exercisesRef = collection(db, COLLECTIONS.exercises)
+    const snapshot = await getDocs(exercisesRef)
 
-        snapshot.docs.forEach(doc => {
-            const exercise = doc.data() as Exercise
+    const categories = new Set<string>()
 
-            if (exercise.category) {
-                categories.add(exercise.category)
-            }
-        })
-        
-        return Array.from(categories).sort()
-    } catch (error) {
-        console.error('Error fetching categories:', error)
-        throw error
-    }
+    snapshot.docs.forEach(doc => {
+      const exercise = doc.data() as Exercise
+
+      if (exercise.category) {
+        categories.add(exercise.category)
+      }
+    })
+
+    return Array.from(categories).sort()
+  } catch (error) {
+    console.error('Error fetching categories:', error)
+    throw error
+  }
 }
