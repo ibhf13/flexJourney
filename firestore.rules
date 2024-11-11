@@ -25,8 +25,20 @@ service cloud.firestore {
       allow write: if isUserOwner(userId);
     }
 
+    // Add new workoutProgress collection rules
+    match /users/{userId}/workoutProgress/{planId} {
+      allow read: if isUserOwner(userId);
+      allow write: if isUserOwner(userId);
+    }
+
     // User stats collection (includes streak data)
     match /statistics/{userId} {
+      allow read: if isUserOwner(userId);
+      allow write: if isUserOwner(userId);
+    }
+
+      // User stats collection (includes streak data)
+    match /userStats/{userId} {
       allow read: if isUserOwner(userId);
       allow write: if isUserOwner(userId);
     }

@@ -4,6 +4,7 @@ export interface FirestoreCollections {
   users: string
   trainingHistory: string
   statistics: string
+  workoutProgress: string
 }
 
 export const COLLECTIONS: FirestoreCollections = {
@@ -11,5 +12,7 @@ export const COLLECTIONS: FirestoreCollections = {
   exercises: 'exercises',
   users: 'users',
   trainingHistory: 'trainingHistory',
-  statistics: 'statistics'
+  statistics: 'userStats',
+  // statistics: 'statistics',
+  workoutProgress: 'workoutProgress'
 } as const
