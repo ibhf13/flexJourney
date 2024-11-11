@@ -1,6 +1,5 @@
-import { createContext, ReactNode, useContext, useEffect, useReducer } from 'react'
+import { createContext, ReactNode, useContext, useReducer } from 'react'
 import { WorkoutPlan } from '../types/WorkoutTypes'
-import { loadFromLocalStorage, saveToLocalStorage } from '../utils/storage'
 
 interface WorkoutContextState {
     selectedPlan: WorkoutPlan | null
@@ -118,18 +117,6 @@ function workoutReducer(state: WorkoutContextState, action: WorkoutAction): Work
 
 export function WorkoutProvider({ children }: { children: ReactNode }) {
     const [state, dispatch] = useReducer(workoutReducer, initialState)
-
-    useEffect(() => {
-        const storedState = loadFromLocalStorage('workoutState')
-
-        if (storedState) {
-            dispatch({ type: 'LOAD_STORED_STATE', payload: storedState })
-        }
-    }, [])
-
-    useEffect(() => {
-        saveToLocalStorage('workoutState', state)
-    }, [state])
 
     const value: WorkoutContextValue = {
         ...state,
