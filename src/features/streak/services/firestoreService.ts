@@ -1,4 +1,5 @@
 import { db } from '@/config/firebase/firebase'
+import { COLLECTIONS } from '@/config/firebase/types/firestore'
 import {
     doc,
     getDoc,
@@ -9,12 +10,12 @@ import {
 } from 'firebase/firestore'
 import { UserBadges } from '../types/streakTypes'
 
-const COLLECTION = 'userStats'
+const STATISTICS_COLLECTION = COLLECTIONS.statistics
 
 export const firestoreService = {
     async getUserStreakData(userId: string) {
         try {
-            const userStatsRef = doc(db, COLLECTION, userId)
+            const userStatsRef = doc(db, STATISTICS_COLLECTION, userId)
             const userStatsDoc = await getDoc(userStatsRef)
 
             if (!userStatsDoc.exists()) {
@@ -39,7 +40,7 @@ export const firestoreService = {
         badges: UserBadges | null
     ) {
         try {
-            const userStatsRef = doc(db, COLLECTION, userId)
+            const userStatsRef = doc(db, STATISTICS_COLLECTION, userId)
 
             const data = {
                 userId,
@@ -62,7 +63,7 @@ export const firestoreService = {
     async initializeUserStats(userId: string) {
 
         try {
-            const userStatsRef = doc(db, COLLECTION, userId)
+            const userStatsRef = doc(db, STATISTICS_COLLECTION, userId)
             const userStatsDoc = await getDoc(userStatsRef)
 
             if (!userStatsDoc.exists()) {
@@ -95,7 +96,7 @@ export const firestoreService = {
 
     async resetUserStreak(userId: string) {
         try {
-            const userStatsRef = doc(db, COLLECTION, userId)
+            const userStatsRef = doc(db, STATISTICS_COLLECTION, userId)
             const userStatsDoc = await getDoc(userStatsRef)
 
             if (userStatsDoc.exists()) {
