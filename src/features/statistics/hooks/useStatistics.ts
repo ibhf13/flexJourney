@@ -10,7 +10,7 @@ export const useStatistics = () => {
     const { showNotification } = useNotificationContext()
 
     const { data: stats, isLoading, error } = useQuery({
-        queryKey: ['userStats', currentUser?.uid],
+        queryKey: ['statistics', currentUser?.uid],
         queryFn: () => currentUser ? statisticsService.getUserStats(currentUser.uid) : null,
         enabled: !!currentUser,
     })
@@ -22,7 +22,7 @@ export const useStatistics = () => {
             return statisticsService.updateWorkoutStats(currentUser.uid, updateData)
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['userStats'] })
+            queryClient.invalidateQueries({ queryKey: ['statistics'] })
         },
         onError: (error) => {
             showNotification({
@@ -52,7 +52,7 @@ export const useStatistics = () => {
             )
         },
         onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['userStats'] })
+            queryClient.invalidateQueries({ queryKey: ['statistics'] })
         },
         onError: (error) => {
             showNotification({
@@ -69,7 +69,7 @@ export const useStatistics = () => {
             return statisticsService.calculateAndUpdateStreak(currentUser.uid)
         },
         onSuccess: (newStreak) => {
-            queryClient.invalidateQueries({ queryKey: ['userStats'] })
+            queryClient.invalidateQueries({ queryKey: ['statistics'] })
             showNotification({
                 message: `Workout streak: ${newStreak} days!`,
                 severity: 'success',

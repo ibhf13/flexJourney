@@ -1,4 +1,5 @@
 import { db } from '@/config/firebase/firebase'
+import { COLLECTIONS } from '@/config/firebase/types/firestore'
 import {
     doc,
     getDoc,
@@ -7,6 +8,8 @@ import {
     updateDoc,
 } from 'firebase/firestore'
 import { ExerciseProgress, UserStats, WorkoutStat } from '../types/StatisticsTypes'
+
+const STATISTICS_DOCUMENT = COLLECTIONS.statistics
 
 export const statisticsService = {
     async initializeUserStats(userId: string): Promise<UserStats> {
@@ -38,7 +41,7 @@ export const statisticsService = {
         }
 
         try {
-            const userStatsRef = doc(db, 'userStats', userId)
+            const userStatsRef = doc(db, STATISTICS_DOCUMENT, userId)
 
             await setDoc(userStatsRef, {
                 ...newStats,
@@ -55,7 +58,7 @@ export const statisticsService = {
 
     async getUserStats(userId: string): Promise<UserStats | null> {
         try {
-            const userStatsRef = doc(db, 'userStats', userId)
+            const userStatsRef = doc(db, STATISTICS_DOCUMENT, userId)
             const userStatsDoc = await getDoc(userStatsRef)
 
             if (!userStatsDoc.exists()) {
@@ -77,7 +80,7 @@ export const statisticsService = {
         updateData: Partial<WorkoutStat>
     ): Promise<void> {
         try {
-            const userStatsRef = doc(db, 'userStats', userId)
+            const userStatsRef = doc(db, STATISTICS_DOCUMENT, userId)
 
             await updateDoc(userStatsRef, {
                 'workoutStats': updateData,
@@ -96,7 +99,7 @@ export const statisticsService = {
         reps: number
     ): Promise<void> {
         try {
-            const userStatsRef = doc(db, 'userStats', userId)
+            const userStatsRef = doc(db, STATISTICS_DOCUMENT, userId)
             const userStatsDoc = await getDoc(userStatsRef)
 
             if (!userStatsDoc.exists()) {
@@ -172,7 +175,7 @@ export const statisticsService = {
 
     async calculateAndUpdateStreak(userId: string): Promise<number> {
         try {
-            const userStatsRef = doc(db, 'userStats', userId)
+            const userStatsRef = doc(db, STATISTICS_DOCUMENT, userId)
             const userStatsDoc = await getDoc(userStatsRef)
 
             if (!userStatsDoc.exists()) {
