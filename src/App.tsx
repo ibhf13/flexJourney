@@ -1,4 +1,3 @@
-import { AuthProvider } from '@/contexts/AuthContext'
 import { NavigationProvider } from '@/contexts/NavigationContext'
 import { ErrorBoundary } from '@/features/errorHandling/components/ErrorBoundary'
 import { ExerciseProvider } from '@/features/exercises/contexts/ExerciseContext'
@@ -12,6 +11,7 @@ import { ThemeProvider } from '@mui/material/styles'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import { Toaster } from 'react-hot-toast'
 import AppRouter from './config/router/AppRouter'
+import { AuthProvider } from './features/auth/contexts/AuthContext'
 import { WorkoutBuilderProvider } from './features/workoutBuilder/contexts/WorkoutBuilderContext'
 
 const queryClient = new QueryClient({

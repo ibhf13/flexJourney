@@ -1,4 +1,4 @@
-import { useAuthContext } from '@/contexts/AuthContext'
+import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useMediaQuery, useTheme } from '@mui/material'
 import { useState } from 'react'
 import { UserProfile } from '../types/ProfileTypes'

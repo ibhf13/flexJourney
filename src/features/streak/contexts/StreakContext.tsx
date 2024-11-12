@@ -1,5 +1,5 @@
-import { useAuthContext } from '@/contexts/AuthContext'
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import * as BadgeService from '../services/badgeService'
 import { firestoreService } from '../services/firestoreService'

@@ -1,5 +1,5 @@
-import { useAuthContext } from '@/contexts/AuthContext'
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { statisticsService } from '../api/statisticsService'
 import { WorkoutStat } from '../types/StatisticsTypes'
