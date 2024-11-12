@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotificationContext } from '@/features/Feedback'
+import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthError } from './useAuthError'
@@ -15,7 +15,7 @@ export const useSignup = () => {
   const [isGoogleLoading, setIsGoogleLoading] = useState(false)
   const { register, googleSignIn, isAuthenticated } = useAuthContext()
   const navigate = useNavigate()
-  const { showNotification } = useNotificationContext()
+  const { handleError, showMessage } = useErrorHandler()
   const { getErrorMessage } = useAuthError()
 
   useEffect(() => {
@@ -28,15 +28,9 @@ export const useSignup = () => {
     try {
       setIsLoading(true)
       await register(data.email, data.password, data.displayName)
-      showNotification({
-        message: 'Account created successfully!',
-        severity: 'success',
-      })
+      showMessage('Account created successfully!', 'success')
     } catch (error) {
-      showNotification({
-        message: getErrorMessage(error),
-        severity: 'error',
-      })
+      handleError(getErrorMessage(error), 'error')
     } finally {
       setIsLoading(false)
     }
@@ -46,15 +40,9 @@ export const useSignup = () => {
     try {
       setIsGoogleLoading(true)
       await googleSignIn()
-      showNotification({
-        message: 'Signed in successfully with Google!',
-        severity: 'success',
-      })
+      showMessage('Signed in successfully with Google!', 'success')
     } catch (error) {
-      showNotification({
-        message: getErrorMessage(error),
-        severity: 'error',
-      })
+      handleError(getErrorMessage(error), 'error')
     } finally {
       setIsGoogleLoading(false)
     }

@@ -8,7 +8,7 @@ import { useParams } from 'react-router-dom'
 export const ExercisePage = () => {
     const { planId, dayId } = useParams<{ planId: string; dayId: string }>()
     const { data: currentDay, isLoading, error } = useDayDetails(planId, dayId)
-    const { exercises, setExercises } = useExerciseContext()
+    const { exercises, setExercises, isLoading: exercisesLoading, error: exercisesError } = useExerciseContext()
 
     useEffect(() => {
         if (currentDay?.exercises) {
@@ -50,7 +50,7 @@ export const ExercisePage = () => {
             </Typography>
 
             <Box sx={{ mt: 2 }}>
-                <ExerciseList exercises={exercises} />
+                <ExerciseList exercises={exercises} isLoading={exercisesLoading} error={exercisesError} />
             </Box>
         </Container>
     )

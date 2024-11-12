@@ -1,4 +1,4 @@
-import { LoadingErrorWrapper } from '@/components/common/Error/LoadingErrorWrapper'
+import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
 import { ProfileDetails } from '@/features/profile/components/ProfileDetails'
 import { ProfileForm } from '@/features/profile/components/ProfileForm'
 import { ProfileHeader } from '@/features/profile/components/ProfileHeader'

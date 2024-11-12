@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotificationContext } from '@/features/Feedback'
+import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { statisticsService } from '../api/statisticsService'
 import { WorkoutStat } from '../types/StatisticsTypes'
@@ -7,7 +7,7 @@ import { WorkoutStat } from '../types/StatisticsTypes'
 export const useStatistics = () => {
     const { currentUser } = useAuthContext()
     const queryClient = useQueryClient()
-    const { showNotification } = useNotificationContext()
+    const { handleError, showMessage } = useErrorHandler()
 
     const { data: stats, isLoading, error } = useQuery({
         queryKey: ['statistics', currentUser?.uid],
@@ -25,10 +25,7 @@ export const useStatistics = () => {
             queryClient.invalidateQueries({ queryKey: ['statistics'] })
         },
         onError: (error) => {
-            showNotification({
-                message: error instanceof Error ? error.message : 'Failed to update stats',
-                severity: 'error',
-            })
+            handleError(error instanceof Error ? error.message : 'Failed to update stats', 'error')
         },
     })
 
@@ -55,10 +52,7 @@ export const useStatistics = () => {
             queryClient.invalidateQueries({ queryKey: ['statistics'] })
         },
         onError: (error) => {
-            showNotification({
-                message: error instanceof Error ? error.message : 'Failed to update exercise progress',
-                severity: 'error',
-            })
+            handleError(error instanceof Error ? error.message : 'Failed to update exercise progress', 'error')
         },
     })
 
@@ -70,10 +64,7 @@ export const useStatistics = () => {
         },
         onSuccess: (newStreak) => {
             queryClient.invalidateQueries({ queryKey: ['statistics'] })
-            showNotification({
-                message: `Workout streak: ${newStreak} days!`,
-                severity: 'success',
-            })
+            showMessage(`Workout streak: ${newStreak} days!`, 'success')
         },
     })
 

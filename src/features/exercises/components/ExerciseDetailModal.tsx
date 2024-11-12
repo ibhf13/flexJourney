@@ -1,9 +1,9 @@
 import { ConfirmationDialog } from '@/components/common/dialogs/ConfirmationDialog'
 import { useAuthContext } from '@/contexts/AuthContext'
+import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useExerciseCompletion } from '@/features/exercises/hooks/useExerciseCompletion'
 import { useUnsavedChanges } from '@/features/exercises/hooks/useUnsavedChanges'
 import { Exercise, ExerciseFormData } from '@/features/exercises/types/ExerciseTypes'
-import { useNotificationContext } from '@/features/Feedback'
 import { historyService } from '@/features/history/services/historyService'
 import { TrainingHistoryEntry } from '@/features/history/types/HistoryTypes'
 import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
@@ -32,7 +32,7 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
     const isMobile = useMediaQuery(theme.breakpoints.down('md'))
     const [hasChanges, setHasChanges] = useState(false)
     const { handleExerciseComplete } = useExerciseCompletion()
-    const { showNotification } = useNotificationContext()
+    const { handleError, showMessage } = useErrorHandler()
     const { selectedPlan } = useWorkoutContext()
     const { user } = useAuthContext()
     const [isSubmitting, setIsSubmitting] = useState(false)
@@ -51,10 +51,7 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
     const handleFormSubmit = async (data: ExerciseFormData) => {
         try {
             if (!selectedPlan || !user) {
-                showNotification({
-                    message: !selectedPlan ? 'No workout plan selected' : 'You must be logged in to save progress',
-                    severity: 'error'
-                })
+                showMessage(!selectedPlan ? 'No workout plan selected' : 'You must be logged in to save progress', 'error')
 
                 return
             }
@@ -88,20 +85,14 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
             const completed = handleExerciseComplete(exercise, day, data)
 
             if (completed) {
-                showNotification({
-                    message: 'Exercise completed successfully',
-                    severity: 'success'
-                })
+                showMessage('Exercise completed successfully', 'success')
                 onClose()
             } else {
                 throw new Error('Failed to mark exercise as complete')
             }
         } catch (error) {
             console.error('Error saving exercise:', error)
-            showNotification({
-                message: 'Failed to save exercise progress',
-                severity: 'error'
-            })
+            handleError('Failed to save exercise progress', 'error')
         } finally {
             setIsSubmitting(false)
         }

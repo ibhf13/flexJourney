@@ -1,4 +1,5 @@
 import { CongratulationsOverlay } from '@/components/common/animations/CongratulationsOverlay'
+import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
 import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
 import { useWorkoutCompletion } from '@/features/workout/hooks/useWorkoutCompletion'
 import { Grid } from '@mui/material'
@@ -10,9 +11,11 @@ import { ExerciseDetailModal } from './ExerciseDetailModal'
 
 interface ExerciseListProps {
     exercises: Exercise[]
+    isLoading: boolean
+    error: Error | null
 }
 
-export const ExerciseList: React.FC<ExerciseListProps> = ({ exercises }) => {
+export const ExerciseList: React.FC<ExerciseListProps> = ({ exercises, isLoading, error }) => {
     const { completedExercises, selectedPlan, selectedDay } = useWorkoutContext()
     const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null)
     const currentDay = selectedPlan?.days[selectedDay]
@@ -37,32 +40,35 @@ export const ExerciseList: React.FC<ExerciseListProps> = ({ exercises }) => {
 
     return (
         <>
-            <Grid container spacing={3}>
-                {sortedExercises.map((exercise) => (
-                    <Grid item xs={12} sm={6} md={4} key={exercise.id}>
-                        <ExerciseCard
-                            exercise={exercise}
-                            onSelect={handleExerciseSelect}
-                            isCompleted={completedExercises.includes(exercise.id)}
-                        />
-                    </Grid>
-                ))}
-            </Grid>
+            <LoadingErrorWrapper isLoading={isLoading} error={error}>
 
-            {selectedExercise && selectedPlan && (
-                <ExerciseDetailModal
-                    exercise={selectedExercise}
-                    day={currentDay!}
-                    open={!!selectedExercise}
-                    onClose={handleModalClose}
+                <Grid container spacing={3}>
+                    {sortedExercises.map((exercise) => (
+                        <Grid item xs={12} sm={6} md={4} key={exercise.id}>
+                            <ExerciseCard
+                                exercise={exercise}
+                                onSelect={handleExerciseSelect}
+                                isCompleted={completedExercises.includes(exercise.id)}
+                            />
+                        </Grid>
+                    ))}
+                </Grid>
+
+                {selectedExercise && selectedPlan && (
+                    <ExerciseDetailModal
+                        exercise={selectedExercise}
+                        day={currentDay!}
+                        open={!!selectedExercise}
+                        onClose={handleModalClose}
+                    />
+                )}
+
+                <CongratulationsOverlay
+                    show={showCongratulations}
+                    message={`You've completed all exercises for ${currentDay?.title}!`}
+                    onComplete={handleCongratulationsComplete}
                 />
-            )}
-
-            <CongratulationsOverlay
-                show={showCongratulations}
-                message={`You've completed all exercises for ${currentDay?.title}!`}
-                onComplete={handleCongratulationsComplete}
-            />
+            </LoadingErrorWrapper>
         </>
     )
 }

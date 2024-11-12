@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotificationContext } from '@/features/Feedback'
+import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { updateUserProfile } from '../api/profileService'
@@ -15,7 +15,7 @@ interface UploadAvatarOptions {
 export const useProfileAvatar = (options: UploadAvatarOptions = {}) => {
     const [uploadProgress, setUploadProgress] = useState(0)
     const { currentUser } = useAuthContext()
-    const { showNotification } = useNotificationContext()
+    const { handleError, showMessage } = useErrorHandler()
     const queryClient = useQueryClient()
     const {
         maxSizeMB = 1,
@@ -141,19 +141,13 @@ export const useProfileAvatar = (options: UploadAvatarOptions = {}) => {
         },
         onSuccess: (base64String) => {
             queryClient.invalidateQueries({ queryKey: ['profile', currentUser?.uid] })
-            showNotification({
-                message: 'Profile picture updated successfully',
-                severity: 'success',
-            })
+            showMessage('Profile picture updated successfully', 'success')
             setUploadProgress(0)
             onSuccess?.(base64String)
         },
         onError: (error) => {
             setUploadProgress(0)
-            showNotification({
-                message: error instanceof Error ? error.message : 'Failed to upload avatar',
-                severity: 'error',
-            })
+            handleError(error instanceof Error ? error.message : 'Failed to upload avatar', 'error')
         },
     })
 
