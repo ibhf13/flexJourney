@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotificationContext } from '@/features/Feedback'
+import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { FirebaseError } from 'firebase/app'
 import { fetchUserProfile, updateUserProfile } from '../api/profileService'
@@ -8,7 +8,7 @@ import type { UpdateProfileData, UserProfile } from '../types/ProfileTypes'
 export const useProfile = () => {
     const { currentUser } = useAuthContext()
     const queryClient = useQueryClient()
-    const { showNotification } = useNotificationContext()
+    const { handleError, showMessage } = useErrorHandler()
 
     const {
         data: profile,
@@ -43,14 +43,11 @@ export const useProfile = () => {
             return data
         },
         onSuccess: () => {
-            showNotification({ message: 'Profile updated successfully', severity: 'success' })
+            showMessage('Profile updated successfully', 'success')
             queryClient.invalidateQueries({ queryKey: ['profile', currentUser?.uid] })
         },
         onError: (error) => {
-            showNotification({
-                message: error instanceof Error ? error.message : 'Failed to update profile',
-                severity: 'error',
-            })
+            handleError(error instanceof Error ? error.message : 'Failed to update profile', 'error')
         },
     })
 

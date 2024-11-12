@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotificationContext } from '@/features/Feedback'
+import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { yupResolver } from '@hookform/resolvers/yup'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
@@ -17,7 +17,7 @@ export const useProfileForm = ({ initialData, onSuccess }: UseProfileFormProps =
     const [isDirty, setIsDirty] = useState(false)
     const { currentUser } = useAuthContext()
     const queryClient = useQueryClient()
-    const { showNotification } = useNotificationContext()
+    const { handleError, showMessage } = useErrorHandler()
 
     // Convert the initial data to match the form data structure
     const convertedInitialData: Partial<ProfileFormData> = {
@@ -59,18 +59,12 @@ export const useProfileForm = ({ initialData, onSuccess }: UseProfileFormProps =
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['profile'] })
-            showNotification({
-                message: 'Profile updated successfully',
-                severity: 'success',
-            })
+            showMessage('Profile updated successfully', 'success')
             setIsDirty(false)
             onSuccess?.()
         },
         onError: (error) => {
-            showNotification({
-                message: error instanceof Error ? error.message : 'Failed to update profile',
-                severity: 'error',
-            })
+            handleError(error instanceof Error ? error.message : 'Failed to update profile', 'error')
         },
     })
 

@@ -1,4 +1,4 @@
-import { LoadingErrorWrapper } from '@/components/common/Error/LoadingErrorWrapper'
+import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
 import { useExercises } from '@/features/exercises/hooks/useExercises'
 import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import DeleteIcon from '@mui/icons-material/Delete'

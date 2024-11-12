@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotificationContext } from '@/features/Feedback'
+import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useQueryClient } from '@tanstack/react-query'
 import { v4 as uuidv4 } from 'uuid'
 import { ExerciseLog, HistoryFilters } from '../types/HistoryTypes'
@@ -7,7 +7,7 @@ import { useHistoryQueries } from './useHistoryQueries'
 
 export const useHistory = (filters?: HistoryFilters) => {
     const { currentUser } = useAuthContext()
-    const { showNotification } = useNotificationContext()
+    const { handleError, showMessage } = useErrorHandler()
     const queryClient = useQueryClient()
 
     const {
@@ -38,10 +38,7 @@ export const useHistory = (filters?: HistoryFilters) => {
         exerciseLog: ExerciseLog
     ) => {
         if (!currentUser) {
-            showNotification({
-                message: 'Please sign in to save your progress',
-                severity: 'error'
-            })
+            showMessage('Please sign in to save your progress', 'error')
             throw new Error('User not authenticated')
         }
 

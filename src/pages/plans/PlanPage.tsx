@@ -1,9 +1,9 @@
+import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
+import { PlanCard } from '@/features/workout/components/PlanCard'
 import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
 import { useWorkoutPlans } from '@/features/workout/hooks/useWorkoutPlans'
 import { WorkoutPlan } from '@/features/workout/types/WorkoutTypes'
 import { WorkoutBuilderCard } from '@/features/workoutBuilder/components/WorkoutBuilderCard'
-import { LoadingErrorWrapper } from '@features/workout/components/common/LoadingErrorWrapper'
-import { PlanCard } from '@features/workout/components/PlanCard'
 import { Container, Grid, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 

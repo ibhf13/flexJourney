@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotificationContext } from '@/features/Feedback'
+import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuthError } from './useAuthError'
@@ -12,21 +12,18 @@ interface LoginCredentials {
 export const useLoginHandler = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [authSuccess, setAuthSuccess] = useState(false)
+  const { handleError, showMessage } = useErrorHandler()
   const { login, googleSignIn, currentUser } = useAuthContext()
   const navigate = useNavigate()
-  const { showNotification } = useNotificationContext()
   const { getErrorMessage } = useAuthError()
 
   useEffect(() => {
     if (authSuccess && currentUser) {
       navigate('/')
-      showNotification({
-        message: 'Successfully logged in!',
-        severity: 'success',
-      })
+      showMessage('Successfully logged in!', 'success')
       setAuthSuccess(false)
     }
-  }, [authSuccess, currentUser, navigate, showNotification])
+  }, [authSuccess, currentUser, navigate, handleError, showMessage])
 
   const handleLogin = async (data: LoginCredentials) => {
     try {
@@ -34,10 +31,7 @@ export const useLoginHandler = () => {
       await login(data.email, data.password)
       setAuthSuccess(true)
     } catch (error) {
-      showNotification({
-        message: getErrorMessage(error),
-        severity: 'error',
-      })
+      handleError(getErrorMessage(error), 'error')
     } finally {
       setIsLoading(false)
     }
@@ -49,10 +43,7 @@ export const useLoginHandler = () => {
       await googleSignIn()
       setAuthSuccess(true)
     } catch (error) {
-      showNotification({
-        message: getErrorMessage(error),
-        severity: 'error',
-      })
+      handleError(getErrorMessage(error), 'error')
     } finally {
       setIsLoading(false)
     }

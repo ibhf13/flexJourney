@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotificationContext } from '@/features/Feedback'
+import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import * as BadgeService from '../services/badgeService'
 import { firestoreService } from '../services/firestoreService'
@@ -40,7 +40,7 @@ const StreakContext = createContext<StreakContextType | undefined>(undefined)
 
 export const StreakProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
     const { currentUser } = useAuthContext()
-    const { showNotification } = useNotificationContext()
+    const { handleError, showMessage } = useErrorHandler()
     const [isLoading, setIsLoading] = useState(true)
     const [error, setError] = useState<Error | null>(null)
     const [streakData, setStreakData] = useState<StreakData>(INITIAL_STREAK_DATA)
@@ -71,14 +71,11 @@ export const StreakProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             const errorMessage = err instanceof Error ? err.message : 'Failed to load streak data'
 
             setError(new Error(errorMessage))
-            showNotification({
-                message: errorMessage,
-                severity: 'error',
-            })
+            handleError(errorMessage, 'error')
         } finally {
             setIsLoading(false)
         }
-    }, [currentUser?.uid, showNotification])
+    }, [currentUser?.uid, handleError])
 
     useEffect(() => {
         loadStreakData()
@@ -94,15 +91,11 @@ export const StreakProvider: React.FC<{ children: React.ReactNode }> = ({ childr
         )
 
         justUnlocked.forEach(badge => {
-            showNotification({
-                message: `🎉 New Badge Unlocked: ${badge.name}!`,
-                severity: 'success',
-                autoHideDuration: 6000,
-            })
+            showMessage(`🎉 New Badge Unlocked: ${badge.name}!`, 'success')
         })
 
         return newBadges
-    }, [showNotification])
+    }, [handleError, showMessage])
 
     // Update streak with optimistic updates
     const updateStreak = useCallback(async (workoutDate: string) => {
@@ -135,11 +128,7 @@ export const StreakProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             const milestone = StreakService.getStreakMilestone(newStreak)
 
             if (milestone) {
-                showNotification({
-                    message: StreakService.getStreakMessage(newStreak),
-                    severity: 'success',
-                    autoHideDuration: 6000,
-                })
+                showMessage(StreakService.getStreakMessage(newStreak), 'success')
             }
 
             // Update final state with server response
@@ -160,13 +149,10 @@ export const StreakProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             const errorMessage = err instanceof Error ? err.message : 'Failed to update streak'
 
             setError(new Error(errorMessage))
-            showNotification({
-                message: errorMessage,
-                severity: 'error',
-            })
+            handleError(errorMessage, 'error')
             throw err
         }
-    }, [currentUser?.uid, streakData, showNotification, handleBadgeNotifications])
+    }, [currentUser?.uid, streakData, handleBadgeNotifications, handleError, showMessage])
 
     // Reset streak with optimistic updates
     const resetStreak = useCallback(async () => {
@@ -186,11 +172,7 @@ export const StreakProvider: React.FC<{ children: React.ReactNode }> = ({ childr
 
             await firestoreService.resetUserStreak(currentUser.uid)
 
-            showNotification({
-                message: 'Streak reset. Start fresh tomorrow! 💪',
-                severity: 'info',
-                autoHideDuration: 4000,
-            })
+            showMessage('Streak reset. Start fresh tomorrow! 💪', 'info')
         } catch (err) {
             // Revert optimistic update on error
             setStreakData(previousData)
@@ -198,13 +180,10 @@ export const StreakProvider: React.FC<{ children: React.ReactNode }> = ({ childr
             const errorMessage = err instanceof Error ? err.message : 'Failed to reset streak'
 
             setError(new Error(errorMessage))
-            showNotification({
-                message: errorMessage,
-                severity: 'error',
-            })
+            handleError(errorMessage, 'error')
             throw err
         }
-    }, [currentUser?.uid, streakData, showNotification])
+    }, [currentUser?.uid, streakData, handleError, showMessage])
 
     // Memoized values
     const unlockedBadges = useMemo(() =>

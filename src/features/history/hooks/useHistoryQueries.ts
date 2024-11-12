@@ -1,5 +1,5 @@
 import { useAuthContext } from '@/contexts/AuthContext'
-import { useNotificationContext } from '@/features/Feedback'
+import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { historyService } from '../services/historyService'
 import { HistoryFilters, TrainingHistoryEntry } from '../types/HistoryTypes'
@@ -15,7 +15,7 @@ const HISTORY_KEYS = {
 
 export const useHistoryQueries = () => {
     const queryClient = useQueryClient()
-    const { showNotification } = useNotificationContext()
+    const { handleError, showMessage } = useErrorHandler()
     const { currentUser } = useAuthContext()
 
     const useTrainingHistory = (filters?: HistoryFilters) => {
@@ -47,17 +47,11 @@ export const useHistoryQueries = () => {
             },
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ['training-history'] })
-                showNotification({
-                    message: 'Training history saved successfully',
-                    severity: 'success'
-                })
+                showMessage('Training history saved successfully', 'success')
             },
             onError: (error) => {
                 console.error('Create history error:', error)
-                showNotification({
-                    message: 'Failed to save training history',
-                    severity: 'error'
-                })
+                handleError('Failed to save training history', 'error')
             }
         })
     }
@@ -73,17 +67,11 @@ export const useHistoryQueries = () => {
             },
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ['training-history'] })
-                showNotification({
-                    message: 'Entry deleted successfully',
-                    severity: 'success'
-                })
+                showMessage('Entry deleted successfully', 'success')
             },
             onError: (error) => {
                 console.error('Delete history error:', error)
-                showNotification({
-                    message: 'Failed to delete entry',
-                    severity: 'error'
-                })
+                handleError('Failed to delete entry', 'error')
             }
         })
     }
@@ -102,17 +90,11 @@ export const useHistoryQueries = () => {
             },
             onSuccess: () => {
                 queryClient.invalidateQueries({ queryKey: ['training-history'] })
-                showNotification({
-                    message: 'Entry updated successfully',
-                    severity: 'success'
-                })
+                showMessage('Entry updated successfully', 'success')
             },
             onError: (error) => {
                 console.error('Update history error:', error)
-                showNotification({
-                    message: 'Failed to update entry',
-                    severity: 'error'
-                })
+                handleError('Failed to update entry', 'error')
             }
         })
     }

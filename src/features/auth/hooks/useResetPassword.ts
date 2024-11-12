@@ -1,5 +1,5 @@
 import { auth } from '@/config/firebase/firebase'
-import { useNotificationContext } from '@/features/Feedback'
+import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import { useState } from 'react'
 import { useAuthError } from './useAuthError'
@@ -7,7 +7,7 @@ import { useAuthError } from './useAuthError'
 export const useResetPassword = () => {
   const [isLoading, setIsLoading] = useState(false)
   const [isEmailSent, setIsEmailSent] = useState(false)
-  const { showNotification } = useNotificationContext()
+  const { handleError, showMessage } = useErrorHandler()
   const { getErrorMessage } = useAuthError()
 
   const handleResetPassword = async (email: string) => {
@@ -15,15 +15,9 @@ export const useResetPassword = () => {
       setIsLoading(true)
       await sendPasswordResetEmail(auth, email)
       setIsEmailSent(true)
-      showNotification({
-        message: 'Password reset email sent successfully!',
-        severity: 'success',
-      })
+      showMessage('Password reset email sent successfully!', 'success')
     } catch (error) {
-      showNotification({
-        message: getErrorMessage(error),
-        severity: 'error',
-      })
+      handleError(getErrorMessage(error), 'error')
     } finally {
       setIsLoading(false)
     }

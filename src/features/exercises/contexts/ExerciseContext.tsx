@@ -94,6 +94,8 @@ export function ExerciseProvider({ children }: { children: ReactNode }) {
 
     const value: ExerciseContextValue = {
         ...state,
+        isLoading: state.isLoading,
+        error: state.error,
         setExercises,
         toggleExerciseCompletion,
         setLoading,

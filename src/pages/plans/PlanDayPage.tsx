@@ -1,4 +1,4 @@
-import { LoadingErrorWrapper } from '@/features/workout/components/common/LoadingErrorWrapper'
+import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
 import { WorkoutDayCard } from '@/features/workout/components/WorkoutDayCard'
 import { usePlanDetails } from '@/features/workout/hooks/usePlanDetails'
 import { WorkoutDay } from '@/features/workout/types/WorkoutTypes'

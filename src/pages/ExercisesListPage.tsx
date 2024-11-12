@@ -1,4 +1,4 @@
-import { LoadingErrorWrapper } from '@/components/common/Error/LoadingErrorWrapper'
+import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
 import { ExerciseCard } from '@/features/exercises/components/ExerciseCard'
 import { ExerciseFilters } from '@/features/exercises/components/ExerciseFilters'
 import { ExerciseListItem } from '@/features/exercises/components/ExerciseListItem'
