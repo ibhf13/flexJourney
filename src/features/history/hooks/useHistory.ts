@@ -1,5 +1,5 @@
-import { useAuthContext } from '@/contexts/AuthContext'
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useQueryClient } from '@tanstack/react-query'
 import { v4 as uuidv4 } from 'uuid'
 import { ExerciseLog, HistoryFilters } from '../types/HistoryTypes'

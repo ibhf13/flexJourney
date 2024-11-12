@@ -1,5 +1,5 @@
 import { db } from '@/config/firebase/firebase'
-import { useAuthContext } from '@/contexts/AuthContext'
+import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useQuery } from '@tanstack/react-query'
 import { endOfMonth, format, startOfMonth } from 'date-fns'
 import { collection, getDocs, query, where } from 'firebase/firestore'

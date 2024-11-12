@@ -1,8 +1,8 @@
 import { PageContainer } from '@/components/common/StructureComponents/PageContainer'
-import { useAuthContext } from '@/contexts/AuthContext'
-import { QuickActions } from '@/features/home/components/QuickActions'
-import { SeedDataButton } from '@/features/home/components/SeedDataButton'
 import { WelcomeSection } from '@/features/home/components/WelcomeSection'
+import { useAuthContext } from '@features/auth/contexts/AuthContext'
+import { QuickActions } from '@features/home/components/QuickActions'
+import { SeedDataButton } from '@features/home/components/SeedDataButton'
 import { Box } from '@mui/material'
 import { motion } from 'framer-motion'
 

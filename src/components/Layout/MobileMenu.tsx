@@ -1,5 +1,5 @@
-import { useAuthContext } from '@/contexts/AuthContext'
 import { useNavigationContext } from '@/contexts/NavigationContext'
+import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import {
   History as HistoryIcon,
   Home as HomeIcon,

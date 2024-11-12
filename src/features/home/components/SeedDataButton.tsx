@@ -1,5 +1,5 @@
-import { useAuthContext } from '@/contexts/AuthContext'
 import { seedWorkoutPlans } from '@/utils/firebaseUtils'
+import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { LoadingButton } from '@mui/lab'
 import { Box, Typography } from '@mui/material'
 import { useSnackbar } from 'notistack'

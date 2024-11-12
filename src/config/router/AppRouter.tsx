@@ -1,4 +1,4 @@
-import { useAuthContext } from '@/contexts/AuthContext'
+import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
 import { privateRoutes, publicRoutes } from './routes'
 
@@ -10,11 +10,11 @@ const AppRouter = () => {
     ...(isAuthenticated
       ? [privateRoutes]
       : [
-          {
-            path: '*',
-            element: <Navigate to="/login" replace />,
-          },
-        ]),
+        {
+          path: '*',
+          element: <Navigate to="/login" replace />,
+        },
+      ]),
   ])
 
   return <RouterProvider router={router} />

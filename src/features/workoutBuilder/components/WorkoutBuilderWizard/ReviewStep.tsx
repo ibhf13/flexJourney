@@ -1,6 +1,6 @@
-import { useAuthContext } from '@/contexts/AuthContext'
 import { useExercises } from '@/features/exercises/hooks/useExercises'
 import { DifficultyLevel } from '@/features/workout/types/WorkoutTypes'
+import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import PreviewIcon from '@mui/icons-material/Preview'

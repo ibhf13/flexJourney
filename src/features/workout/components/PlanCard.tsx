@@ -1,6 +1,6 @@
 import { BaseCard, BaseCardContent } from '@/components/common/Cards'
 import { ConfirmationDialog } from '@/components/common/dialogs/ConfirmationDialog'
-import { useAuthContext } from '@/contexts/AuthContext'
+import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import DeleteIcon from '@mui/icons-material/Delete'
 import PersonIcon from '@mui/icons-material/Person'
 import { Box, Chip, Menu, MenuItem } from '@mui/material'

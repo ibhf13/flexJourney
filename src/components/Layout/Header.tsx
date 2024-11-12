@@ -1,6 +1,6 @@
-import { useAuthContext } from '@/contexts/AuthContext'
 import { useProfile } from '@/features/profile/hooks/useProfile'
 import { StreakBadge } from '@/features/streak/components/StreakBadge'
+import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import MenuIcon from '@mui/icons-material/Menu'
 import {
   AppBar,
