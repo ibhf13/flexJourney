@@ -1,17 +1,22 @@
 import { NavigationContextType, NavigationState } from '@/contexts/types/navigationType'
+import { useBreakpoints } from '@/hooks/useBreakpoints'
 import React, { createContext, useCallback, useContext, useState } from 'react'
 
-const initialState: NavigationState = {
-  isMobileMenuOpen: false,
-  isProfileMenuOpen: false,
-  isWorkoutDrawerOpen: false,
-  isSidebarOpen: true,
-  activeRoute: window.location.pathname,
-}
+
 
 const NavigationContext = createContext<NavigationContextType | undefined>(undefined)
 
 export const NavigationProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const { isMobile } = useBreakpoints()
+
+  const initialState: NavigationState = {
+    isMobileMenuOpen: false,
+    isProfileMenuOpen: false,
+    isWorkoutDrawerOpen: false,
+    isSidebarOpen: isMobile ? false : true,
+    activeRoute: window.location.pathname,
+  }
+
   const [state, setState] = useState<NavigationState>(initialState)
 
   const toggleMobileMenu = useCallback(() => {
