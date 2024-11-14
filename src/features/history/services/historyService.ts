@@ -1,95 +1,104 @@
-import { db } from '@/config/firebase/firebase'
-import {
-    addDoc,
-    collection,
-    deleteDoc,
-    doc,
-    getDocs,
-    orderBy,
-    query,
-    Timestamp,
-    updateDoc,
-    where
-} from 'firebase/firestore'
-import { HistoryFilters, TrainingHistoryEntry } from '../types/HistoryTypes'
+import { createDocument, deleteDocument, queryCollection, updateDocument } from '@/config/firebase/operations/database'
+import { COLLECTIONS } from '@/config/firebase/types/collections'
+import { getUserCollection } from '@/config/firebase/utils/helpers'
+import { dateToTimestamp, timestampToDate } from '@/config/firebase/utils/transforms'
+import { Timestamp } from 'firebase/firestore'
+import { ExerciseLog, HistoryFilters, TrainingHistoryEntry } from '../types/HistoryTypes'
 
-const COLLECTION_NAME = 'trainingHistory'
-
-const convertToTimestamp = (date: string | Date) => {
-    return Timestamp.fromDate(new Date(date))
+type FirestoreTrainingHistoryEntry = Omit<TrainingHistoryEntry, 'date' | 'exercises'> & {
+    date: Timestamp
+    exercises: (Omit<ExerciseLog, 'completedAt'> & { completedAt: Timestamp })[]
 }
 
-const convertToISOString = (date: Timestamp | string | Date) => {
-    if (date instanceof Timestamp) {
-        return date.toDate().toISOString()
+const convertToFirestoreData = (entry: TrainingHistoryEntry) => {
+    return {
+        ...entry,
+        date: dateToTimestamp(new Date(entry.date)),
+        exercises: entry.exercises.map(exercise => ({
+            ...exercise,
+            completedAt: dateToTimestamp(new Date(exercise.completedAt))
+        }))
     }
+}
 
-    return date instanceof Date ? date.toISOString() : date
+const convertFromFirestoreData = (data: any): TrainingHistoryEntry => {
+    return {
+        ...data,
+        date: timestampToDate(data.date).toISOString(),
+        exercises: data.exercises.map((exercise: any) => ({
+            ...exercise,
+            completedAt: timestampToDate(exercise.completedAt).toISOString()
+        }))
+    }
 }
 
 export const historyService = {
     create: async (userId: string, entry: TrainingHistoryEntry) => {
-        const historyRef = collection(db, 'users', userId, COLLECTION_NAME)
-        const firestoreEntry = {
-            ...entry,
-            date: convertToTimestamp(entry.date),
-            exercises: entry.exercises.map(exercise => ({
-                ...exercise,
-                completedAt: convertToTimestamp(exercise.completedAt)
-            }))
-        }
+        const collectionRef = getUserCollection(userId, COLLECTIONS.USERS.SUB_COLLECTIONS.TRAINING_HISTORY as 'TRAINING_HISTORY')
+        const firestoreData = convertToFirestoreData(entry)
 
-        const docRef = await addDoc(historyRef, firestoreEntry)
+        const result = await createDocument<FirestoreTrainingHistoryEntry>(collectionRef, firestoreData)
 
-        return docRef.id
+        return result.id
     },
 
     getAll: async (userId: string, filters?: HistoryFilters) => {
-        const historyRef = collection(db, 'users', userId, COLLECTION_NAME)
-        let baseQuery = query(historyRef, orderBy('date', 'desc'))
-
-        if (filters) {
-            const { startDate, endDate, planId } = filters
-            const conditions = []
-
-            if (startDate) conditions.push(where('date', '>=', convertToTimestamp(startDate)))
-            if (endDate) conditions.push(where('date', '<=', convertToTimestamp(endDate)))
-            if (planId) conditions.push(where('planId', '==', planId))
-
-            baseQuery = query(historyRef, ...conditions, orderBy('date', 'desc'))
+        const collectionRef = getUserCollection(userId, COLLECTIONS.USERS.SUB_COLLECTIONS.TRAINING_HISTORY as 'TRAINING_HISTORY')
+        const queryOptions: any = {
+            orderBy: { field: 'date', direction: 'desc' }
         }
 
-        const snapshot = await getDocs(baseQuery)
+        if (filters) {
+            const whereConditions = []
 
-        return snapshot.docs.map(doc => ({
-            ...doc.data(),
-            id: doc.id,
-            date: convertToISOString(doc.data().date),
-            exercises: doc.data().exercises.map((exercise: any) => ({
-                ...exercise,
-                completedAt: convertToISOString(exercise.completedAt)
-            }))
-        })) as TrainingHistoryEntry[]
+            if (filters.startDate) {
+                whereConditions.push({
+                    field: 'date',
+                    operator: '>=',
+                    value: dateToTimestamp(filters.startDate)
+                })
+            }
+
+            if (filters.endDate) {
+                whereConditions.push({
+                    field: 'date',
+                    operator: '<=',
+                    value: dateToTimestamp(filters.endDate)
+                })
+            }
+
+            if (filters.planId) {
+                whereConditions.push({
+                    field: 'planId',
+                    operator: '==',
+                    value: filters.planId
+                })
+            }
+
+            queryOptions.where = whereConditions
+        }
+
+        const results = await queryCollection<any>(collectionRef, queryOptions)
+
+        return results.map(convertFromFirestoreData)
     },
 
     delete: async (userId: string, entryId: string) => {
-        const entryRef = doc(db, 'users', userId, COLLECTION_NAME, entryId)
+        const collectionPath = `${COLLECTIONS.USERS.COLLECTION}/${userId}/${COLLECTIONS.USERS.SUB_COLLECTIONS.TRAINING_HISTORY}`
 
-        await deleteDoc(entryRef)
+        await deleteDocument(collectionPath, entryId)
 
         return entryId
     },
 
     update: async (userId: string, entryId: string, updates: Partial<TrainingHistoryEntry>) => {
-        const entryRef = doc(db, 'users', userId, COLLECTION_NAME, entryId)
-        const { date, ...otherUpdates } = updates
-
+        const collectionPath = `${COLLECTIONS.USERS.COLLECTION}/${userId}/${COLLECTIONS.USERS.SUB_COLLECTIONS.TRAINING_HISTORY}`
         const firestoreUpdates = {
-            ...otherUpdates,
-            updatedAt: Timestamp.now()
+            ...updates,
+            updatedAt: new Date()
         }
 
-        await updateDoc(entryRef, firestoreUpdates)
+        await updateDocument(collectionPath, entryId, firestoreUpdates)
 
         return entryId
     }

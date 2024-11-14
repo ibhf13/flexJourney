@@ -1,34 +1,23 @@
-import { db } from '@/config/firebase/firebase'
-import { COLLECTIONS } from '@/config/firebase/types/firestore'
-import {
-    doc,
-    getDoc,
-    serverTimestamp,
-    setDoc,
-    Timestamp,
-    updateDoc
-} from 'firebase/firestore'
-import { UserBadges } from '../types/streakTypes'
+import { createDocument, getDocument, updateDocument } from '@/config/firebase/operations/database'
+import { COLLECTIONS } from '@/config/firebase/types/collections'
+import { handleFirebaseError } from '@/config/firebase/utils/errors'
+import { dateToTimestamp } from '@/config/firebase/utils/transforms'
+import { UserBadges, UserStats } from '../types/streakTypes'
 
-const STATISTICS_COLLECTION = COLLECTIONS.statistics
+const STATS_COLLECTION = COLLECTIONS.USERS.SUB_COLLECTIONS.STATS
 
 export const firestoreService = {
-    async getUserStreakData(userId: string) {
+    async getUserStreakData(userId: string): Promise<UserStats | null> {
         try {
-            const userStatsRef = doc(db, STATISTICS_COLLECTION, userId)
-            const userStatsDoc = await getDoc(userStatsRef)
+            const stats = await getDocument<UserStats>(STATS_COLLECTION, userId)
 
-            if (!userStatsDoc.exists()) {
-                // If no data exists, initialize the user stats
+            if (!stats) {
                 return await this.initializeUserStats(userId)
             }
 
-            const data = userStatsDoc.data()
-
-            return undefined
+            return stats
         } catch (error) {
-            console.error('Error fetching user streak data:', error)
-            throw error
+            throw handleFirebaseError(error)
         }
     },
 
@@ -37,82 +26,67 @@ export const firestoreService = {
         streak: number,
         dates: string[],
         lastWorkoutDate: string | null,
-        badges: UserBadges | null
-    ) {
+        badges: UserBadges
+    ): Promise<UserStats> {
         try {
-            const userStatsRef = doc(db, STATISTICS_COLLECTION, userId)
-
             const data = {
                 userId,
                 streak,
                 dates,
-                lastWorkoutDate: lastWorkoutDate ? Timestamp.fromDate(new Date(lastWorkoutDate)) : null,
+                lastWorkoutDate: lastWorkoutDate ? dateToTimestamp(new Date(lastWorkoutDate)) : null,
                 badges,
-                lastUpdated: serverTimestamp(),
+                updatedAt: new Date()
             }
 
-            await setDoc(userStatsRef, data, { merge: true })
+            await updateDocument(STATS_COLLECTION, userId, data)
 
-            return data
+            return data as UserStats
         } catch (error) {
-            console.error('Error updating user streak data:', error)
-            throw error
+            throw handleFirebaseError(error)
         }
     },
 
-    async initializeUserStats(userId: string) {
-
+    async initializeUserStats(userId: string): Promise<UserStats> {
         try {
-            const userStatsRef = doc(db, STATISTICS_COLLECTION, userId)
-            const userStatsDoc = await getDoc(userStatsRef)
-
-            if (!userStatsDoc.exists()) {
-                const initialData = {
+            const initialData = {
+                userId,
+                streak: 0,
+                dates: [],
+                lastWorkoutDate: null,
+                badges: {
                     userId,
-                    streak: 12,
-                    dates: [],
-                    lastWorkoutDate: null,
-                    badges: {
-                        userId,
-                        unlockedBadges: [],
-                        achievements: [],
-                        lastUpdated: serverTimestamp(),
-                    },
-                    createdAt: serverTimestamp(),
-                    lastUpdated: serverTimestamp(),
-                }
-
-                await setDoc(userStatsRef, initialData)
-
-                return initialData
+                    unlockedBadges: [],
+                    achievements: [],
+                },
+                highestStreak: 0,
+                createdAt: new Date(),
+                updatedAt: new Date()
             }
 
-            return userStatsDoc.data()
+            return await createDocument<UserStats>(
+                { collection: STATS_COLLECTION },
+                initialData,
+                userId
+            )
         } catch (error) {
-            console.error('Error initializing user stats:', error)
-            throw error
+            throw handleFirebaseError(error)
         }
     },
 
-    async resetUserStreak(userId: string) {
+    async resetUserStreak(userId: string): Promise<void> {
         try {
-            const userStatsRef = doc(db, STATISTICS_COLLECTION, userId)
-            const userStatsDoc = await getDoc(userStatsRef)
+            const currentStats = await this.getUserStreakData(userId)
 
-            if (userStatsDoc.exists()) {
-                const currentBadges = userStatsDoc.data().badges
+            if (!currentStats) return
 
-                await updateDoc(userStatsRef, {
-                    streak: 0,
-                    dates: [],
-                    lastWorkoutDate: null,
-                    badges: currentBadges, // Preserve badges
-                    lastUpdated: serverTimestamp(),
-                })
-            }
+            await updateDocument(STATS_COLLECTION, userId, {
+                streak: 0,
+                dates: [],
+                lastWorkoutDate: null,
+                updatedAt: new Date()
+            })
         } catch (error) {
-            console.error('Error resetting user streak:', error)
-            throw error
+            throw handleFirebaseError(error)
         }
-    },
+    }
 }

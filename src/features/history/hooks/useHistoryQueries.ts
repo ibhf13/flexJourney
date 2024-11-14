@@ -1,3 +1,4 @@
+import { COLLECTIONS } from '@/config/firebase/types/collections'
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
@@ -6,7 +7,7 @@ import { HistoryFilters, TrainingHistoryEntry } from '../types/HistoryTypes'
 
 
 const HISTORY_KEYS = {
-    all: ['trainingHistory'] as const,
+    all: [COLLECTIONS.USERS.SUB_COLLECTIONS.TRAINING_HISTORY] as const,
     list: (userId: string, filters?: HistoryFilters) =>
         [...HISTORY_KEYS.all, 'list', userId, JSON.stringify(filters)] as const,
     detail: (userId: string, entryId: string) =>

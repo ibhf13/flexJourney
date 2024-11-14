@@ -1,4 +1,4 @@
-import { auth } from '@/config/firebase/firebase'
+import { auth } from '@/config/firebase/firebaseConfig'
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { sendPasswordResetEmail } from 'firebase/auth'
 import { useState } from 'react'

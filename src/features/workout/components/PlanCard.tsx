@@ -1,5 +1,7 @@
 import { BaseCard, BaseCardContent } from '@/components/common/Cards'
 import { ConfirmationDialog } from '@/components/common/dialogs/ConfirmationDialog'
+import { getErrorMessage, isFirebaseError } from '@/config/firebase/utils/errors'
+import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import DeleteIcon from '@mui/icons-material/Delete'
 import PersonIcon from '@mui/icons-material/Person'
@@ -17,6 +19,7 @@ interface PlanCardProps {
 
 export const PlanCard = ({ plan, onClick, onDelete, isLoading = false }: PlanCardProps) => {
   const { user } = useAuthContext()
+  const { handleError, showMessage } = useErrorHandler()
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
   const exercisesCount = plan.days.reduce((acc, day) => acc + day.exercises.length, 0)
@@ -50,7 +53,11 @@ export const PlanCard = ({ plan, onClick, onDelete, isLoading = false }: PlanCar
       setDeleteDialogOpen(false)
       onDelete?.()
     } catch (error) {
-      console.error('Error deleting plan:', error)
+      const message = isFirebaseError(error)
+        ? getErrorMessage(error.code)
+        : 'Failed to delete workout plan'
+
+      handleError(message, 'error')
     }
   }
 

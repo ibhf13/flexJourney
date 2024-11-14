@@ -3,7 +3,7 @@ import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useExerciseCompletion } from '@/features/exercises/hooks/useExerciseCompletion'
 import { useUnsavedChanges } from '@/features/exercises/hooks/useUnsavedChanges'
 import { Exercise, ExerciseFormData } from '@/features/exercises/types/ExerciseTypes'
-import { historyService } from '@/features/history/services/historyService'
+import { useHistoryQueries } from '@/features/history/hooks/useHistoryQueries'
 import { TrainingHistoryEntry } from '@/features/history/types/HistoryTypes'
 import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
 import { WorkoutDay } from '@/features/workout/types/WorkoutTypes'
@@ -32,10 +32,12 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
     const isMobile = useMediaQuery(theme.breakpoints.down('md'))
     const [hasChanges, setHasChanges] = useState(false)
     const { handleExerciseComplete } = useExerciseCompletion()
-    const { handleError, showMessage } = useErrorHandler()
+    const { handleError } = useErrorHandler()
     const { selectedPlan } = useWorkoutContext()
     const { user } = useAuthContext()
     const [isSubmitting, setIsSubmitting] = useState(false)
+    const { useCreateHistory } = useHistoryQueries()
+    const createHistory = useCreateHistory()
 
     const {
         isConfirmDialogOpen,
@@ -51,9 +53,7 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
     const handleFormSubmit = async (data: ExerciseFormData) => {
         try {
             if (!selectedPlan || !user) {
-                showMessage(!selectedPlan ? 'No workout plan selected' : 'You must be logged in to save progress', 'error')
-
-                return
+                throw new Error(!selectedPlan ? 'No workout plan selected' : 'You must be logged in to save progress')
             }
 
             if (isSubmitting) return
@@ -67,6 +67,8 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
                 dayName: day.title,
                 userId: user.uid,
                 date: new Date().toISOString(),
+                createdAt: new Date(),
+                updatedAt: new Date(),
                 exercises: [{
                     exerciseId: exercise.id,
                     exerciseName: exercise.title,
@@ -80,19 +82,17 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
                 }]
             }
 
-            await historyService.create(user.uid, historyEntry)
-
+            await createHistory.mutateAsync(historyEntry)
             const completed = handleExerciseComplete(exercise, day, data)
 
             if (completed) {
-                showMessage('Exercise completed successfully', 'success')
                 onClose()
             } else {
                 throw new Error('Failed to mark exercise as complete')
             }
         } catch (error) {
             console.error('Error saving exercise:', error)
-            handleError('Failed to save exercise progress', 'error')
+            handleError(error instanceof Error ? error.message : 'Failed to save exercise progress')
         } finally {
             setIsSubmitting(false)
         }

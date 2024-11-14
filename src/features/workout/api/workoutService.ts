@@ -1,39 +1,23 @@
-import { db } from '@/config/firebase/firebase'
-import { COLLECTIONS } from '@/config/firebase/types/firestore'
-import { collection, deleteDoc, doc, getDoc, getDocs } from 'firebase/firestore'
+import { deleteDocument, getDocument, queryCollection } from '@/config/firebase/operations/database'
+import { COLLECTIONS } from '@/config/firebase/types/collections'
+import { getGlobalCollection } from '@/config/firebase/utils/helpers'
 import { WorkoutPlan } from '../types/WorkoutTypes'
 
 export const fetchWorkoutPlans = async (): Promise<WorkoutPlan[]> => {
-  try {
-    const plansRef = collection(db, COLLECTIONS.workoutPlans)
-    const snapshot = await getDocs(plansRef)
+  const collectionRef = getGlobalCollection('WORKOUT_PLANS')
 
-    return snapshot.docs.map(doc => doc.data() as WorkoutPlan)
-  } catch (error) {
-    console.error('Error fetching workout plans:', error)
-    throw error
-  }
+  return await queryCollection<WorkoutPlan>(collectionRef, {
+    orderBy: {
+      field: 'createdAt',
+      direction: 'desc'
+    }
+  })
 }
 
-export const fetchWorkoutPlanById = async (planId: string): Promise<WorkoutPlan | undefined> => {
-  try {
-    const planRef = doc(db, COLLECTIONS.workoutPlans, planId)
-    const snapshot = await getDoc(planRef)
-
-    return snapshot.exists() ? (snapshot.data() as WorkoutPlan) : undefined
-  } catch (error) {
-    console.error('Error fetching workout plan:', error)
-    throw error
-  }
+export const fetchWorkoutPlanById = async (planId: string): Promise<WorkoutPlan | null> => {
+  return await getDocument<WorkoutPlan>(COLLECTIONS.GLOBAL.WORKOUT_PLANS, planId)
 }
 
 export const deleteWorkoutPlan = async (planId: string): Promise<void> => {
-  try {
-    const planRef = doc(db, COLLECTIONS.workoutPlans, planId)
-
-    await deleteDoc(planRef)
-  } catch (error) {
-    console.error('Error deleting workout plan:', error)
-    throw error
-  }
+  await deleteDocument(COLLECTIONS.GLOBAL.WORKOUT_PLANS, planId)
 }

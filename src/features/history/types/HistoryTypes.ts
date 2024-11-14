@@ -1,3 +1,5 @@
+import { BaseDocument, WithUserId } from '@/config/firebase/types/firebaseTypes'
+
 export interface ExerciseSet {
     weight: number
     reps: number
@@ -12,15 +14,13 @@ export interface ExerciseLog {
     completedAt: string
 }
 
-export interface TrainingHistoryEntry {
-    id: string
+export interface TrainingHistoryEntry extends BaseDocument, WithUserId {
     planId: string
     planName: string
     dayId: string
     dayName: string
     exercises: ExerciseLog[]
     date: string
-    userId: string
 }
 
 export interface HistoryFilters {
