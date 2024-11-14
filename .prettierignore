@@ -19,6 +19,7 @@ dataconnect/
 .env.development.local
 .env.test.local
 .env.production.local
+*.rules
 
 # Debug
 npm-debug.log*

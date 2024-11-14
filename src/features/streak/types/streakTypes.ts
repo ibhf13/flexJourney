@@ -1,3 +1,5 @@
+import { BaseDocument, WithUserId } from '@/config/firebase/types/firebaseTypes'
+
 export type BadgeLevel = 'bronze' | 'silver' | 'gold' | 'platinum' | 'diamond'
 
 export interface Badge {
@@ -7,23 +9,17 @@ export interface Badge {
     icon: string
     level: BadgeLevel
     requirement: number
-    unlockedAt?: string
 }
 
-export interface Achievement {
-    id: string
-    name: string
-    description: string
-    progress: number
-    maxProgress: number
-    completed: boolean
-    completedAt?: string
-    badge: Badge
-}
-
-export interface UserBadges {
-    userId: string
+export interface UserBadges extends WithUserId {
     unlockedBadges: Badge[]
-    achievements: Achievement[]
-    lastUpdated: string
+    achievements: string[]
+}
+
+export interface UserStats extends BaseDocument, WithUserId {
+    streak: number
+    dates: string[]
+    lastWorkoutDate: Date | null
+    badges: UserBadges
+    highestStreak: number
 }

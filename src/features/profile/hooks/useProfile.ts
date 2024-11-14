@@ -1,9 +1,12 @@
+import { FIREBASE_ERROR_CODES } from '@/config/firebase/utils/errors'
+import { useAuthContext } from '@/features/auth/contexts/AuthContext'
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
-import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { FirebaseError } from 'firebase/app'
 import { fetchUserProfile, updateUserProfile } from '../api/profileService'
 import type { UpdateProfileData, UserProfile } from '../types/ProfileTypes'
+
+const PROFILE_CACHE_TIME = 5 * 60 * 1000 // 5 minutes
+const MAX_RETRIES = 3
 
 export const useProfile = () => {
     const { currentUser } = useAuthContext()
@@ -17,18 +20,14 @@ export const useProfile = () => {
         refetch,
     } = useQuery<UserProfile | null>({
         queryKey: ['profile', currentUser?.uid],
-        queryFn: async () => {
-            if (!currentUser?.uid) return null
-
-            return fetchUserProfile(currentUser.uid)
-        },
+        queryFn: () => currentUser?.uid ? fetchUserProfile(currentUser.uid) : null,
         enabled: !!currentUser?.uid,
-        retry: (failureCount, error) => {
-            if (error instanceof FirebaseError && error.code === 'not-found') return false
+        retry: (failureCount, error: any) => {
+            if (error?.code === FIREBASE_ERROR_CODES.NOT_FOUND) return false
 
-            return failureCount < 3
+            return failureCount < MAX_RETRIES
         },
-        staleTime: 5 * 60 * 1000, // Cache for 5 minutes
+        staleTime: PROFILE_CACHE_TIME,
     })
 
     const {
@@ -36,18 +35,17 @@ export const useProfile = () => {
         isPending: isUpdating,
         reset: resetMutation,
     } = useMutation({
-        mutationFn: async (data: UpdateProfileData) => {
+        mutationFn: (data: UpdateProfileData) => {
             if (!currentUser?.uid) throw new Error('User not authenticated')
-            await updateUserProfile(currentUser.uid, data)
 
-            return data
+            return updateUserProfile(currentUser.uid, data)
         },
         onSuccess: () => {
             showMessage('Profile updated successfully', 'success')
             queryClient.invalidateQueries({ queryKey: ['profile', currentUser?.uid] })
         },
         onError: (error) => {
-            handleError(error instanceof Error ? error.message : 'Failed to update profile', 'error')
+            handleError(error instanceof Error ? error.message : 'Failed to update profile')
         },
     })
 

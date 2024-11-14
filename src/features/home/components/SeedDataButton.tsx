@@ -1,4 +1,4 @@
-import { seedWorkoutPlans } from '@/utils/firebaseUtils'
+import { seedWorkoutPlans } from '@/utils/workoutPlanSeeder'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { LoadingButton } from '@mui/lab'
 import { Box, Typography } from '@mui/material'
