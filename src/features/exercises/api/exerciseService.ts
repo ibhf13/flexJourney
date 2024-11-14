@@ -1,5 +1,4 @@
 import { getDocument, queryCollection } from '@/config/firebase/operations/database'
-import { COLLECTIONS } from '@/config/firebase/types/collections'
 import { getGlobalCollection } from '@/config/firebase/utils/helpers'
 import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 
@@ -16,7 +15,9 @@ export const fetchExercises = async (): Promise<Exercise[]> => {
 
 export const fetchExerciseById = async (exerciseId: string): Promise<Exercise | null> => {
   try {
-    return await getDocument<Exercise>(COLLECTIONS.GLOBAL.EXERCISES, exerciseId)
+    const collectionRef = getGlobalCollection('EXERCISES')
+
+    return await getDocument<Exercise>(collectionRef, exerciseId)
   } catch (error) {
     console.error('Error fetching exercise:', error)
     throw error

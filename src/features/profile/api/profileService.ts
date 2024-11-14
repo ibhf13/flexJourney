@@ -1,15 +1,17 @@
 import { createDocument, getDocument, updateDocument } from '@/config/firebase/operations'
-import { COLLECTIONS } from '@/config/firebase/types/collections'
 import { getUserCollection } from '@/config/firebase/utils/helpers'
 import { dateToTimestamp } from '@/config/firebase/utils/transforms'
 import { UpdateProfileData, UserProfile } from '../types/ProfileTypes'
+
 
 export const fetchUserProfile = async (userId: string): Promise<UserProfile | null> => {
     if (!userId?.trim()) {
         throw new Error('Invalid user ID provided')
     }
 
-    return await getDocument<UserProfile>(COLLECTIONS.USERS.COLLECTION, userId)
+    const userProfileCollectionRef = getUserCollection(userId, 'PROFILE')
+
+    return await getDocument<UserProfile>(userProfileCollectionRef, userId)
 }
 
 export const updateUserProfile = async (userId: string, data: UpdateProfileData): Promise<void> => {
@@ -23,7 +25,7 @@ export const updateUserProfile = async (userId: string, data: UpdateProfileData)
 
     const timestamp = new Date()
     const userRef = getUserCollection(userId, 'PROFILE')
-    const existingProfile = await getDocument<UserProfile>(COLLECTIONS.USERS.COLLECTION, userId)
+    const existingProfile = await getDocument<UserProfile>(userRef, userId)
 
     if (existingProfile) {
         const updateData = {
@@ -32,7 +34,7 @@ export const updateUserProfile = async (userId: string, data: UpdateProfileData)
             photoURL: data.photoURL || existingProfile.photoURL,
         }
 
-        await updateDocument<UserProfile>(COLLECTIONS.USERS.COLLECTION, userId, updateData)
+        await updateDocument<UserProfile>(userRef, userId, updateData)
     } else {
         const newUserData: Omit<UserProfile, 'id'> = {
             email: data.email || '',

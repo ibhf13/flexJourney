@@ -45,7 +45,8 @@ export const statisticsService = {
 
     async getUserStats(userId: string): Promise<UserStats | null> {
         try {
-            const stats = await getDocument<UserStats>(STATISTICS_DOCUMENT, userId)
+            const statsRef = getUserCollection(userId, 'STATS')
+            const stats = await getDocument<UserStats>(statsRef, userId)
 
             if (!stats) {
                 return this.initializeUserStats(userId)
@@ -58,9 +59,11 @@ export const statisticsService = {
     },
 
     async updateWorkoutStats(userId: string, updateData: Partial<WorkoutStat>): Promise<void> {
+        const statsRef = getUserCollection(userId, 'STATS')
+
         try {
             await updateDocument(
-                STATISTICS_DOCUMENT,
+                statsRef,
                 userId,
                 {
                     workoutStats: updateData,
@@ -128,7 +131,7 @@ export const statisticsService = {
             }
 
             await updateDocument(
-                STATISTICS_DOCUMENT,
+                getUserCollection(userId, 'STATS'),
                 userId,
                 {
                     exerciseProgress: updatedProgress,

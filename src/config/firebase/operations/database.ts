@@ -43,11 +43,12 @@ export const createDocument = async <T>(
 }
 
 export const getDocument = async <T>(
-    collectionName: string,
+    collectionRef: FirestoreCollectionRef,
     documentId: string
 ): Promise<T | null> => {
     try {
-        const docRef = doc(db, collectionName, documentId)
+        const path = createCollectionPath(collectionRef)
+        const docRef = doc(db, path, documentId)
         const docSnap = await getDoc(docRef)
 
         return snapshotToData<T>(docSnap)
@@ -57,12 +58,13 @@ export const getDocument = async <T>(
 }
 
 export const updateDocument = async <T>(
-    collectionName: string,
+    collectionRef: FirestoreCollectionRef,
     documentId: string,
     data: Partial<T>
 ): Promise<void> => {
     try {
-        const docRef = doc(db, collectionName, documentId)
+        const path = createCollectionPath(collectionRef)
+        const docRef = doc(db, path, documentId)
 
         await updateDoc(docRef, data as any)
     } catch (error) {
@@ -71,11 +73,12 @@ export const updateDocument = async <T>(
 }
 
 export const deleteDocument = async (
-    collectionName: string,
+    collectionRef: FirestoreCollectionRef,
     documentId: string
 ): Promise<void> => {
     try {
-        const docRef = doc(db, collectionName, documentId)
+        const path = createCollectionPath(collectionRef)
+        const docRef = doc(db, path, documentId)
 
         await deleteDoc(docRef)
     } catch (error) {

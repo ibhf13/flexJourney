@@ -84,21 +84,21 @@ export const historyService = {
     },
 
     delete: async (userId: string, entryId: string) => {
-        const collectionPath = `${COLLECTIONS.USERS.COLLECTION}/${userId}/${COLLECTIONS.USERS.SUB_COLLECTIONS.TRAINING_HISTORY}`
+        const collectionRef = getUserCollection(userId, COLLECTIONS.USERS.SUB_COLLECTIONS.TRAINING_HISTORY as 'TRAINING_HISTORY')
 
-        await deleteDocument(collectionPath, entryId)
+        await deleteDocument(collectionRef, entryId)
 
         return entryId
     },
 
     update: async (userId: string, entryId: string, updates: Partial<TrainingHistoryEntry>) => {
-        const collectionPath = `${COLLECTIONS.USERS.COLLECTION}/${userId}/${COLLECTIONS.USERS.SUB_COLLECTIONS.TRAINING_HISTORY}`
+        const collectionRef = getUserCollection(userId, COLLECTIONS.USERS.SUB_COLLECTIONS.TRAINING_HISTORY as 'TRAINING_HISTORY')
         const firestoreUpdates = {
             ...updates,
             updatedAt: new Date()
         }
 
-        await updateDocument(collectionPath, entryId, firestoreUpdates)
+        await updateDocument(collectionRef, entryId, firestoreUpdates)
 
         return entryId
     }
