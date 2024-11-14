@@ -1,6 +1,7 @@
 import { createDocument, getDocument, updateDocument } from '@/config/firebase/operations/database'
 import { COLLECTIONS } from '@/config/firebase/types/collections'
 import { handleFirebaseError } from '@/config/firebase/utils/errors'
+import { getUserCollection } from '@/config/firebase/utils/helpers'
 import { dateToTimestamp } from '@/config/firebase/utils/transforms'
 import { UserBadges, UserStats } from '../types/streakTypes'
 
@@ -9,7 +10,8 @@ const STATS_COLLECTION = COLLECTIONS.USERS.SUB_COLLECTIONS.STATS
 export const firestoreService = {
     async getUserStreakData(userId: string): Promise<UserStats | null> {
         try {
-            const stats = await getDocument<UserStats>(STATS_COLLECTION, userId)
+            const statsRef = getUserCollection(userId, 'STATS')
+            const stats = await getDocument<UserStats>(statsRef, userId)
 
             if (!stats) {
                 return await this.initializeUserStats(userId)
@@ -38,7 +40,7 @@ export const firestoreService = {
                 updatedAt: new Date()
             }
 
-            await updateDocument(STATS_COLLECTION, userId, data)
+            await updateDocument(getUserCollection(userId, 'STATS'), userId, data)
 
             return data as UserStats
         } catch (error) {
@@ -79,7 +81,7 @@ export const firestoreService = {
 
             if (!currentStats) return
 
-            await updateDocument(STATS_COLLECTION, userId, {
+            await updateDocument(getUserCollection(userId, 'STATS'), userId, {
                 streak: 0,
                 dates: [],
                 lastWorkoutDate: null,
