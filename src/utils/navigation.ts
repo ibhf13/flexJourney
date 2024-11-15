@@ -1,4 +1,4 @@
-import { useNavigationContext } from '@/contexts/NavigationContext'
+import { useNavigationContext } from '@/components/Layout/contexts/NavigationContext'
 import { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 

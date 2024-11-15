@@ -1,4 +1,4 @@
-import { NavigationProvider } from '@/contexts/NavigationContext'
+import { NavigationProvider } from '@/components/Layout/contexts/NavigationContext'
 import { ErrorBoundary } from '@/features/errorHandling/components/ErrorBoundary'
 import { ExerciseProvider } from '@/features/exercises/contexts/ExerciseContext'
 import { StreakProvider } from '@/features/streak/contexts/StreakContext'

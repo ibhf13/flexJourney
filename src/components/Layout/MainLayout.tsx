@@ -1,7 +1,7 @@
-import { useNavigationContext } from '@/contexts/NavigationContext'
 import { useRouteChange } from '@/utils/navigation'
 import { Box } from '@mui/material'
 import { Outlet } from 'react-router-dom'
+import { useNavigationContext } from './contexts/NavigationContext'
 import Header from './Header'
 import Sidebar from './Sidebar'
 

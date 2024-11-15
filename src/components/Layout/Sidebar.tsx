@@ -29,7 +29,7 @@ const Sidebar = ({ open, onClose }: SidebarProps) => {
         },
       }}
     >
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ p: 2, height: '100%' }}>
         <Navigation orientation="vertical" />
       </Box>
     </Drawer>
