@@ -1,11 +1,10 @@
-import { Menu, MenuItem, ListItemIcon, ListItemText, Divider, alpha } from '@mui/material'
-import {
-  Person as PersonIcon,
-  Settings as SettingsIcon,
-  ExitToApp as LogoutIcon,
-} from '@mui/icons-material'
-import { Link } from 'react-router-dom'
 import { useLogout } from '@/features/auth/hooks/useLogout'
+import {
+  ExitToApp as LogoutIcon,
+  Person as PersonIcon
+} from '@mui/icons-material'
+import { Divider, ListItemIcon, ListItemText, Menu, MenuItem, alpha } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 interface UserMenuProps {
   anchorEl: HTMLElement | null
@@ -58,13 +57,6 @@ const UserMenu = ({ anchorEl, onClose }: UserMenuProps) => {
           <PersonIcon fontSize="small" />
         </ListItemIcon>
         <ListItemText primary="Profile" />
-      </MenuItem>
-
-      <MenuItem component={Link} to="/settings">
-        <ListItemIcon>
-          <SettingsIcon fontSize="small" />
-        </ListItemIcon>
-        <ListItemText primary="Settings" />
       </MenuItem>
 
       <Divider sx={{ my: 1 }} />

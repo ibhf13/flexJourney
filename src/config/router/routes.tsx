@@ -1,7 +1,7 @@
 import MainLayout from '@/components/Layout/MainLayout'
 import { ExercisesListPage } from '@/pages/ExercisesListPage'
 import { HistoryPage } from '@/pages/HistoryPage'
-import HomePage from '@/pages/home/HomePage'
+import HomePage from '@/pages/HomePage'
 import Login from '@/pages/Login'
 import { ExercisePage } from '@/pages/plans/ExercisePage'
 import { PlanDayPage } from '@/pages/plans/PlanDayPage'

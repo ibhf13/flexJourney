@@ -1,4 +1,4 @@
-import { useNavigationContext } from '@/contexts/NavigationContext'
+import { useNavigationContext } from '@/components/Layout/contexts/NavigationContext'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import {
   History as HistoryIcon,

@@ -1,4 +1,4 @@
-import { NavigationContextType, NavigationState } from '@/contexts/types/navigationType'
+import { NavigationContextType, NavigationState } from '@/components/Layout/contexts/types/navigationType'
 import { useBreakpoints } from '@/hooks/useBreakpoints'
 import React, { createContext, useCallback, useContext, useState } from 'react'
 
