@@ -1,23 +1,32 @@
 import { useNavigationContext } from '@/components/Layout/contexts/NavigationContext'
 import { useLogout } from '@/features/auth/hooks/useLogout'
 import {
+  CalendarMonth as CalendarMonthIcon,
   History as HistoryIcon,
   Home as HomeIcon,
   Logout as LogoutIcon,
+  People as PeopleIcon,
+  Assignment as PlanIcon,
   Person as ProfileIcon,
+  ShoppingCart as ShoppingCartIcon,
+  BarChart as StatisticsIcon,
   FitnessCenter as WorkoutIcon,
 } from '@mui/icons-material'
 import { Box, Divider, List, ListItem, ListItemButton, ListItemIcon, ListItemText } from '@mui/material'
 import { Link } from 'react-router-dom'
 import { NavigationProps } from './types'
 
+
 const navigationItems = [
   { label: 'Home', path: '/', icon: <HomeIcon /> },
-  { label: 'Plan', path: '/plan', icon: <WorkoutIcon /> },
+  { label: 'Plan', path: '/plan', icon: <PlanIcon /> },
   { label: 'Exercises', path: '/exercises', icon: <WorkoutIcon /> },
   { label: 'History', path: '/history', icon: <HistoryIcon /> },
   { label: 'Profile', path: '/profile', icon: <ProfileIcon /> },
-  { label: 'Statistics', path: '/statistics', icon: <HistoryIcon /> },
+  { label: 'Statistics', path: '/statistics', icon: <StatisticsIcon /> },
+  { label: 'Calendar', path: '/calendar', icon: <CalendarMonthIcon /> },
+  { label: 'Community', path: '/community', icon: <PeopleIcon /> },
+  { label: 'Shop', path: '/shop', icon: <ShoppingCartIcon /> },
 ]
 
 const Navigation = ({ orientation = 'horizontal' }: NavigationProps) => {
