@@ -1,9 +1,8 @@
-import { BaseDocument } from '@/config/firebase/types/firebaseTypes'
 import { DifficultyLevel } from '@/features/workout/types/WorkoutTypes'
 import { createContext, ReactNode, useContext, useState } from 'react'
 import { WorkoutBuilderStep, WorkoutPlan } from '../types/workoutBuilderTypes'
 
-interface WorkoutBuilderState extends Partial<WorkoutPlan>, Partial<BaseDocument> {
+interface WorkoutBuilderState extends Partial<WorkoutPlan> {
     days: WorkoutPlan['days']
     description: string
     level: DifficultyLevel

@@ -1,4 +1,3 @@
-import { FirebaseDocument } from '@/config/firebase/types/firebaseTypes'
 import { Timestamp } from 'firebase/firestore'
 
 export type FitnessLevel = 'Beginner' | 'Intermediate' | 'Advanced'
@@ -18,11 +17,14 @@ export interface BaseProfileData {
     phoneNumber?: string
 }
 
-export interface UserProfile extends BaseProfileData, FirebaseDocument<BaseProfileData> {
+export interface UserProfile extends BaseProfileData {
     email: string
     photoURL?: string
     avatarUpdatedAt?: string
     birthDate?: string
+    id: string
+    createdAt: Date
+    updatedAt: Date
 }
 
 export interface ProfileFormData extends BaseProfileData {

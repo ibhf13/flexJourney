@@ -1,5 +1,5 @@
+import { COLLECTIONS } from '@/config/firebase/collections'
 import { db } from '@/config/firebase/firebaseConfig'
-import { COLLECTIONS } from '@/config/firebase/types/collections'
 import { cleanData } from '@/utils/dataUtils'
 import { doc, FirestoreError, getDoc, setDoc, Timestamp, updateDoc } from 'firebase/firestore'
 import { UpdateProfileData, UserProfile } from '../types/ProfileTypes'
@@ -59,8 +59,8 @@ export const updateUserProfile = async (userId: string, data: UpdateProfileData)
                 email: data.email || '',
                 displayName: data.displayName || 'Anonymous User',
                 ...cleanedData,
-                createdAt: timestamp,
-                updatedAt: timestamp,
+                createdAt: timestamp.toDate(),
+                updatedAt: timestamp.toDate(),
             }
 
             await setDoc(userRef, cleanData(newUserData))

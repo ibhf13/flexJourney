@@ -1,5 +1,5 @@
 import { db } from '@/config/firebase'
-import { COLLECTIONS } from '@/config/firebase/types/collections'
+import { COLLECTIONS } from '@/config/firebase/collections'
 import { collection, deleteDoc, doc, getDoc, getDocs } from 'firebase/firestore'
 import { WorkoutPlan } from '../types/WorkoutTypes'
 

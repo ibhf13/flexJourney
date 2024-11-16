@@ -1,6 +1,6 @@
 import DEFAULT_IMAGE_URL from '@/assets/images/dumbells.jpg'
 import { db } from '@/config/firebase'
-import { COLLECTIONS } from '@/config/firebase/types/collections'
+import { COLLECTIONS } from '@/config/firebase/collections'
 import { WorkoutPlan as BaseWorkoutPlan } from '@/features/workout/types/WorkoutTypes'
 import { collection, doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import { WorkoutPlan as BuilderWorkoutPlan } from '../types/workoutBuilderTypes'
