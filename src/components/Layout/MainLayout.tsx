@@ -27,6 +27,11 @@ const MainLayout = () => {
           minHeight: '100vh',
           transition: 'margin 225ms cubic-bezier(0.4, 0, 0.6, 1)',
           bgcolor: 'background.default',
+          '&::-webkit-scrollbar': {
+            display: 'none'
+          },
+          scrollbarWidth: 'none',  // Firefox
+          msOverflowStyle: 'none'  // IE and Edge
         }}
       >
         <Outlet />
