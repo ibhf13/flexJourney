@@ -1,12 +1,8 @@
-import { useAuthContext } from '@/features/auth/contexts/AuthContext'
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { statisticsService } from '../api/statisticsService'
 import { WorkoutStat } from '../types/StatisticsTypes'
-
-const QUERY_KEYS = {
-    statistics: 'statistics'
-} as const
 
 export const useStatistics = () => {
     const { currentUser } = useAuthContext()
@@ -14,14 +10,10 @@ export const useStatistics = () => {
     const { handleError, showMessage } = useErrorHandler()
 
     const { data: stats, isLoading, error } = useQuery({
-        queryKey: [QUERY_KEYS.statistics, currentUser?.uid],
+        queryKey: ['statistics', currentUser?.uid],
         queryFn: () => currentUser ? statisticsService.getUserStats(currentUser.uid) : null,
         enabled: !!currentUser,
     })
-
-    const invalidateStats = () => {
-        queryClient.invalidateQueries({ queryKey: [QUERY_KEYS.statistics] })
-    }
 
     const { mutate: updateStats } = useMutation({
         mutationFn: (updateData: Partial<WorkoutStat>) => {
@@ -29,9 +21,11 @@ export const useStatistics = () => {
 
             return statisticsService.updateWorkoutStats(currentUser.uid, updateData)
         },
-        onSuccess: invalidateStats,
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ['statistics'] })
+        },
         onError: (error) => {
-            handleError(error instanceof Error ? error.message : 'Failed to update stats')
+            handleError(error instanceof Error ? error.message : 'Failed to update stats', 'error')
         },
     })
 

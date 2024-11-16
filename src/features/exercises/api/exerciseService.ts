@@ -1,23 +1,28 @@
-import { getDocument, queryCollection } from '@/config/firebase/operations/database'
-import { getGlobalCollection } from '@/config/firebase/utils/helpers'
-import { Exercise } from '@/features/exercises/types/ExerciseTypes'
+import { db } from '@/config/firebase'
+import { COLLECTIONS } from '@/config/firebase/types/collections'
+import { Exercise } from "@/features/exercises/types/ExerciseTypes"
+import { collection, doc, getDoc, getDocs } from 'firebase/firestore'
+
+const EXERCISES_COLLECTION = COLLECTIONS.GLOBAL.EXERCISES
 
 export const fetchExercises = async (): Promise<Exercise[]> => {
   try {
-    const collectionRef = getGlobalCollection('EXERCISES')
+    const exercisesRef = collection(db, EXERCISES_COLLECTION)
+    const snapshot = await getDocs(exercisesRef)
 
-    return await queryCollection<Exercise>(collectionRef, {})
+    return snapshot.docs.map(doc => doc.data() as Exercise)
   } catch (error) {
     console.error('Error fetching exercises:', error)
     throw error
   }
 }
 
-export const fetchExerciseById = async (exerciseId: string): Promise<Exercise | null> => {
+export const fetchExerciseById = async (exerciseId: string): Promise<Exercise | undefined> => {
   try {
-    const collectionRef = getGlobalCollection('EXERCISES')
+    const exerciseRef = doc(db, EXERCISES_COLLECTION, exerciseId)
+    const snapshot = await getDoc(exerciseRef)
 
-    return await getDocument<Exercise>(collectionRef, exerciseId)
+    return snapshot.exists() ? (snapshot.data() as Exercise) : undefined
   } catch (error) {
     console.error('Error fetching exercise:', error)
     throw error
@@ -26,12 +31,14 @@ export const fetchExerciseById = async (exerciseId: string): Promise<Exercise | 
 
 export const fetchCategories = async (): Promise<string[]> => {
   try {
-    const collectionRef = getGlobalCollection('EXERCISES')
-    const exercises = await queryCollection<Exercise>(collectionRef, {})
+    const exercisesRef = collection(db, EXERCISES_COLLECTION)
+    const snapshot = await getDocs(exercisesRef)
 
     const categories = new Set<string>()
 
-    exercises.forEach(exercise => {
+    snapshot.docs.forEach(doc => {
+      const exercise = doc.data() as Exercise
+
       if (exercise.category) {
         categories.add(exercise.category)
       }

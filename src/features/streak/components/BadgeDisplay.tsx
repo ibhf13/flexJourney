@@ -1,6 +1,6 @@
 import { Box, Paper, Tooltip, Typography, useTheme } from '@mui/material'
 import { motion } from 'framer-motion'
-import * as BadgeService from '../services/badgeService'
+import * as BadgeService from '../api/badgeService'
 import { Badge } from '../types/streakTypes'
 
 interface BadgeDisplayProps {

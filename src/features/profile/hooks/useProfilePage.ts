@@ -1,4 +1,5 @@
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
+import { Timestamp } from '@firebase/firestore'
 import { useMediaQuery, useTheme } from '@mui/material'
 import { useState } from 'react'
 import { UserProfile } from '../types/ProfileTypes'
@@ -11,16 +12,16 @@ export const useProfilePage = () => {
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
 
-    // Create default profile data from auth user if no profile exists
-    const displayedProfile = profile || {
+    const defaultProfileData: UserProfile = {
         id: currentUser?.uid || '',
         email: currentUser?.email || '',
         displayName: currentUser?.displayName || 'Anonymous User',
-        photoURL: currentUser?.photoURL,
+        photoURL: currentUser?.photoURL || '',
         fitnessLevel: 'Beginner',
-        createdAt: new Date().toISOString(),
-        updatedAt: new Date().toISOString()
-    } as UserProfile
+        createdAt: Timestamp.now(),
+        updatedAt: Timestamp.now()
+    }
+    const displayedProfile = profile || defaultProfileData
 
     const handleEditClick = () => setIsEditing(true)
     const handleCloseEdit = () => setIsEditing(false)

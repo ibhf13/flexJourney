@@ -1,26 +1,41 @@
-import { deleteDocument, getDocument, queryCollection } from '@/config/firebase/operations/database'
-import { getGlobalCollection } from '@/config/firebase/utils/helpers'
+import { db } from '@/config/firebase'
+import { COLLECTIONS } from '@/config/firebase/types/collections'
+import { collection, deleteDoc, doc, getDoc, getDocs } from 'firebase/firestore'
 import { WorkoutPlan } from '../types/WorkoutTypes'
 
-export const fetchWorkoutPlans = async (): Promise<WorkoutPlan[]> => {
-  const collectionRef = getGlobalCollection('WORKOUT_PLANS')
+const WORKOUT_PLANS_COLLECTION = COLLECTIONS.GLOBAL.WORKOUT_PLANS
 
-  return await queryCollection<WorkoutPlan>(collectionRef, {
-    orderBy: {
-      field: 'createdAt',
-      direction: 'desc'
-    }
-  })
+export const fetchWorkoutPlans = async (): Promise<WorkoutPlan[]> => {
+  try {
+    const plansRef = collection(db, WORKOUT_PLANS_COLLECTION)
+    const snapshot = await getDocs(plansRef)
+
+    return snapshot.docs.map(doc => doc.data() as WorkoutPlan)
+  } catch (error) {
+    console.error('Error fetching workout plans:', error)
+    throw error
+  }
 }
 
-export const fetchWorkoutPlanById = async (planId: string): Promise<WorkoutPlan | null> => {
-  const collectionRef = getGlobalCollection('WORKOUT_PLANS')
+export const fetchWorkoutPlanById = async (planId: string): Promise<WorkoutPlan | undefined> => {
+  try {
+    const planRef = doc(db, WORKOUT_PLANS_COLLECTION, planId)
+    const snapshot = await getDoc(planRef)
 
-  return await getDocument<WorkoutPlan>(collectionRef, planId)
+    return snapshot.exists() ? (snapshot.data() as WorkoutPlan) : undefined
+  } catch (error) {
+    console.error('Error fetching workout plan:', error)
+    throw error
+  }
 }
 
 export const deleteWorkoutPlan = async (planId: string): Promise<void> => {
-  const collectionRef = getGlobalCollection('WORKOUT_PLANS')
+  try {
+    const planRef = doc(db, WORKOUT_PLANS_COLLECTION, planId)
 
-  await deleteDocument(collectionRef, planId)
+    await deleteDoc(planRef)
+  } catch (error) {
+    console.error('Error deleting workout plan:', error)
+    throw error
+  }
 }
