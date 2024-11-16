@@ -25,7 +25,6 @@ interface WorkoutContextValue extends WorkoutContextState {
     selectPlan: (plan: WorkoutPlan) => void
     selectDay: (dayIndex: number) => void
     completeExercise: (exerciseId: string) => void
-    resetWorkout: () => void
     updateExerciseProgress: (exerciseId: string, weight: number, reps: number) => void
     selectedDay: number
 }
@@ -46,7 +45,6 @@ type WorkoutAction =
     | { type: 'SELECT_PLAN'; payload: WorkoutPlan }
     | { type: 'SELECT_DAY'; payload: number }
     | { type: 'COMPLETE_EXERCISE'; payload: string }
-    | { type: 'RESET_WORKOUT' }
     | { type: 'UPDATE_EXERCISE_PROGRESS'; payload: { exerciseId: string; weight: number; reps: number } }
     | { type: 'LOAD_STORED_STATE'; payload: WorkoutContextState }
 
@@ -94,8 +92,6 @@ function workoutReducer(state: WorkoutContextState, action: WorkoutAction): Work
                 lastWorkoutDate: today,
                 trainingHistory: updatedHistory
             }
-        case 'RESET_WORKOUT':
-            return initialState
         case 'UPDATE_EXERCISE_PROGRESS':
             return {
                 ...state,
@@ -123,7 +119,6 @@ export function WorkoutProvider({ children }: { children: ReactNode }) {
         selectPlan: (plan) => dispatch({ type: 'SELECT_PLAN', payload: plan }),
         selectDay: (dayIndex) => dispatch({ type: 'SELECT_DAY', payload: dayIndex }),
         completeExercise: (exerciseId) => dispatch({ type: 'COMPLETE_EXERCISE', payload: exerciseId }),
-        resetWorkout: () => dispatch({ type: 'RESET_WORKOUT' }),
         updateExerciseProgress: (exerciseId: string, weight: number, reps: number) =>
             dispatch({ type: 'UPDATE_EXERCISE_PROGRESS', payload: { exerciseId, weight, reps } }),
         selectedDay: state.selectedDay,
