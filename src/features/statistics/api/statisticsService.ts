@@ -9,7 +9,9 @@ import {
 } from 'firebase/firestore'
 import { ExerciseProgress, UserStats, WorkoutStat } from '../types/StatisticsTypes'
 
-const STATISTICS_DOCUMENT = COLLECTIONS.USERS.SUB_COLLECTIONS.STATS
+// Update path construction to use subcollection
+const getUserStatsPath = (userId: string) =>
+    `${COLLECTIONS.USERS.COLLECTION}/${userId}/${COLLECTIONS.USERS.SUB_COLLECTIONS.STATS}`
 
 export const statisticsService = {
     async initializeUserStats(userId: string): Promise<UserStats> {
@@ -32,7 +34,7 @@ export const statisticsService = {
         }
 
         const newStats: UserStats = {
-            id: userId, // Use userId as the document ID
+            id: 'stats', // Use fixed ID for the stats document
             userId,
             workoutStats: initialWorkoutStats,
             exerciseProgress: [],
@@ -41,7 +43,7 @@ export const statisticsService = {
         }
 
         try {
-            const userStatsRef = doc(db, STATISTICS_DOCUMENT, userId)
+            const userStatsRef = doc(db, getUserStatsPath(userId), 'stats')
 
             await setDoc(userStatsRef, {
                 ...newStats,
@@ -58,17 +60,14 @@ export const statisticsService = {
 
     async getUserStats(userId: string): Promise<UserStats | null> {
         try {
-            const userStatsRef = doc(db, STATISTICS_DOCUMENT, userId)
+            const userStatsRef = doc(db, getUserStatsPath(userId), 'stats')
             const userStatsDoc = await getDoc(userStatsRef)
 
             if (!userStatsDoc.exists()) {
                 return this.initializeUserStats(userId)
             }
 
-            return {
-                ...userStatsDoc.data(),
-                id: userStatsDoc.id
-            } as UserStats
+            return userStatsDoc.data() as UserStats
         } catch (error) {
             console.error('Error fetching user stats:', error)
             throw error
@@ -80,7 +79,7 @@ export const statisticsService = {
         updateData: Partial<WorkoutStat>
     ): Promise<void> {
         try {
-            const userStatsRef = doc(db, STATISTICS_DOCUMENT, userId)
+            const userStatsRef = doc(db, getUserStatsPath(userId), 'stats')
 
             await updateDoc(userStatsRef, {
                 'workoutStats': updateData,
@@ -99,7 +98,7 @@ export const statisticsService = {
         reps: number
     ): Promise<void> {
         try {
-            const userStatsRef = doc(db, STATISTICS_DOCUMENT, userId)
+            const userStatsRef = doc(db, getUserStatsPath(userId), 'stats')
             const userStatsDoc = await getDoc(userStatsRef)
 
             if (!userStatsDoc.exists()) {
@@ -175,7 +174,7 @@ export const statisticsService = {
 
     async calculateAndUpdateStreak(userId: string): Promise<number> {
         try {
-            const userStatsRef = doc(db, STATISTICS_DOCUMENT, userId)
+            const userStatsRef = doc(db, getUserStatsPath(userId), 'stats')
             const userStatsDoc = await getDoc(userStatsRef)
 
             if (!userStatsDoc.exists()) {
