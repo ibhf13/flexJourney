@@ -1,10 +1,10 @@
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import React, { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
-import * as BadgeService from '../services/badgeService'
-import { firestoreService } from '../services/firestoreService'
-import { getMockStreakData, updateMockStreakData } from '../services/mockStreakService'
-import * as StreakService from '../services/streakService'
+import * as BadgeService from '../api/badgeService'
+import { firestoreService } from '../api/firestoreService'
+import { getMockStreakData, updateMockStreakData } from '../api/mockStreakService'
+import * as StreakService from '../api/streakService'
 import { Badge, UserBadges } from '../types/streakTypes'
 
 interface StreakData {

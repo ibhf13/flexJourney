@@ -1,7 +1,7 @@
 import { Box, Paper, Typography } from '@mui/material'
 import { motion } from 'framer-motion'
+import * as BadgeService from '../api/badgeService'
 import { useStreak } from '../contexts/StreakContext'
-import * as BadgeService from '../services/badgeService'
 import { Badge } from '../types/streakTypes'
 import { BadgeDisplay } from './BadgeDisplay'
 

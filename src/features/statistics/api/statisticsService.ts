@@ -1,77 +1,94 @@
-import { createDocument, getDocument, updateDocument } from '@/config/firebase/operations/database'
+import { db } from '@/config/firebase/'
 import { COLLECTIONS } from '@/config/firebase/types/collections'
-import { handleFirebaseError } from '@/config/firebase/utils/errors'
-import { getUserCollection } from '@/config/firebase/utils/helpers'
+import {
+    doc,
+    getDoc,
+    serverTimestamp,
+    setDoc,
+    updateDoc,
+} from 'firebase/firestore'
 import { ExerciseProgress, UserStats, WorkoutStat } from '../types/StatisticsTypes'
 
 const STATISTICS_DOCUMENT = COLLECTIONS.USERS.SUB_COLLECTIONS.STATS
 
 export const statisticsService = {
     async initializeUserStats(userId: string): Promise<UserStats> {
+        const initialWorkoutStats: WorkoutStat = {
+            totalWorkouts: 0,
+            completedWorkouts: 0,
+            currentStreak: 0,
+            longestStreak: 0,
+            totalSets: 0,
+            totalReps: 0,
+            totalWeight: 0,
+            weeklyAverage: 0,
+            monthlyAverage: 0,
+            completionRate: 0,
+            lastWorkoutDate: null,
+            startDate: new Date().toISOString(),
+            favoriteExercises: [],
+            workoutsByMonth: [],
+            updatedAt: new Date().toISOString()
+        }
+
+        const newStats: UserStats = {
+            id: userId, // Use userId as the document ID
+            userId,
+            workoutStats: initialWorkoutStats,
+            exerciseProgress: [],
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        }
+
         try {
-            const initialWorkoutStats: WorkoutStat = {
-                totalWorkouts: 0,
-                completedWorkouts: 0,
-                currentStreak: 0,
-                longestStreak: 0,
-                totalSets: 0,
-                totalReps: 0,
-                totalWeight: 0,
-                weeklyAverage: 0,
-                monthlyAverage: 0,
-                completionRate: 0,
-                lastWorkoutDate: null,
-                startDate: new Date().toISOString(),
-                favoriteExercises: [],
-                workoutsByMonth: [],
-                updatedAt: new Date().toISOString()
-            }
+            const userStatsRef = doc(db, STATISTICS_DOCUMENT, userId)
 
-            const newStats: Omit<UserStats, 'id'> = {
-                userId,
-                workoutStats: initialWorkoutStats,
-                exerciseProgress: [],
-                createdAt: new Date().toISOString(),
-                updatedAt: new Date().toISOString()
-            }
+            await setDoc(userStatsRef, {
+                ...newStats,
+                createdAt: serverTimestamp(),
+                updatedAt: serverTimestamp()
+            })
 
-            const collectionRef = getUserCollection(userId, 'STATS')
-
-            return await createDocument<UserStats>(collectionRef, newStats, userId)
+            return newStats
         } catch (error) {
-            throw handleFirebaseError(error)
+            console.error('Error initializing user stats:', error)
+            throw error
         }
     },
 
     async getUserStats(userId: string): Promise<UserStats | null> {
         try {
-            const statsRef = getUserCollection(userId, 'STATS')
-            const stats = await getDocument<UserStats>(statsRef, userId)
+            const userStatsRef = doc(db, STATISTICS_DOCUMENT, userId)
+            const userStatsDoc = await getDoc(userStatsRef)
 
-            if (!stats) {
+            if (!userStatsDoc.exists()) {
                 return this.initializeUserStats(userId)
             }
 
-            return stats
+            return {
+                ...userStatsDoc.data(),
+                id: userStatsDoc.id
+            } as UserStats
         } catch (error) {
-            throw handleFirebaseError(error)
+            console.error('Error fetching user stats:', error)
+            throw error
         }
     },
 
-    async updateWorkoutStats(userId: string, updateData: Partial<WorkoutStat>): Promise<void> {
-        const statsRef = getUserCollection(userId, 'STATS')
-
+    async updateWorkoutStats(
+        userId: string,
+        updateData: Partial<WorkoutStat>
+    ): Promise<void> {
         try {
-            await updateDocument(
-                statsRef,
-                userId,
-                {
-                    workoutStats: updateData,
-                    updatedAt: new Date().toISOString()
-                }
-            )
+            const userStatsRef = doc(db, STATISTICS_DOCUMENT, userId)
+
+            await updateDoc(userStatsRef, {
+                'workoutStats': updateData,
+                'updatedAt': serverTimestamp()
+            })
         } catch (error) {
-            throw handleFirebaseError(error)
+            console.error('Error updating workout stats:', error)
+            throw error
         }
     },
 
@@ -82,14 +99,26 @@ export const statisticsService = {
         reps: number
     ): Promise<void> {
         try {
-            const stats = await this.getUserStats(userId)
+            const userStatsRef = doc(db, STATISTICS_DOCUMENT, userId)
+            const userStatsDoc = await getDoc(userStatsRef)
 
-            if (!stats) {
-                throw new Error('User stats not found')
+            if (!userStatsDoc.exists()) {
+                await this.initializeUserStats(userId)
+                // Fetch the newly created document
+                const newStatsDoc = await getDoc(userStatsRef)
+
+                if (!newStatsDoc.exists()) {
+                    throw new Error('Failed to initialize user stats')
+                }
             }
 
-            const exerciseProgress = stats.exerciseProgress || []
-            const exerciseIndex = exerciseProgress.findIndex(p => p.exerciseId === exerciseId)
+            const currentStats = userStatsDoc.data() as UserStats
+            const exerciseProgress = currentStats.exerciseProgress || []
+
+            const exerciseIndex = exerciseProgress.findIndex(
+                p => p.exerciseId === exerciseId
+            )
+
             const newProgressEntry = {
                 date: new Date().toISOString(),
                 weight,
@@ -99,9 +128,10 @@ export const statisticsService = {
             const updatedProgress = [...exerciseProgress]
 
             if (exerciseIndex === -1) {
+                // New exercise
                 const newExerciseProgress: ExerciseProgress = {
                     exerciseId,
-                    name: '',
+                    name: '', // You'll need to fetch this from your exercises data
                     personalBest: {
                         weight,
                         reps,
@@ -113,12 +143,15 @@ export const statisticsService = {
 
                 updatedProgress.push(newExerciseProgress)
             } else {
+                // Existing exercise
                 const currentProgress = { ...updatedProgress[exerciseIndex] }
 
                 currentProgress.history = [...currentProgress.history, newProgressEntry]
 
+                // Update personal best if applicable
                 if (weight > currentProgress.personalBest.weight ||
-                    (weight === currentProgress.personalBest.weight && reps > currentProgress.personalBest.reps)) {
+                    (weight === currentProgress.personalBest.weight &&
+                        reps > currentProgress.personalBest.reps)) {
                     currentProgress.personalBest = {
                         weight,
                         reps,
@@ -130,67 +163,70 @@ export const statisticsService = {
                 updatedProgress[exerciseIndex] = currentProgress
             }
 
-            await updateDocument(
-                getUserCollection(userId, 'STATS'),
-                userId,
-                {
-                    exerciseProgress: updatedProgress,
-                    updatedAt: new Date().toISOString()
-                }
-            )
+            await updateDoc(userStatsRef, {
+                exerciseProgress: updatedProgress,
+                updatedAt: serverTimestamp()
+            })
         } catch (error) {
-            throw handleFirebaseError(error)
+            console.error('Error updating exercise progress:', error)
+            throw error
         }
     },
 
     async calculateAndUpdateStreak(userId: string): Promise<number> {
         try {
-            const stats = await this.getUserStats(userId)
+            const userStatsRef = doc(db, STATISTICS_DOCUMENT, userId)
+            const userStatsDoc = await getDoc(userStatsRef)
 
-            if (!stats) {
-                throw new Error('User stats not found')
+            if (!userStatsDoc.exists()) {
+                await this.initializeUserStats(userId)
+
+                return 0
             }
 
-            const { workoutStats } = stats
+            const currentStats = userStatsDoc.data() as UserStats
             const today = new Date()
-            const lastWorkoutDate = workoutStats.lastWorkoutDate
-                ? new Date(workoutStats.lastWorkoutDate)
+            const lastWorkoutDate = currentStats.workoutStats.lastWorkoutDate
+                ? new Date(currentStats.workoutStats.lastWorkoutDate)
                 : null
 
-            let newStreak = workoutStats.currentStreak
+            let newStreak = currentStats.workoutStats.currentStreak
 
-            // If this is the first workout
             if (!lastWorkoutDate) {
                 newStreak = 1
             } else {
-                const diffInDays = Math.floor(
+                const diffDays = Math.floor(
                     (today.getTime() - lastWorkoutDate.getTime()) / (1000 * 60 * 60 * 24)
                 )
 
-                if (diffInDays === 1) {
-                    // Consecutive day workout
+                if (diffDays <= 1) {
                     newStreak += 1
-                } else if (diffInDays === 0) {
-                    // Same day workout, maintain streak
-                    newStreak = workoutStats.currentStreak
                 } else {
-                    // Streak broken
                     newStreak = 1
                 }
             }
 
-            const updateData: Partial<WorkoutStat> = {
+            const newLongestStreak = Math.max(
+                newStreak,
+                currentStats.workoutStats.longestStreak || 0
+            )
+
+            const updatedWorkoutStats = {
+                ...currentStats.workoutStats,
                 currentStreak: newStreak,
-                lastWorkoutDate: today.toISOString(),
-                longestStreak: Math.max(newStreak, workoutStats.longestStreak),
-                updatedAt: new Date().toISOString()
+                longestStreak: newLongestStreak,
+                lastWorkoutDate: today.toISOString()
             }
 
-            await this.updateWorkoutStats(userId, updateData)
+            await updateDoc(userStatsRef, {
+                workoutStats: updatedWorkoutStats,
+                updatedAt: serverTimestamp()
+            })
 
             return newStreak
         } catch (error) {
-            throw handleFirebaseError(error)
+            console.error('Error calculating streak:', error)
+            throw error
         }
     }
 }

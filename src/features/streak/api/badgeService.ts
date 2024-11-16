@@ -1,4 +1,4 @@
-import { Badge, BadgeLevel, UserBadges } from '../types/streakTypes'
+import { Badge, BadgeLevel } from '../types/streakTypes'
 
 export const STREAK_BADGES: Badge[] = [
     {
@@ -81,9 +81,3 @@ export const getProgressToNextBadge = (streak: number): number => {
 export const getUnlockedBadges = (streak: number): Badge[] => {
     return STREAK_BADGES.filter(badge => streak >= badge.requirement)
 }
-
-export const createInitialBadges = (userId: string): UserBadges => ({
-    userId,
-    unlockedBadges: [],
-    achievements: []
-})

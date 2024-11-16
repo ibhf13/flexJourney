@@ -1,6 +1,7 @@
-import { createDocument, getDocument, updateDocument } from '@/config/firebase/operations'
-import { getUserCollection } from '@/config/firebase/utils/helpers'
-import { dateToTimestamp } from '@/config/firebase/utils/transforms'
+import { db } from '@/config/firebase/firebaseConfig'
+import { COLLECTIONS } from '@/config/firebase/types/collections'
+import { cleanData } from '@/utils/dataUtils'
+import { doc, FirestoreError, getDoc, setDoc, Timestamp, updateDoc } from 'firebase/firestore'
 import { UpdateProfileData, UserProfile } from '../types/ProfileTypes'
 
 
@@ -9,9 +10,21 @@ export const fetchUserProfile = async (userId: string): Promise<UserProfile | nu
         throw new Error('Invalid user ID provided')
     }
 
-    const userProfileCollectionRef = getUserCollection(userId, 'PROFILE')
+    try {
+        const userRef = doc(db, COLLECTIONS.USERS.COLLECTION, userId)
+        const userSnap = await getDoc(userRef)
 
-    return await getDocument<UserProfile>(userProfileCollectionRef, userId)
+        if (!userSnap.exists()) {
+            return null
+        }
+
+        return userSnap.data() as UserProfile
+    } catch (error) {
+        const firestoreError = error as FirestoreError
+
+        console.error(`Firestore error (${firestoreError.code}):`, firestoreError.message)
+        throw new Error('Failed to fetch user profile. Please try again later.')
+    }
 }
 
 export const updateUserProfile = async (userId: string, data: UpdateProfileData): Promise<void> => {
@@ -23,27 +36,39 @@ export const updateUserProfile = async (userId: string, data: UpdateProfileData)
         throw new Error('No update data provided')
     }
 
-    const timestamp = new Date()
-    const userRef = getUserCollection(userId, 'PROFILE')
-    const existingProfile = await getDocument<UserProfile>(userRef, userId)
+    try {
+        const userRef = doc(db, COLLECTIONS.USERS.COLLECTION, userId)
+        const docSnap = await getDoc(userRef)
+        const timestamp = Timestamp.now()
+        const cleanedData = cleanData(data)
 
-    if (existingProfile) {
-        const updateData = {
-            ...data,
-            updatedAt: dateToTimestamp(timestamp),
-            photoURL: data.photoURL || existingProfile.photoURL,
+        if (docSnap.exists()) {
+            // Preserve existing data that's not being updated
+            const existingData = docSnap.data()
+            const updateData = {
+                ...existingData, // Keep existing data
+                ...cleanedData,  // Override with new data
+                updatedAt: timestamp,
+                photoURL: cleanedData.photoURL || existingData.photoURL,
+            }
+
+            await updateDoc(userRef, updateData)
+        } else {
+            const newUserData: UserProfile = {
+                id: userId,
+                email: data.email || '',
+                displayName: data.displayName || 'Anonymous User',
+                ...cleanedData,
+                createdAt: timestamp,
+                updatedAt: timestamp,
+            }
+
+            await setDoc(userRef, cleanData(newUserData))
         }
+    } catch (error) {
+        const firestoreError = error as FirestoreError
 
-        await updateDocument<UserProfile>(userRef, userId, updateData)
-    } else {
-        const newUserData: Omit<UserProfile, 'id'> = {
-            email: data.email || '',
-            displayName: data.displayName || 'Anonymous User',
-            ...data,
-            createdAt: dateToTimestamp(timestamp),
-            updatedAt: dateToTimestamp(timestamp),
-        }
-
-        await createDocument<UserProfile>(userRef, newUserData, userId)
+        console.error(`Firestore error (${firestoreError.code}):`, firestoreError.message)
+        throw new Error('Failed to update user profile. Please try again later.')
     }
 }

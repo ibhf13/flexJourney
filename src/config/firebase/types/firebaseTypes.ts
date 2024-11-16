@@ -1,3 +1,4 @@
+import { Timestamp } from '@firebase/firestore'
 import { COLLECTIONS } from './collections'
 
 export type CollectionName = typeof COLLECTIONS
@@ -19,15 +20,11 @@ export type FirestoreCollectionRef = {
     subcollection?: string
 }
 
-export type FirebaseTimestamp = {
-    seconds: number
-    nanoseconds: number
-}
 
 export type FirebaseDocument<T> = T & {
     id: string
-    createdAt: FirebaseTimestamp
-    updatedAt: FirebaseTimestamp
+    createdAt: Timestamp
+    updatedAt: Timestamp
 }
 
 export type FirebaseQueryOptions = {

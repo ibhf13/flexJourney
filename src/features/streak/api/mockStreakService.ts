@@ -51,7 +51,6 @@ const createDefaultUserData = (userId: string): MockStreakData => ({
         userId,
         unlockedBadges: [],
         achievements: [],
-        lastUpdated: new Date().toISOString()
     },
     highestStreak: 0,
     lastUpdated: new Date().toISOString(),
