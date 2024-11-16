@@ -97,6 +97,11 @@ export const HistoryPage = () => {
                 px: { xs: 1, sm: 2, md: 3 },
                 py: { xs: 2, md: 4 },
                 overflowX: 'hidden',
+                '&::-webkit-scrollbar': {
+                    display: 'none'
+                },
+                scrollbarWidth: 'none',
+                msOverflowStyle: 'none'
             }}
         >
             <Box
