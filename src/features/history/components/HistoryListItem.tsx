@@ -19,11 +19,22 @@ export const HistoryListItem = ({ entry }: HistoryListItemProps) => {
     const [isExpanded, setIsExpanded] = useState(false)
     const [isEditDialogOpen, setIsEditDialogOpen] = useState(false)
     const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false)
+    const [isDeleting, setIsDeleting] = useState(false)
     const { deleteEntry, updateEntry } = useHistory()
 
-    const handleDelete = () => {
-        deleteEntry(entry.id)
-        setIsDeleteDialogOpen(false)
+    const handleDelete = async () => {
+        try {
+            setIsDeleting(true)
+            const success = await deleteEntry(entry.id)
+
+            if (success) {
+                setIsDeleteDialogOpen(false)
+            }
+        } catch (error) {
+            console.error('Failed to delete entry:', error)
+        } finally {
+            setIsDeleting(false)
+        }
     }
 
     const handleEdit = (updates: Partial<TrainingHistoryEntry>) => {

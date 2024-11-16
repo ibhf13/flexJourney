@@ -84,13 +84,26 @@ export const useHistory = (filters?: HistoryFilters) => {
     }
 
     const deleteEntry = async (id: string) => {
+        if (!currentUser?.uid) {
+            showMessage('Please sign in to delete entries', 'error')
+
+            return false
+        }
+
         try {
-            await deleteHistory(id)
-            queryClient.invalidateQueries({ queryKey: ['training-history'] })
+            await deleteHistory({
+                userId: currentUser.uid,
+                entryId: id
+            })
+
+            await queryClient.invalidateQueries({
+                queryKey: ['training-history', currentUser.uid]
+            })
 
             return true
         } catch (error) {
             console.error('Delete entry error:', error)
+            showMessage('Failed to delete entry', 'error')
 
             return false
         }
