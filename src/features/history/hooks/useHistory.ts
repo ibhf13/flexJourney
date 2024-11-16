@@ -2,7 +2,7 @@ import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useQueryClient } from '@tanstack/react-query'
 import { v4 as uuidv4 } from 'uuid'
-import { ExerciseLog, HistoryFilters } from '../types/HistoryTypes'
+import { ExerciseLog, HistoryFilters, TrainingHistoryEntry } from '../types/HistoryTypes'
 import { useHistoryQueries } from './useHistoryQueries'
 
 export const useHistory = (filters?: HistoryFilters) => {
@@ -42,7 +42,7 @@ export const useHistory = (filters?: HistoryFilters) => {
             throw new Error('User not authenticated')
         }
 
-        const entry = {
+        const entry: TrainingHistoryEntry = {
             id: uuidv4(),
             planId,
             planName,
@@ -50,7 +50,9 @@ export const useHistory = (filters?: HistoryFilters) => {
             dayName,
             exercises: [exerciseLog],
             date: new Date().toISOString(),
-            userId: currentUser.uid
+            userId: currentUser.uid,
+            createdAt: new Date(),
+            updatedAt: new Date()
         }
 
         try {
