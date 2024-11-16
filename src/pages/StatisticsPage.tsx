@@ -45,7 +45,7 @@ export const StatisticsPage = () => {
                         {STATS_PAGE_TEXTS.NO_DATA}
                     </Alert>
                 ) : (
-                    <Grid container direction="column" spacing={3}>
+                    <Grid container direction="column" spacing={4}>
                         <Grid item xs={12} md={6}>
                             <UserStats stats={stats} />
                         </Grid>
