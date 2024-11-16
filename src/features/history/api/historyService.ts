@@ -5,6 +5,7 @@ import {
     collection,
     deleteDoc,
     doc,
+    getDoc,
     getDocs,
     orderBy,
     query,
@@ -74,11 +75,32 @@ export const historyService = {
     },
 
     delete: async (userId: string, entryId: string) => {
-        const entryRef = doc(db, 'users', userId, TRAINING_HISTORY_COLLECTION, entryId)
+        try {
+            const entryRef = doc(
+                db,
+                'users',
+                userId,
+                'trainingHistory',
+                entryId
+            )
 
-        await deleteDoc(entryRef)
+            const docSnap = await getDoc(entryRef)
 
-        return entryId
+            if (!docSnap.exists()) {
+                throw new Error(`Document not found at path: ${entryRef.path}`)
+            }
+
+            await deleteDoc(entryRef)
+
+            return entryId
+        } catch (error) {
+            console.error('Error deleting document:', {
+                error,
+                userId,
+                entryId
+            })
+            throw error
+        }
     },
 
     update: async (userId: string, entryId: string, updates: Partial<TrainingHistoryEntry>) => {

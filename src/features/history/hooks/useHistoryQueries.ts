@@ -59,15 +59,17 @@ export const useHistoryQueries = () => {
 
     const useDeleteHistory = () => {
         return useMutation({
-            mutationFn: (entryId: string) => {
-                if (!currentUser?.uid) {
-                    return Promise.reject(new Error('No user authenticated'))
+            mutationFn: ({ userId, entryId }: { userId: string; entryId: string }) => {
+                if (!userId) {
+                    throw new Error('No user authenticated')
                 }
 
-                return historyService.delete(currentUser.uid, entryId)
+                return historyService.delete(userId, entryId)
             },
-            onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ['training-history'] })
+            onSuccess: (_, variables) => {
+                queryClient.invalidateQueries({
+                    queryKey: HISTORY_KEYS.list(variables.userId)
+                })
                 showMessage('Entry deleted successfully', 'success')
             },
             onError: (error) => {

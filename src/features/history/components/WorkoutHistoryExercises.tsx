@@ -25,6 +25,8 @@ interface WorkoutHistoryExercisesProps {
     onUpdateSets: (exerciseId: string, sets: ExerciseSet[]) => void
 }
 
+const generateUniqueKey = (exerciseId: string, index: number) => `${exerciseId}-${index}`
+
 export const WorkoutHistoryExercises = ({
     exercises,
     availableExercises,
@@ -118,9 +120,9 @@ export const WorkoutHistoryExercises = ({
             </Stack>
 
             <AnimatePresence initial={false}>
-                {exercises.map((exercise) => (
+                {exercises.map((exercise, index) => (
                     <Paper
-                        key={exercise.exerciseId}
+                        key={generateUniqueKey(exercise.exerciseId, index)}
                         component={motion.div}
                         layout
                         initial={{ opacity: 0, y: 20 }}
