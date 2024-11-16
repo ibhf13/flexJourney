@@ -15,6 +15,7 @@ const ProfilePage = () => {
         handleEditClick,
         handleCloseEdit,
         handleEditSuccess,
+        handleAvatarUpdate,
     } = useProfilePage()
 
     return (
@@ -24,7 +25,7 @@ const ProfilePage = () => {
                 displayName={displayedProfile.displayName}
                 fitnessLevel={displayedProfile.fitnessLevel}
                 onEditClick={handleEditClick}
-                onAvatarUpdate={(url) => { }}
+                onAvatarUpdate={handleAvatarUpdate}
             />
 
             <Container
@@ -40,12 +41,14 @@ const ProfilePage = () => {
                 </Stack>
             </Container>
 
-            <ProfileForm
-                open={isEditing}
-                onClose={handleCloseEdit}
-                initialData={displayedProfile}
-                onSuccess={handleEditSuccess}
-            />
+            {isEditing && (
+                <ProfileForm
+                    open={isEditing}
+                    onClose={handleCloseEdit}
+                    initialData={displayedProfile}
+                    onSuccess={handleEditSuccess}
+                />
+            )}
         </LoadingErrorWrapper>
     )
 }

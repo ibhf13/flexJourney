@@ -1,4 +1,4 @@
-import { COLLECTIONS } from '@/config/firebase/types/collections'
+import { COLLECTIONS } from '@/config/firebase/collections'
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'

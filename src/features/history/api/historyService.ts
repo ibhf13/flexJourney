@@ -1,5 +1,5 @@
 import { db } from '@/config/firebase'
-import { COLLECTIONS } from '@/config/firebase/types/collections'
+import { COLLECTIONS } from '@/config/firebase/collections'
 import {
     addDoc,
     collection,
@@ -64,14 +64,14 @@ export const historyService = {
         const snapshot = await getDocs(baseQuery)
 
         return snapshot.docs.map(doc => ({
-            ...doc.data(),
             id: doc.id,
+            ...doc.data(),
             date: convertToISOString(doc.data().date),
             exercises: doc.data().exercises.map((exercise: any) => ({
                 ...exercise,
                 completedAt: convertToISOString(exercise.completedAt)
             }))
-        })) as TrainingHistoryEntry[]
+        })) as (TrainingHistoryEntry)[]
     },
 
     delete: async (userId: string, entryId: string) => {

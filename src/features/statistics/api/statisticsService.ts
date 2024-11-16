@@ -1,5 +1,5 @@
 import { db } from '@/config/firebase/'
-import { COLLECTIONS } from '@/config/firebase/types/collections'
+import { COLLECTIONS } from '@/config/firebase/collections'
 import {
     doc,
     getDoc,
