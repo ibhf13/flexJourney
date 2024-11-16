@@ -1,5 +1,4 @@
 import { useProfile } from '@/features/profile/hooks/useProfile'
-import { StreakBadge } from '@/features/streak/components/StreakBadge'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import MenuIcon from '@mui/icons-material/Menu'
 import {
@@ -71,7 +70,6 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
           </PrimaryButton>
         ) : (
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-            <StreakBadge />
             <IconButton
               onClick={handleUserMenuOpen}
               sx={{

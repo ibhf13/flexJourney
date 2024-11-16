@@ -1,5 +1,4 @@
 import { IconButton } from '@/components/common/Buttons'
-import { StreakBadge } from '@/features/streak/components/StreakBadge'
 import EditRoundedIcon from '@mui/icons-material/EditRounded'
 import { alpha, Box, Container, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { ProfileAvatar } from './ProfileAvatar'
@@ -67,7 +66,6 @@ export const ProfileHeader = ({
                             >
                                 {displayName}
                             </Typography>
-                            <StreakBadge />
                             <IconButton
                                 icon={<EditRoundedIcon />}
                                 onClick={onEditClick}
