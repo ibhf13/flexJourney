@@ -1,7 +1,6 @@
 import { NavigationProvider } from '@/components/Layout/contexts/NavigationContext'
 import { ErrorBoundary } from '@/features/errorHandling/components/ErrorBoundary'
 import { ExerciseProvider } from '@/features/exercises/contexts/ExerciseContext'
-import { StreakProvider } from '@/features/streak/contexts/StreakContext'
 import { WorkoutProvider } from '@/features/workout/contexts/WorkoutContext'
 import GlobalStyles from '@/styles/globalStyles'
 import theme from '@/styles/theme'
@@ -31,25 +30,23 @@ function App() {
           <MuiGlobalStyles styles={GlobalStyles} />
           <NavigationProvider>
             <AuthProvider>
-              <StreakProvider>
-                <WorkoutProvider>
-                  <ExerciseProvider>
-                    <WorkoutBuilderProvider>
-                      <AppRouter />
-                      <Toaster
-                        position="bottom-center"
-                        toastOptions={{
-                          duration: 4000,
-                          style: {
-                            background: '#333',
-                            color: '#fff',
-                          },
-                        }}
-                      />
-                    </WorkoutBuilderProvider>
-                  </ExerciseProvider>
-                </WorkoutProvider>
-              </StreakProvider>
+              <WorkoutProvider>
+                <ExerciseProvider>
+                  <WorkoutBuilderProvider>
+                    <AppRouter />
+                    <Toaster
+                      position="bottom-center"
+                      toastOptions={{
+                        duration: 4000,
+                        style: {
+                          background: '#333',
+                          color: '#fff',
+                        },
+                      }}
+                    />
+                  </WorkoutBuilderProvider>
+                </ExerciseProvider>
+              </WorkoutProvider>
             </AuthProvider>
           </NavigationProvider>
         </ThemeProvider>

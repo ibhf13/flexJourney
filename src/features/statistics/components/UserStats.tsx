@@ -1,5 +1,3 @@
-import { BadgesCollection } from '@/features/streak/components/BadgesCollection'
-import { useStreak } from '@/features/streak/contexts/StreakContext'
 import EmojiEventsIcon from '@mui/icons-material/EmojiEvents'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import TrendingUpIcon from '@mui/icons-material/TrendingUp'
@@ -42,7 +40,6 @@ const StatBlock = ({ label, value, icon, description }: StatBlockProps) => (
 )
 
 export const UserStats = ({ stats }: { stats: WorkoutStat | undefined }) => {
-    const { currentStreak, highestStreak, unlockedBadges } = useStreak()
 
     return (
         <Grid container spacing={3}>
@@ -51,7 +48,7 @@ export const UserStats = ({ stats }: { stats: WorkoutStat | undefined }) => {
                     <Grid item xs={12} sm={6}>
                         <StatBlock
                             label="Current Streak"
-                            value={currentStreak}
+                            value={12}
                             icon={<WhatshotIcon color="primary" />}
                             description="Consecutive days of training"
                         />
@@ -59,7 +56,7 @@ export const UserStats = ({ stats }: { stats: WorkoutStat | undefined }) => {
                     <Grid item xs={12} sm={6}>
                         <StatBlock
                             label="Best Streak"
-                            value={highestStreak}
+                            value={12}
                             icon={<EmojiEventsIcon color="primary" />}
                             description="Your longest training streak"
                         />
@@ -85,13 +82,12 @@ export const UserStats = ({ stats }: { stats: WorkoutStat | undefined }) => {
 
             <Grid item xs={12} lg={4}>
                 <Stack spacing={3}>
-                    <BadgesCollection />
                     <Paper sx={{ p: 2 }}>
                         <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                             Achievements
                         </Typography>
                         <Typography variant="h4" component="div" fontWeight="bold">
-                            {unlockedBadges.length}
+                            {12}
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
                             Badges unlocked through dedication

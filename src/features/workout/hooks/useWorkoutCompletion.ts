@@ -1,11 +1,9 @@
-import { useStreak } from '@/features/streak/contexts/StreakContext'
 import { useCallback, useEffect, useState } from 'react'
 import { useWorkoutContext } from '../contexts/WorkoutContext'
 import { WorkoutDay } from '../types/WorkoutTypes'
 
 export const useWorkoutCompletion = (day: WorkoutDay) => {
     const { completedExercises } = useWorkoutContext()
-    const { updateStreak } = useStreak()
     const [showCongratulations, setShowCongratulations] = useState(false)
     const [isWorkoutCompleted, setIsWorkoutCompleted] = useState(false)
 
@@ -21,9 +19,8 @@ export const useWorkoutCompletion = (day: WorkoutDay) => {
         if (isComplete && !isWorkoutCompleted) {
             setIsWorkoutCompleted(true)
             setShowCongratulations(true)
-            updateStreak(new Date().toISOString())
         }
-    }, [checkWorkoutComplete, isWorkoutCompleted, updateStreak])
+    }, [checkWorkoutComplete, isWorkoutCompleted])
 
     const handleCongratulationsComplete = useCallback(() => {
         setShowCongratulations(false)

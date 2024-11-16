@@ -1,4 +1,5 @@
 import { UserStats } from '@/features/statistics/components/UserStats'
+import { WorkoutStatistics } from '@/features/statistics/components/WorkoutStatistics'
 import { useStatistics } from '@/features/statistics/hooks/useStatistics'
 import { Box, Typography } from '@mui/material'
 
@@ -19,6 +20,7 @@ export const StatisticsPage = () => {
                 Statistics
             </Typography>
             <UserStats stats={stats} />
+            <WorkoutStatistics />
         </Box>
     )
 }
