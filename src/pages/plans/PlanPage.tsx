@@ -1,7 +1,6 @@
 import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
 import { PlanCard } from '@/features/workout/components/PlanCard'
-import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
-import { useWorkoutPlans } from '@/features/workout/hooks/useWorkoutPlans'
+import { useRefreshWorkoutPlans, useWorkoutPlans } from '@/features/workout/hooks/useWorkoutQuerys'
 import { WorkoutPlan } from '@/features/workout/types/WorkoutTypes'
 import { WorkoutBuilderCard } from '@/features/workoutBuilder/components/WorkoutBuilderCard'
 import { Container, Grid, Typography } from '@mui/material'
@@ -9,13 +8,13 @@ import { useNavigate } from 'react-router-dom'
 
 export const PlanPage = () => {
   const navigate = useNavigate()
-  const { plans, isLoading, error, refreshPlans } = useWorkoutPlans()
-  const { selectPlan } = useWorkoutContext()
+  const { data: plans, isLoading, error } = useWorkoutPlans()
+  const refreshPlans = useRefreshWorkoutPlans()
 
   const handlePlanSelect = (plan: WorkoutPlan) => {
-    selectPlan(plan)
     navigate(`/plan/${plan.id}`)
   }
+
 
   return (
     <LoadingErrorWrapper isLoading={isLoading} error={error ?? null}>
@@ -28,12 +27,11 @@ export const PlanPage = () => {
         </Typography>
 
         <Grid container spacing={3}>
-          {plans.map((plan) => (
+          {plans?.map((plan) => (
             <Grid item xs={12} sm={6} md={4} key={plan.id}>
               <PlanCard
                 plan={plan}
                 onClick={handlePlanSelect}
-                onDelete={refreshPlans}
               />
             </Grid>
           ))}
@@ -45,3 +43,4 @@ export const PlanPage = () => {
     </LoadingErrorWrapper>
   )
 }
+

@@ -1,4 +1,4 @@
-import { useWorkoutPlans } from '@/features/workout/hooks/useWorkoutPlans'
+// import { useWorkoutPlans } from '@/features/workout/hooks/useWorkoutPlans'
 import CloseIcon from '@mui/icons-material/Close'
 import {
     Box,
@@ -37,7 +37,7 @@ export const EditHistoryDialog = ({
 }: EditHistoryDialogProps) => {
     const theme = useTheme()
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
-    const { plans, isLoading } = useWorkoutPlans()
+    // const { plans, isLoading } = useWorkoutPlans()
     const {
         selectedPlanId,
         selectedDayId,
@@ -53,7 +53,7 @@ export const EditHistoryDialog = ({
         handleRemoveExercise,
         handleUpdateSets,
         getFormUpdates
-    } = useHistoryForm({ initialEntry: entry, plans })
+    } = useHistoryForm({ initialEntry: entry, plans: [] })
 
     const handleSave = () => {
         const updates = getFormUpdates()

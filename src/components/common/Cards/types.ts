@@ -13,7 +13,7 @@ export interface BaseCardProps {
 }
 
 export interface CardSkeletonProps {
-    height?: number;
+    height?: number
 }
 
 export interface BaseCardContentProps {

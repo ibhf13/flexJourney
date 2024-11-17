@@ -1,4 +1,4 @@
-import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
+// import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
 import { createContext, ReactNode, useCallback, useContext, useReducer } from 'react'
 import { Exercise } from '../types/ExerciseTypes'
 
@@ -11,7 +11,7 @@ interface ExerciseContextState {
 
 interface ExerciseContextValue extends ExerciseContextState {
     setExercises: (exercises: Exercise[]) => void
-    toggleExerciseCompletion: (exerciseId: string) => void
+    // toggleExerciseCompletion: (exerciseId: string) => void
     setLoading: (isLoading: boolean) => void
     setError: (error: Error | null) => void
     resetExercises: () => void
@@ -26,7 +26,7 @@ const initialState: ExerciseContextState = {
 
 type ExerciseAction =
     | { type: 'SET_EXERCISES'; payload: Exercise[] }
-    | { type: 'TOGGLE_COMPLETION'; payload: string }
+    // | { type: 'TOGGLE_COMPLETION'; payload: string }
     | { type: 'SET_LOADING'; payload: boolean }
     | { type: 'SET_ERROR'; payload: Error | null }
     | { type: 'RESET_EXERCISES' }
@@ -42,16 +42,16 @@ function exerciseReducer(state: ExerciseContextState, action: ExerciseAction): E
                 error: null,
                 isLoading: false
             }
-        case 'TOGGLE_COMPLETION':
-            const newCompletedExercises = new Set(state.completedExercises)
+        // case 'TOGGLE_COMPLETION':
+        //     const newCompletedExercises = new Set(state.completedExercises)
 
-            if (newCompletedExercises.has(action.payload)) {
-                newCompletedExercises.delete(action.payload)
-            } else {
-                newCompletedExercises.add(action.payload)
-            }
+        //     if (newCompletedExercises.has(action.payload)) {
+        //         newCompletedExercises.delete(action.payload)
+        //     } else {
+        //         newCompletedExercises.add(action.payload)
+        //     }
 
-            return { ...state, completedExercises: newCompletedExercises }
+        //     return { ...state, completedExercises: newCompletedExercises }
         case 'SET_LOADING':
             return { ...state, isLoading: action.payload }
         case 'SET_ERROR':
@@ -69,16 +69,16 @@ function exerciseReducer(state: ExerciseContextState, action: ExerciseAction): E
 
 export function ExerciseProvider({ children }: { children: ReactNode }) {
     const [state, dispatch] = useReducer(exerciseReducer, initialState)
-    const { completeExercise } = useWorkoutContext()
+    // const { completeExercise } = useWorkoutContext()
 
     const setExercises = useCallback((exercises: Exercise[]) => {
         dispatch({ type: 'SET_EXERCISES', payload: exercises })
     }, [])
 
-    const toggleExerciseCompletion = useCallback((exerciseId: string) => {
-        dispatch({ type: 'TOGGLE_COMPLETION', payload: exerciseId })
-        completeExercise(exerciseId)
-    }, [completeExercise])
+    // const toggleExerciseCompletion = useCallback((exerciseId: string) => {
+    //     dispatch({ type: 'TOGGLE_COMPLETION', payload: exerciseId })
+    //     completeExercise(exerciseId)
+    // }, [completeExercise])
 
     const setLoading = useCallback((isLoading: boolean) => {
         dispatch({ type: 'SET_LOADING', payload: isLoading })
@@ -97,7 +97,7 @@ export function ExerciseProvider({ children }: { children: ReactNode }) {
         isLoading: state.isLoading,
         error: state.error,
         setExercises,
-        toggleExerciseCompletion,
+        // toggleExerciseCompletion,
         setLoading,
         setError,
         resetExercises
