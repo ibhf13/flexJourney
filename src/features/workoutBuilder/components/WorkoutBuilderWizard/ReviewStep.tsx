@@ -21,6 +21,7 @@ import {
     TextField,
     Typography
 } from '@mui/material'
+import { User } from 'firebase/auth'
 import { useState } from 'react'
 import { saveWorkoutPlan } from '../../api/workoutBuilderService'
 import { useWorkoutBuilderContext } from '../../contexts/WorkoutBuilderContext'
@@ -31,13 +32,13 @@ interface ReviewStepProps {
 
 export const ReviewStep = ({ onSuccess }: ReviewStepProps) => {
     const { workoutPlan, setCurrentStep, resetBuilder } = useWorkoutBuilderContext()
-    const { exercises } = useExercises()
+    const { exercises, isExercisesLoading, exercisesError } = useExercises()
     const { user } = useAuthContext()
     const [isSaving, setIsSaving] = useState(false)
     const [error, setError] = useState<string | null>(null)
     const [success, setSuccess] = useState(false)
     const [description, setDescription] = useState('')
-    const [level, setLevel] = useState<DifficultyLevel>('Beginner')
+    const [level, setLevel] = useState<DifficultyLevel>(DifficultyLevel.BEGINNER)
 
     const handleSave = async () => {
         if (!user || !workoutPlan.title || !workoutPlan.days) return
@@ -51,7 +52,7 @@ export const ReviewStep = ({ onSuccess }: ReviewStepProps) => {
                 description,
                 level,
                 workoutPlan.type,
-                user
+                user as User
             )
             setSuccess(true)
             setTimeout(() => {
@@ -161,7 +162,7 @@ export const ReviewStep = ({ onSuccess }: ReviewStepProps) => {
                                 >
                                     <Stack spacing={1}>
                                         {day.exercises.map((exercise) => {
-                                            const exerciseDetails = exercises.find(e => e.id === exercise.id)
+                                            const exerciseDetails = exercises?.find(e => e.id === exercise.id)
 
                                             return (
                                                 <Typography

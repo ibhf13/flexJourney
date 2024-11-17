@@ -1,16 +1,15 @@
 import MainLayout from '@/components/Layout/MainLayout'
 import ComingSoonPage from '@/pages/ComingSoonPage'
 import { ExercisesPage } from '@/pages/ExercisesPage'
-import { HistoryPage } from '@/pages/HistoryPage'
 import HomePage from '@/pages/HomePage'
 import Login from '@/pages/Login'
 import { PlanDayPage } from '@/pages/plans/PlanDayPage'
 import { PlanExercisePage } from '@/pages/plans/PlanExercisePage'
 import { PlanPage } from '@/pages/plans/PlanPage'
 import ProfilePage from '@/pages/ProfilePage'
+import { ProgressPage } from '@/pages/ProgressPage'
 import ResetPassword from '@/pages/ResetPassword'
 import Signup from '@/pages/Signup'
-import { StatisticsPage } from '@/pages/StatisticsPage'
 import { RouteObject } from 'react-router-dom'
 
 export const publicRoutes = [
@@ -50,11 +49,15 @@ export const privateRoutes: RouteObject = {
         },
         {
             path: '/history',
-            element: <HistoryPage />
+            element: <ComingSoonPage />
         },
         {
             path: '/exercises',
             element: <ExercisesPage />
+        },
+        {
+            path: '/progress',
+            element: <ProgressPage />
         },
         {
             path: '/profile',
@@ -62,7 +65,7 @@ export const privateRoutes: RouteObject = {
         },
         {
             path: '/statistics',
-            element: <StatisticsPage />
+            element: <ComingSoonPage />
         },
         {
             path: '/Calendar',

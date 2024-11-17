@@ -11,9 +11,9 @@ export const useExercisesList = () => {
     const [selectedCategory, setSelectedCategory] = useState('')
     const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null)
 
-    const { exercises, categories } = useExercises()
+    const { exercises, categories, isExercisesLoading, isCategoriesLoading, exercisesError, categoriesError } = useExercises()
 
-    const filteredExercises = exercises.data?.filter(exercise => {
+    const filteredExercises = exercises?.filter(exercise => {
         const matchesSearch = exercise.title.toLowerCase().includes(searchQuery.toLowerCase())
         const matchesCategory = !selectedCategory || exercise.category === selectedCategory
 
@@ -37,12 +37,12 @@ export const useExercisesList = () => {
     return {
         // Data
         exercises: paginatedExercises,
-        categories: categories.data,
+        isExercisesLoading,
+        exercisesError,
+        categories,
+        isCategoriesLoading,
+        categoriesError,
         selectedExercise,
-
-        // Loading and error states
-        isLoading: exercises.isLoading || categories.isLoading,
-        error: exercises.error || categories.error,
 
         // Pagination
         page,

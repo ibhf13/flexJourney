@@ -19,8 +19,9 @@ import { NavigationProps } from './types'
 
 const navigationItems = [
   { label: 'Home', path: '/', icon: <HomeIcon /> },
-  { label: 'Plan', path: '/plan', icon: <PlanIcon /> },
+  { label: 'My Plan', path: '/progress', icon: <PlanIcon /> },
   { label: 'Exercises', path: '/exercises', icon: <WorkoutIcon /> },
+  { label: 'Plan', path: '/plan', icon: <PlanIcon /> },
   { label: 'History', path: '/history', icon: <HistoryIcon /> },
   { label: 'Profile', path: '/profile', icon: <ProfileIcon /> },
   { label: 'Statistics', path: '/statistics', icon: <StatisticsIcon /> },
