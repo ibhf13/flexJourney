@@ -1,11 +1,9 @@
 import { ConfirmationDialog } from '@/components/common/dialogs/ConfirmationDialog'
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
-import { useExerciseCompletion } from '@/features/exercises/hooks/useExerciseCompletion'
 import { useUnsavedChanges } from '@/features/exercises/hooks/useUnsavedChanges'
-import { Exercise, ExerciseFormData } from '@/features/exercises/types/ExerciseTypes'
+import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import { useHistoryQueries } from '@/features/history/hooks/useHistoryQueries'
-import { TrainingHistoryEntry } from '@/features/history/types/HistoryTypes'
-import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
+// import { useWorkoutContext } from '@/features/workout/contexts/WorkoutContext'
 import { WorkoutDay } from '@/features/workout/types/WorkoutTypes'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { Box, Dialog, DialogContent, Grid, useMediaQuery, useTheme } from '@mui/material'
@@ -31,9 +29,8 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('md'))
     const [hasChanges, setHasChanges] = useState(false)
-    const { handleExerciseComplete } = useExerciseCompletion()
     const { handleError } = useErrorHandler()
-    const { selectedPlan } = useWorkoutContext()
+    // const { selectedPlan } = useWorkoutContext()
     const { user } = useAuthContext()
     const [isSubmitting, setIsSubmitting] = useState(false)
     const { useCreateHistory } = useHistoryQueries()
@@ -50,53 +47,53 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
         onClose,
     })
 
-    const handleFormSubmit = async (data: ExerciseFormData) => {
-        try {
-            if (!selectedPlan || !user) {
-                throw new Error(!selectedPlan ? 'No workout plan selected' : 'You must be logged in to save progress')
-            }
+    // const handleFormSubmit = async (data: ExerciseFormData) => {
+    //     try {
+    //         if (!selectedPlan || !user) {
+    //             throw new Error(!selectedPlan ? 'No workout plan selected' : 'You must be logged in to save progress')
+    //         }
 
-            if (isSubmitting) return
-            setIsSubmitting(true)
+    //         if (isSubmitting) return
+    //         setIsSubmitting(true)
 
-            const historyEntry: TrainingHistoryEntry = {
-                id: crypto.randomUUID(),
-                planId: selectedPlan.id,
-                planName: selectedPlan.title,
-                dayId: day.id,
-                dayName: day.title,
-                userId: user.uid,
-                date: new Date().toISOString(),
-                createdAt: new Date(),
-                updatedAt: new Date(),
-                exercises: [{
-                    exerciseId: exercise.id,
-                    exerciseName: exercise.title,
-                    sets: data.sets.map(set => ({
-                        weight: set.weight || 0,
-                        reps: set.repetitions || 0,
-                        time: set.time || 0,
-                        unit: exercise.type === 'cardio' ? 'sec' : 'kg'
-                    })),
-                    completedAt: new Date().toISOString()
-                }]
-            }
+    //         const historyEntry: TrainingHistoryEntry = {
+    //             id: crypto.randomUUID(),
+    //             planId: selectedPlan.id,
+    //             planName: selectedPlan.title,
+    //             dayId: day.id,
+    //             dayName: day.title,
+    //             userId: user.uid,
+    //             date: new Date().toISOString(),
+    //             createdAt: new Date(),
+    //             updatedAt: new Date(),
+    //             exercises: [{
+    //                 exerciseId: exercise.id,
+    //                 exerciseName: exercise.title,
+    //                 sets: data.sets.map(set => ({
+    //                     weight: set.weight || 0,
+    //                     reps: set.repetitions || 0,
+    //                     time: set.time || 0,
+    //                     unit: exercise.type === 'cardio' ? 'sec' : 'kg'
+    //                 })),
+    //                 completedAt: new Date().toISOString()
+    //             }]
+    //         }
 
-            await createHistory.mutateAsync(historyEntry)
-            const completed = handleExerciseComplete(exercise, day, data)
+    //         await createHistory.mutateAsync(historyEntry)
+    //         const completed = handleExerciseComplete(exercise, day, data)
 
-            if (completed) {
-                onClose()
-            } else {
-                throw new Error('Failed to mark exercise as complete')
-            }
-        } catch (error) {
-            console.error('Error saving exercise:', error)
-            handleError(error instanceof Error ? error.message : 'Failed to save exercise progress')
-        } finally {
-            setIsSubmitting(false)
-        }
-    }
+    //         if (completed) {
+    //             onClose()
+    //         } else {
+    //             throw new Error('Failed to mark exercise as complete')
+    //         }
+    //     } catch (error) {
+    //         console.error('Error saving exercise:', error)
+    //         handleError(error instanceof Error ? error.message : 'Failed to save exercise progress')
+    //     } finally {
+    //         setIsSubmitting(false)
+    //     }
+    // }
 
     return (
         <>
@@ -131,7 +128,8 @@ export const ExerciseDetailModal: React.FC<ExerciseDetailModalProps> = ({
                                 <ExerciseForm
                                     exerciseType={exercise.type}
                                     defaultRestPeriod={exercise.defaultRestPeriod}
-                                    onSubmit={handleFormSubmit}
+                                    // onSubmit={handleFormSubmit}
+                                    onSubmit={() => { console.log('submitted and closed'), onClose() }}
                                     onCancel={onClose}
                                     onChange={() => setHasChanges(true)}
                                 />

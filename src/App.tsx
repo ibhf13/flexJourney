@@ -1,7 +1,6 @@
 import { NavigationProvider } from '@/components/Layout/contexts/NavigationContext'
 import { ErrorBoundary } from '@/features/errorHandling/components/ErrorBoundary'
 import { ExerciseProvider } from '@/features/exercises/contexts/ExerciseContext'
-import { WorkoutProvider } from '@/features/workout/contexts/WorkoutContext'
 import GlobalStyles from '@/styles/globalStyles'
 import theme from '@/styles/theme'
 import { GlobalStyles as MuiGlobalStyles } from '@mui/material'
@@ -30,23 +29,21 @@ function App() {
           <MuiGlobalStyles styles={GlobalStyles} />
           <NavigationProvider>
             <AuthProvider>
-              <WorkoutProvider>
-                <ExerciseProvider>
-                  <WorkoutBuilderProvider>
-                    <AppRouter />
-                    <Toaster
-                      position="bottom-center"
-                      toastOptions={{
-                        duration: 4000,
-                        style: {
-                          background: '#333',
-                          color: '#fff',
-                        },
-                      }}
-                    />
-                  </WorkoutBuilderProvider>
-                </ExerciseProvider>
-              </WorkoutProvider>
+              <ExerciseProvider>
+                <WorkoutBuilderProvider>
+                  <AppRouter />
+                  <Toaster
+                    position="bottom-center"
+                    toastOptions={{
+                      duration: 4000,
+                      style: {
+                        background: '#333',
+                        color: '#fff',
+                      },
+                    }}
+                  />
+                </WorkoutBuilderProvider>
+              </ExerciseProvider>
             </AuthProvider>
           </NavigationProvider>
         </ThemeProvider>

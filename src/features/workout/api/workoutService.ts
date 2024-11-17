@@ -17,7 +17,9 @@ export const fetchWorkoutPlans = async (): Promise<WorkoutPlan[]> => {
   }
 }
 
-export const fetchWorkoutPlanById = async (planId: string): Promise<WorkoutPlan | undefined> => {
+export const fetchWorkoutPlanById = async (planId: string | undefined): Promise<WorkoutPlan | undefined> => {
+  if (!planId) return undefined
+
   try {
     const planRef = doc(db, WORKOUT_PLANS_COLLECTION, planId)
     const snapshot = await getDoc(planRef)

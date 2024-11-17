@@ -1,13 +1,10 @@
-import { BaseCard, BaseCardContent } from '@/components/common/Cards'
+import { BaseCard } from '@/components/common/Cards'
 import { ConfirmationDialog } from '@/components/common/dialogs/ConfirmationDialog'
-import { getErrorMessage, isFirebaseError } from '@/config/firebase/utils/errors'
-import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
-import { useAuthContext } from '@features/auth/contexts/AuthContext'
+import { DifficultyChip } from '@/components/common/Forms/DifficultyChip'
 import DeleteIcon from '@mui/icons-material/Delete'
 import PersonIcon from '@mui/icons-material/Person'
-import { Box, Chip, Menu, MenuItem } from '@mui/material'
-import { useState } from 'react'
-import { deleteWorkoutPlan } from '../api/workoutService'
+import { Box, CardContent, Chip, Menu, MenuItem, Typography } from '@mui/material'
+import { usePlanCard } from '../hooks/usePlanCard'
 import { WorkoutPlan } from '../types/WorkoutTypes'
 
 interface PlanCardProps {
@@ -18,48 +15,17 @@ interface PlanCardProps {
 }
 
 export const PlanCard = ({ plan, onClick, onDelete, isLoading = false }: PlanCardProps) => {
-  const { user } = useAuthContext()
-  const { handleError, showMessage } = useErrorHandler()
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false)
-  const exercisesCount = plan.days.reduce((acc, day) => acc + day.exercises.length, 0)
-  const isOwner = user?.uid === plan.userId
-
-  const handleClick = () => {
-    if (!isLoading) {
-      onClick(plan)
-    }
-  }
-
-  const handleMenuClick = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation()
-    setAnchorEl(event.currentTarget)
-  }
-
-  const handleMenuClose = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation()
-    setAnchorEl(null)
-  }
-
-  const handleDeleteClick = (event: React.MouseEvent<HTMLElement>) => {
-    event.stopPropagation()
-    setAnchorEl(null)
-    setDeleteDialogOpen(true)
-  }
-
-  const handleDeleteConfirm = async () => {
-    try {
-      await deleteWorkoutPlan(plan.id)
-      setDeleteDialogOpen(false)
-      onDelete?.()
-    } catch (error) {
-      const message = isFirebaseError(error)
-        ? getErrorMessage(error.code)
-        : 'Failed to delete workout plan'
-
-      handleError(message, 'error')
-    }
-  }
+  const {
+    anchorEl,
+    deleteDialogOpen,
+    isOwner,
+    handleClick,
+    handleMenuClick,
+    handleMenuClose,
+    handleDeleteClick,
+    handleDeleteConfirm,
+    setDeleteDialogOpen,
+  } = usePlanCard({ plan, onClick, onDelete, isLoading })
 
   return (
     <>
@@ -71,56 +37,89 @@ export const PlanCard = ({ plan, onClick, onDelete, isLoading = false }: PlanCar
       >
         <Box sx={{ position: 'relative' }}>
           {isOwner && (
-            <>
-              <Box sx={{
-                position: 'absolute',
-                top: -20,
-                right: 8,
-                zIndex: 2,
-                display: 'flex',
-                alignItems: 'center',
-                gap: 1
-              }}>
-                <Chip
-                  icon={<PersonIcon />}
-                  label="My Plan"
-                  size="small"
-                  color="primary"
-                  onClick={handleMenuClick}
-                />
-                <Menu
-                  anchorEl={anchorEl}
-                  open={Boolean(anchorEl)}
-                  onClose={handleMenuClose}
-                  onClick={(e) => e.stopPropagation()}
-                  transformOrigin={{ horizontal: 'right', vertical: 'top' }}
-                  anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+            <Box sx={{
+              position: 'absolute',
+              top: -20,
+              right: 8,
+              zIndex: 2,
+              display: 'flex',
+              alignItems: 'center',
+              gap: 1
+            }}>
+              <Chip
+                icon={<PersonIcon />}
+                label="My Plan"
+                size="small"
+                color="primary"
+                onClick={handleMenuClick}
+              />
+              <Menu
+                anchorEl={anchorEl}
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+                onClick={(e) => e.stopPropagation()}
+                transformOrigin={{ horizontal: 'right', vertical: 'top' }}
+                anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
+              >
+                <MenuItem
+                  onClick={handleDeleteClick}
+                  sx={{
+                    color: 'error.main',
+                    '&:hover': { backgroundColor: 'error.lighter' }
+                  }}
                 >
-                  <MenuItem
-                    onClick={handleDeleteClick}
-                    sx={{
-                      color: 'error.main',
-                      '&:hover': {
-                        backgroundColor: 'error.lighter'
-                      }
-                    }}
-                  >
-                    <DeleteIcon sx={{ mr: 1 }} fontSize="small" />
-                    Delete Plan
-                  </MenuItem>
-                </Menu>
-              </Box>
-            </>
+                  <DeleteIcon sx={{ mr: 1 }} fontSize="small" />
+                  Delete Plan
+                </MenuItem>
+              </Menu>
+            </Box>
           )}
-          <BaseCardContent
-            title={plan.title}
-            description={plan.description}
-            level={plan.level}
-            exercisesCount={exercisesCount}
-          />
+          <CardContent>
+            <Typography
+              variant="h5"
+              component="h3"
+              gutterBottom
+              sx={{
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+              }}
+            >
+              {plan.title}
+            </Typography>
+            <Typography
+              variant="body2"
+              color="text.secondary"
+              sx={{
+                mb: 2,
+                minHeight: '3em',
+                overflow: 'hidden',
+                textOverflow: 'ellipsis',
+                display: '-webkit-box',
+                WebkitLineClamp: 2,
+                WebkitBoxOrient: 'vertical',
+              }}
+            >
+              {plan.description}
+            </Typography>
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'center', justifyContent: 'space-between' }}>
+              <DifficultyChip
+                level={plan.level}
+                aria-label={`Difficulty level: ${plan.level}`}
+              />
+              <Chip
+                label={`${plan.days.length} days`}
+                color="primary"
+                size="small"
+                variant="outlined"
+                aria-label={`Contains ${plan.days.length} days`}
+              />
+            </Box>
+          </CardContent>
         </Box>
       </BaseCard>
-
 
       <ConfirmationDialog
         open={deleteDialogOpen}
