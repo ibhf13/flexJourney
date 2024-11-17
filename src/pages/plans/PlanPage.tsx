@@ -32,6 +32,9 @@ export const PlanPage = () => {
         </Typography>
 
         <Grid container spacing={3}>
+          <Grid item xs={12} sm={6} md={4}>
+            <WorkoutBuilderCard onPlanCreated={refreshPlans} />
+          </Grid>
           {filteredPlans?.map((plan) => (
             <Grid item xs={12} sm={6} md={4} key={plan.id}>
               <PlanCard
@@ -40,9 +43,6 @@ export const PlanPage = () => {
               />
             </Grid>
           ))}
-          <Grid item xs={12} sm={6} md={4}>
-            <WorkoutBuilderCard onPlanCreated={refreshPlans} />
-          </Grid>
         </Grid>
       </Container>
     </LoadingErrorWrapper>
