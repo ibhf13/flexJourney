@@ -21,10 +21,12 @@ export const useExercises = () => {
     }
 
     return {
-        exercises: exercisesQuery.data ?? [],
-        isLoading: exercisesQuery.isLoading,
-        error: exercisesQuery.error,
-        categories: categoriesQuery.data ?? [],
+        exercises: exercisesQuery.data,
+        isExercisesLoading: exercisesQuery.isLoading,
+        exercisesError: exercisesQuery.error,
+        categories: categoriesQuery.data,
+        isCategoriesLoading: categoriesQuery.isLoading,
+        categoriesError: categoriesQuery.error,
         useExerciseById,
     }
 }

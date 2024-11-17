@@ -24,7 +24,7 @@ import { useWorkoutBuilderContext } from '../../contexts/WorkoutBuilderContext'
 
 export const ExerciseSelectionStep = () => {
     const { workoutPlan, updateWorkoutPlan, setCurrentStep } = useWorkoutBuilderContext()
-    const { exercises, isLoading, error } = useExercises()
+    const { exercises, isExercisesLoading, exercisesError } = useExercises()
     const [currentDayIndex, setCurrentDayIndex] = useState(0)
     const [searchQuery, setSearchQuery] = useState('')
 
@@ -50,7 +50,7 @@ export const ExerciseSelectionStep = () => {
         updateWorkoutPlan({ days: newDays })
     }
 
-    const filteredExercises = exercises.filter(exercise =>
+    const filteredExercises = exercises?.filter(exercise =>
         exercise.title.toLowerCase().includes(searchQuery.toLowerCase())
     )
 
@@ -58,7 +58,7 @@ export const ExerciseSelectionStep = () => {
     const hasSelectedExercises = currentDayExercises.length > 0
 
     return (
-        <LoadingErrorWrapper isLoading={isLoading} error={error}>
+        <LoadingErrorWrapper isLoading={isExercisesLoading} error={exercisesError}>
             <Box sx={{ maxWidth: 1000, mx: 'auto' }}>
                 <Paper elevation={2} sx={{ mb: 3, borderRadius: 2 }}>
                     <Tabs
@@ -121,7 +121,7 @@ export const ExerciseSelectionStep = () => {
                         Available Exercises
                     </Typography>
                     <Box sx={{ display: 'flex', gap: 1, flexWrap: 'wrap' }}>
-                        {filteredExercises.map(exercise => (
+                        {filteredExercises?.map(exercise => (
                             <Tooltip
                                 key={exercise.id}
                                 title={currentDayExercises.some(e => e.id === exercise.id)
@@ -154,7 +154,7 @@ export const ExerciseSelectionStep = () => {
                         </Typography>
                         <Box>
                             {currentDayExercises.map((exercise, index) => {
-                                const exerciseDetails = exercises.find(e => e.id === exercise.id)
+                                const exerciseDetails = exercises?.find(e => e.id === exercise.id)
 
                                 return (
                                     <Box key={exercise.id}>

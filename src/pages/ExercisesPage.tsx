@@ -10,8 +10,8 @@ import { Box, Container, Grid, List, Pagination, Paper, useMediaQuery, useTheme 
 export const ExercisesPage = () => {
     const {
         exercises,
-        isLoading,
-        error,
+        isExercisesLoading,
+        exercisesError,
         page,
         totalPages,
         setPage,
@@ -75,7 +75,7 @@ export const ExercisesPage = () => {
                     />
                 </Box>
 
-                <LoadingErrorWrapper isLoading={isLoading} error={error}>
+                <LoadingErrorWrapper isLoading={isExercisesLoading} error={exercisesError}>
                     {isGridView ? (
                         <Grid container spacing={{ xs: 2, sm: 3 }}>
                             {exercises.map(exercise => (
