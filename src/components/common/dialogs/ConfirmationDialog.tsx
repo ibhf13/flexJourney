@@ -32,7 +32,7 @@ export const ConfirmationDialog = ({
                 Cancel
             </Button>
             <Button onClick={onConfirm} color="error" variant="contained">
-                Delete
+                Discard
             </Button>
         </DialogActions>
     </Dialog>
