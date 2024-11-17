@@ -2,6 +2,7 @@ import DEFAULT_IMAGE_URL from '@/assets/images/dumbells.jpg'
 import { db } from '@/config/firebase'
 import { COLLECTIONS } from '@/config/firebase/collections'
 import { WorkoutPlan as BaseWorkoutPlan } from '@/features/workout/types/WorkoutTypes'
+import { User } from 'firebase/auth'
 import { collection, doc, serverTimestamp, setDoc } from 'firebase/firestore'
 import { WorkoutPlan as BuilderWorkoutPlan } from '../types/workoutBuilderTypes'
 
@@ -12,10 +13,10 @@ export const saveWorkoutPlan = async (
     description: string = '',
     level: string = 'Beginner',
     type: 'custom' | 'default' = 'custom',
-    userId: string
+    user: User
 ): Promise<string> => {
     try {
-        if (!userId) {
+        if (!user.uid) {
             throw new Error('User ID is required to save workout plan')
         }
 
@@ -24,9 +25,10 @@ export const saveWorkoutPlan = async (
             .toLowerCase()
             .replace(/[^a-z0-9]/g, '-')
             .replace(/-+/g, '-')
-            .replace(/^-|-$/g, '')
+            + '-' + user.email
 
         const newDocRef = doc(workoutPlansRef, docId)
+
 
         const formattedWorkoutPlan: BaseWorkoutPlan = {
             id: docId,
@@ -42,7 +44,7 @@ export const saveWorkoutPlan = async (
                 level: day.level || level,
                 exercises: day.exercises
             })),
-            userId,
+            userId: user.uid,
             type,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp()
