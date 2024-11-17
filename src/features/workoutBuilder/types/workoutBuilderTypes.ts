@@ -17,6 +17,7 @@ export interface WorkoutPlan {
     days: WorkoutDay[]
     createdAt: Date
     userId: string
+    type: 'custom' | 'default'
 }
 
 export type WorkoutBuilderStep = 'basics' | 'days' | 'exercises' | 'review'

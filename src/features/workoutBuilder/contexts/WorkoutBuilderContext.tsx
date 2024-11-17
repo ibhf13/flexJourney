@@ -6,6 +6,7 @@ interface WorkoutBuilderState extends Partial<WorkoutPlan> {
     days: WorkoutPlan['days']
     description: string
     level: DifficultyLevel
+    type: 'custom' | 'default'
 }
 
 interface WorkoutBuilderContextType {
@@ -20,6 +21,7 @@ const INITIAL_STATE: WorkoutBuilderState = {
     days: [],
     description: '',
     level: 'Beginner',
+    type: 'custom'
 }
 
 const WorkoutBuilderContext = createContext<WorkoutBuilderContextType | undefined>(undefined)

@@ -1,3 +1,4 @@
+import { useAuth } from '@/features/auth/hooks/useAuth'
 import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
 import { PlanCard } from '@/features/workout/components/PlanCard'
 import { useRefreshWorkoutPlans, useWorkoutPlans } from '@/features/workout/hooks/useWorkoutQuerys'
@@ -7,14 +8,18 @@ import { Container, Grid, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
 export const PlanPage = () => {
+  const { user } = useAuth()
   const navigate = useNavigate()
   const { data: plans, isLoading, error } = useWorkoutPlans()
   const refreshPlans = useRefreshWorkoutPlans()
 
+  const filteredPlans = plans?.filter(plan =>
+    plan.type === 'default' || (plan.type === 'custom' && plan.userId === user?.uid)
+  )
+
   const handlePlanSelect = (plan: WorkoutPlan) => {
     navigate(`/plan/${plan.id}`)
   }
-
 
   return (
     <LoadingErrorWrapper isLoading={isLoading} error={error ?? null}>
@@ -27,7 +32,7 @@ export const PlanPage = () => {
         </Typography>
 
         <Grid container spacing={3}>
-          {plans?.map((plan) => (
+          {filteredPlans?.map((plan) => (
             <Grid item xs={12} sm={6} md={4} key={plan.id}>
               <PlanCard
                 plan={plan}

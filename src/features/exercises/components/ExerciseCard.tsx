@@ -7,14 +7,14 @@ import { Exercise } from '../types/ExerciseTypes'
 
 interface ExerciseCardProps {
     exercise: Exercise
-    onSelect: (exercise: Exercise) => void
-    isCompleted?: boolean
+    onClick?: (exercise: Exercise) => void
 }
 
-export const ExerciseCard = ({ exercise, onSelect, isCompleted = false }: ExerciseCardProps) => {
+export const ExerciseCard = ({ exercise, onClick }: ExerciseCardProps) => {
+
     const handleClick = () => {
-        if (!isCompleted) {
-            onSelect(exercise)
+        if (onClick) {
+            onClick(exercise)
         }
     }
 
@@ -26,12 +26,10 @@ export const ExerciseCard = ({ exercise, onSelect, isCompleted = false }: Exerci
             onClick={handleClick}
             sx={{
                 position: 'relative',
-                opacity: isCompleted ? 0.7 : 1,
-                filter: isCompleted ? 'grayscale(100%)' : 'none',
                 transition: 'all 0.3s ease',
             }}
         >
-            {isCompleted && (
+            {false && (
                 <Box
                     sx={{
                         position: 'absolute',

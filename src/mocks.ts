@@ -7,6 +7,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
         description: 'A classic 3-day split targeting all major muscle groups for strength and hypertrophy',
         imageUrl: '/images/plans/ppl-split.jpg',
         level: 'Intermediate',
+        type: 'default',
         days: [
             {
                 id: 'push-day',
@@ -241,6 +242,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
         description: 'Complete body workout ideal for beginners',
         imageUrl: '/images/plans/full-body.jpg',
         level: 'Beginner',
+        type: 'default',
         days: [
             {
                 id: 'full-body-day1',
@@ -475,6 +477,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
         description: 'Classic bro split targeting one major muscle group per day for focused hypertrophy',
         imageUrl: '/images/plans/bro-split-6-days.jpg',
         level: 'Advanced',
+        type: 'default',
         days: [
             {
                 id: 'chest-day',
@@ -802,6 +805,7 @@ export const WORKOUT_PLANS: WorkoutPlan[] = [
         description: 'Bro split training focusing on each muscle group over 5 days',
         imageUrl: '/images/plans/bro-split-5-days.jpg',
         level: 'Intermediate',
+        type: 'default',
         days: [
             {
                 id: 'chest-shoulders-day',
