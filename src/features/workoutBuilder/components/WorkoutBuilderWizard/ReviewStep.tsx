@@ -50,7 +50,8 @@ export const ReviewStep = ({ onSuccess }: ReviewStepProps) => {
                 workoutPlan as Required<typeof workoutPlan>,
                 description,
                 level,
-                user.uid
+                workoutPlan.type,
+                user.uid,
             )
             setSuccess(true)
             setTimeout(() => {

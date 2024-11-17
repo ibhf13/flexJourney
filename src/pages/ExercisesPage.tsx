@@ -1,45 +1,30 @@
 import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
 import { ExerciseCard } from '@/features/exercises/components/ExerciseCard'
+import { ExerciseDialog } from '@/features/exercises/components/ExerciseDialog'
 import { ExerciseFilters } from '@/features/exercises/components/ExerciseFilters'
 import { ExerciseListItem } from '@/features/exercises/components/ExerciseListItem'
-import { ExerciseViewModal } from '@/features/exercises/components/ExerciseViewModal'
 import { ViewToggle } from '@/features/exercises/components/ViewToggle'
-import { useExercises } from '@/features/exercises/hooks/useExercises'
-import { Exercise } from '@/features/exercises/types/ExerciseTypes'
+import { useExercisesList } from '@/features/exercises/hooks/useExercisesList'
 import { Box, Container, Grid, List, Pagination, Paper, useMediaQuery, useTheme } from '@mui/material'
-import { useState } from 'react'
 
-const ITEMS_PER_PAGE = 12
-
-export const ExercisesListPage = () => {
-    const [isGridView, setIsGridView] = useState(true)
-    const [page, setPage] = useState(1)
-    const [searchQuery, setSearchQuery] = useState('')
-    const [selectedCategory, setSelectedCategory] = useState('')
-    const [selectedExercise, setSelectedExercise] = useState<Exercise | null>(null)
-
-    const { exercises, isLoading, error } = useExercises()
-
-    const filteredExercises = exercises.filter(exercise => {
-        const matchesSearch = exercise.title.toLowerCase().includes(searchQuery.toLowerCase())
-        const matchesCategory = !selectedCategory || exercise.category === selectedCategory
-
-        return matchesSearch && matchesCategory
-    })
-
-    const totalPages = Math.ceil(filteredExercises.length / ITEMS_PER_PAGE)
-    const paginatedExercises = filteredExercises.slice(
-        (page - 1) * ITEMS_PER_PAGE,
-        page * ITEMS_PER_PAGE
-    )
-
-    const handleExerciseSelect = (exercise: Exercise) => {
-        setSelectedExercise(exercise)
-    }
-
-    const handleCloseModal = () => {
-        setSelectedExercise(null)
-    }
+export const ExercisesPage = () => {
+    const {
+        exercises,
+        isLoading,
+        error,
+        page,
+        totalPages,
+        setPage,
+        isGridView,
+        setIsGridView,
+        searchQuery,
+        selectedCategory,
+        setSearchQuery,
+        setSelectedCategory,
+        selectedExercise,
+        handleExerciseSelect,
+        handleCloseModal,
+    } = useExercisesList()
 
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
@@ -51,17 +36,12 @@ export const ExercisesListPage = () => {
                 py: { xs: 2, sm: 4 },
                 px: { xs: 1, sm: 3 },
                 overflow: 'auto',
-                '&::-webkit-scrollbar': {
-                    display: 'none'
-                },
+                '&::-webkit-scrollbar': { display: 'none' },
                 msOverflowStyle: 'none',
                 scrollbarWidth: 'none'
             }}
         >
-            <Paper sx={{
-                p: { xs: 2, sm: 3 },
-                mb: { xs: 2, sm: 4 }
-            }}>
+            <Paper sx={{ p: { xs: 2, sm: 3 }, mb: { xs: 2, sm: 4 } }}>
                 <Box sx={{
                     display: 'flex',
                     flexDirection: 'row',
@@ -98,18 +78,11 @@ export const ExercisesListPage = () => {
                 <LoadingErrorWrapper isLoading={isLoading} error={error}>
                     {isGridView ? (
                         <Grid container spacing={{ xs: 2, sm: 3 }}>
-                            {paginatedExercises.map(exercise => (
-                                <Grid
-                                    item
-                                    xs={12}
-                                    sm={6}
-                                    md={4}
-                                    lg={3}
-                                    key={exercise.id}
-                                >
+                            {exercises.map(exercise => (
+                                <Grid item xs={12} sm={6} md={4} lg={3} key={exercise.id}>
                                     <ExerciseCard
                                         exercise={exercise}
-                                        onSelect={handleExerciseSelect}
+                                        onClick={handleExerciseSelect}
                                     />
                                 </Grid>
                             ))}
@@ -117,11 +90,9 @@ export const ExercisesListPage = () => {
                     ) : (
                         <List sx={{
                             width: '100%',
-                            '& .MuiListItem-root': {
-                                px: { xs: 1, sm: 2 }
-                            }
+                            '& .MuiListItem-root': { px: { xs: 1, sm: 2 } }
                         }}>
-                            {paginatedExercises.map(exercise => (
+                            {exercises.map(exercise => (
                                 <ExerciseListItem
                                     key={exercise.id}
                                     exercise={exercise}
@@ -151,7 +122,7 @@ export const ExercisesListPage = () => {
             </Paper>
 
             {selectedExercise && (
-                <ExerciseViewModal
+                <ExerciseDialog
                     exercise={selectedExercise}
                     open={!!selectedExercise}
                     onClose={handleCloseModal}

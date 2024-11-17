@@ -7,6 +7,7 @@ export enum DifficultyLevel {
 }
 
 export interface Exercise {
+  id: string
   title: string
   description: string
   imageUrl: string
@@ -36,6 +37,7 @@ export interface WorkoutPlan {
   level: DifficultyLevel
   days: WorkoutDay[]
   userId?: string
+  type: 'custom' | 'default'
   createdAt: Date | FieldValue
   updatedAt: Date | FieldValue
 }

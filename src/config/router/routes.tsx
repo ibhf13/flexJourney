@@ -1,11 +1,11 @@
 import MainLayout from '@/components/Layout/MainLayout'
 import ComingSoonPage from '@/pages/ComingSoonPage'
-import { ExercisesListPage } from '@/pages/ExercisesListPage'
+import { ExercisesPage } from '@/pages/ExercisesPage'
 import { HistoryPage } from '@/pages/HistoryPage'
 import HomePage from '@/pages/HomePage'
 import Login from '@/pages/Login'
-import { ExercisePage } from '@/pages/plans/ExercisePage'
 import { PlanDayPage } from '@/pages/plans/PlanDayPage'
+import { PlanExercisePage } from '@/pages/plans/PlanExercisePage'
 import { PlanPage } from '@/pages/plans/PlanPage'
 import ProfilePage from '@/pages/ProfilePage'
 import ResetPassword from '@/pages/ResetPassword'
@@ -46,7 +46,7 @@ export const privateRoutes: RouteObject = {
         },
         {
             path: '/plan/:planId/day/:dayId',
-            element: <ExercisePage />
+            element: <PlanExercisePage />
         },
         {
             path: '/history',
@@ -54,7 +54,7 @@ export const privateRoutes: RouteObject = {
         },
         {
             path: '/exercises',
-            element: <ExercisesListPage />
+            element: <ExercisesPage />
         },
         {
             path: '/profile',

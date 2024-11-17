@@ -5,13 +5,13 @@ import { ExerciseDetails } from './ExerciseDetails'
 import { ExerciseModalHeader } from './ExerciseModalHeader'
 import { ExerciseVideo } from './ExerciseVideo'
 
-interface ExerciseViewModalProps {
+interface ExerciseDialogProps {
     exercise: Exercise
     open: boolean
     onClose: () => void
 }
 
-export const ExerciseViewModal: React.FC<ExerciseViewModalProps> = ({
+export const ExerciseDialog: React.FC<ExerciseDialogProps> = ({
     exercise,
     open,
     onClose,

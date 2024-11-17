@@ -11,6 +11,7 @@ export const saveWorkoutPlan = async (
     workoutPlan: BuilderWorkoutPlan,
     description: string = '',
     level: string = 'Beginner',
+    type: 'custom' | 'default' = 'custom',
     userId: string
 ): Promise<string> => {
     try {
@@ -42,6 +43,7 @@ export const saveWorkoutPlan = async (
                 exercises: day.exercises
             })),
             userId,
+            type,
             createdAt: serverTimestamp(),
             updatedAt: serverTimestamp()
         }

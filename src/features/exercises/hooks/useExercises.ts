@@ -1,43 +1,30 @@
-import { FirebaseError } from '@/config/firebase/utils/errors'
-import { useEffect, useState } from 'react'
-import { fetchExercises } from '../api/exerciseService'
-import { Exercise } from '../types/ExerciseTypes'
+import { useQuery } from '@tanstack/react-query'
+import { fetchCategories, fetchExerciseById, fetchExercises } from '../api/exerciseService'
 
 export const useExercises = () => {
-    const [exercises, setExercises] = useState<Exercise[]>([])
-    const [isLoading, setIsLoading] = useState(true)
-    const [error, setError] = useState<FirebaseError | null>(null)
+    const exercisesQuery = useQuery({
+        queryKey: ['exercises'],
+        queryFn: fetchExercises,
+    })
 
-    useEffect(() => {
-        let isMounted = true
+    const categoriesQuery = useQuery({
+        queryKey: ['categories'],
+        queryFn: fetchCategories,
+    })
 
-        const loadExercises = async () => {
-            try {
-                setIsLoading(true)
-                const data = await fetchExercises()
+    const useExerciseById = (exerciseId: string) => {
+        return useQuery({
+            queryKey: ['exercise', exerciseId],
+            queryFn: () => fetchExerciseById(exerciseId),
+            enabled: !!exerciseId,
+        })
+    }
 
-                if (isMounted) {
-                    setExercises(data)
-                }
-            } catch (err) {
-                if (isMounted) {
-                    setError(err as FirebaseError)
-                }
-
-                console.error('Error loading exercises:', err)
-            } finally {
-                if (isMounted) {
-                    setIsLoading(false)
-                }
-            }
-        }
-
-        loadExercises()
-
-        return () => {
-            isMounted = false
-        }
-    }, [])
-
-    return { exercises, isLoading, error }
+    return {
+        exercises: exercisesQuery.data ?? [],
+        isLoading: exercisesQuery.isLoading,
+        error: exercisesQuery.error,
+        categories: categoriesQuery.data ?? [],
+        useExerciseById,
+    }
 }
