@@ -27,6 +27,7 @@ export const ExerciseList = ({ exercises, dayId }: ExerciseListProps) => {
                 {exercises.map((exercise) => (
                     <Grid item xs={12} sm={6} md={4} key={exercise.id}>
                         <ProgressExerciseCard
+                            key={exercise.id}
                             exercise={exercise}
                             dayId={dayId}
                             isCompleted={isExerciseCompleted(exercise.id)}

@@ -3,7 +3,7 @@ import { ExerciseCard } from '@/features/exercises/components/ExerciseCard'
 import { Exercise } from '@/features/workout/types/WorkoutTypes'
 import { Box } from '@mui/material'
 import { useState } from 'react'
-import { useProgressQuery } from '../hooks/useProgressQuery'
+import { useProgress } from '../hooks/useProgress'
 import { ExerciseSet } from '../types/ProgressTypes'
 import { CompletedExerciseOverlay } from './CompletedExerciseOverlay'
 import { ExerciseFormDialog } from './ExerciseFormDialog'
@@ -21,17 +21,19 @@ export const ProgressExerciseCard = ({
 }: ProgressExerciseCardProps) => {
     const [formOpen, setFormOpen] = useState(false)
     const { user } = useAuth()
-    const { saveUserExerciseProgress, isSaving } = useProgressQuery()
+    const { progressState, handleExerciseProgress } = useProgress()
 
     const handleSaveProgress = async (sets: ExerciseSet[]) => {
-        if (!user) return
+        if (!user || !progressState.progressId) return
 
-        await saveUserExerciseProgress(dayId, {
+        await handleExerciseProgress(dayId, {
             exerciseId: exercise.id,
             exerciseName: exercise.title,
             sets,
             isCompleted: true
         })
+
+        setFormOpen(false)
     }
 
     const handleCardClick = () => {
@@ -51,7 +53,7 @@ export const ProgressExerciseCard = ({
                 open={formOpen}
                 onClose={() => setFormOpen(false)}
                 onSave={handleSaveProgress}
-                isLoading={isSaving}
+                isLoading={progressState.progressId ? false : true}
             />
         </Box>
     )

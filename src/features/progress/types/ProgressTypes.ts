@@ -40,6 +40,7 @@ export interface DayProgress {
 }
 
 export interface WorkoutProgress {
+    progressId: string
     planId: string
     userId: string
     currentDay: number
@@ -53,4 +54,5 @@ export interface ProgressState {
     selectedPlan?: WorkoutPlan
     selectedDay?: WorkoutDay
     currentDayIndex: number
+    progressId: string | null
 }
