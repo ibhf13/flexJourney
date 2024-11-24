@@ -13,6 +13,7 @@ interface ConfirmationDialogProps {
     message: string
     onConfirm: () => void
     onCancel: () => void
+    buttonText?: string
 }
 
 export const ConfirmationDialog = ({
@@ -21,6 +22,7 @@ export const ConfirmationDialog = ({
     message,
     onConfirm,
     onCancel,
+    buttonText = 'Discard'
 }: ConfirmationDialogProps) => (
     <Dialog open={open} onClose={onCancel}>
         <DialogTitle>{title}</DialogTitle>
@@ -32,7 +34,7 @@ export const ConfirmationDialog = ({
                 Cancel
             </Button>
             <Button onClick={onConfirm} color="error" variant="contained">
-                Discard
+                {buttonText}
             </Button>
         </DialogActions>
     </Dialog>

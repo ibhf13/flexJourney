@@ -9,13 +9,12 @@ interface SelectPlanCardProps {
 }
 
 export const SelectPlanCard = ({ onClick, selectedPlanTitle }: SelectPlanCardProps) => {
-    const defaultImage = '/assets/images/select-plan-placeholder.jpg' // Add a placeholder image
 
     return (
         <BaseCard
             onClick={onClick}
             title={selectedPlanTitle ? 'Change Workout Plan' : 'Select Workout Plan'}
-            imageUrl={defaultImage}
+            imageUrl=""
             imageHeight={200}
             sx={{
                 position: 'relative',

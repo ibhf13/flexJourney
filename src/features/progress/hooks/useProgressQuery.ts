@@ -1,7 +1,7 @@
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { getCurrentProgress, initializeProgress, saveExerciseProgress } from '../api/progressService'
+import { getCurrentProgress, initializeProgress, resetProgress, saveExerciseProgress } from '../api/progressService'
 import { PROGRESS_CONSTANTS } from '../constants/progressConstants'
 import { WorkoutExercise } from '../types/ProgressTypes'
 
@@ -78,6 +78,23 @@ export const useProgressQuery = () => {
         }
     })
 
+    const resetProgressMutation = useMutation({
+        mutationFn: ({ userId, progressId }: { userId: string; progressId: string }) =>
+            resetProgress(userId, progressId),
+        onSuccess: () => {
+            queryClient.invalidateQueries({
+                queryKey: [PROGRESS_CONSTANTS.QUERY_KEYS.WORKOUT_PROGRESS]
+            })
+            showMessage('Progress has been reset successfully', 'success')
+        },
+        onError: (error) => {
+            handleError(
+                `Failed to reset progress: ${error}`,
+                'error'
+            )
+        }
+    })
+
     const initializeUserProgress = async (planId: string) => {
         if (!user) throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_USER)
 
@@ -94,6 +111,14 @@ export const useProgressQuery = () => {
         })
     }
 
+    const resetUserProgress = async (progressId: string) => {
+        if (!user) throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_USER)
+        await resetProgressMutation.mutateAsync({
+            userId: user.uid,
+            progressId
+        })
+    }
+
     return {
         progress: progressQuery.data,
         isLoading: progressQuery.isLoading,
@@ -101,6 +126,8 @@ export const useProgressQuery = () => {
         initializeUserProgress,
         saveUserExerciseProgress,
         isInitializing: initProgressMutation.isPending,
-        isSaving: saveExerciseMutation.isPending
+        isSaving: saveExerciseMutation.isPending,
+        resetUserProgress,
+        isResetting: resetProgressMutation.isPending
     }
 }

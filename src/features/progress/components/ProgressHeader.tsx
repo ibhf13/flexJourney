@@ -2,6 +2,7 @@ import { WorkoutPlan } from '@/features/workout/types/WorkoutTypes'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import SwapHorizIcon from '@mui/icons-material/SwapHoriz'
 import { Box, Button, Chip, LinearProgress, Paper, Typography } from '@mui/material'
+import { ResetProgressButton } from './ResetProgressButton'
 
 interface ProgressHeaderProps {
     selectedPlan?: WorkoutPlan
@@ -10,6 +11,7 @@ interface ProgressHeaderProps {
     totalDays?: number
     completedExercises?: number
     totalExercises?: number
+    progressId?: string | null
 }
 
 export const ProgressHeader = ({
@@ -18,7 +20,8 @@ export const ProgressHeader = ({
     currentDay,
     totalDays,
     completedExercises = 0,
-    totalExercises = 0
+    totalExercises = 0,
+    progressId
 }: ProgressHeaderProps) => {
     const progress = totalExercises > 0 ? (completedExercises / totalExercises) * 100 : 0
 
@@ -94,19 +97,22 @@ export const ProgressHeader = ({
                         </Typography>
                     </Box>
 
-                    <Button
-                        variant="contained"
-                        onClick={onSelectPlan}
-                        startIcon={<SwapHorizIcon />}
-                        sx={{
-                            backgroundColor: '#4caf50',
-                            '&:hover': {
-                                backgroundColor: '#43a047'
-                            }
-                        }}
-                    >
-                        {selectedPlan ? 'Change Plan' : 'Select Plan'}
-                    </Button>
+                    <Box sx={{ display: 'flex', gap: 2 }}>
+                        {progressId && <ResetProgressButton progressId={progressId} completedExercises={completedExercises} />}
+                        <Button
+                            variant="contained"
+                            onClick={onSelectPlan}
+                            startIcon={<SwapHorizIcon />}
+                            sx={{
+                                backgroundColor: '#4caf50',
+                                '&:hover': {
+                                    backgroundColor: '#43a047'
+                                }
+                            }}
+                        >
+                            {selectedPlan ? 'Change Plan' : 'Select Plan'}
+                        </Button>
+                    </Box>
                 </Box>
 
                 {selectedPlan && (
