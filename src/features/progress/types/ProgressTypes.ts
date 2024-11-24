@@ -37,6 +37,7 @@ export interface DayProgress {
     exercises: WorkoutExercise[]
     isCompleted: boolean
     completedAt?: Date
+    dayId: string
 }
 
 export interface WorkoutProgress {
@@ -48,6 +49,7 @@ export interface WorkoutProgress {
     exercises: Record<string, DayProgress>
     startedAt: Date
     lastUpdatedAt: Date
+    completedDays: string[]
 }
 
 export interface ProgressState {

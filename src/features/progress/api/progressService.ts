@@ -142,3 +142,23 @@ export const getCurrentProgress = async (userId: string): Promise<WorkoutProgres
         throw new Error('Failed to fetch workout progress')
     }
 }
+
+export const resetProgress = async (userId: string, progressId: string): Promise<void> => {
+    if (!userId || !progressId) {
+        throw new Error('Invalid parameters for progress reset')
+    }
+
+    try {
+        const progressRef = getUserProgressRef(userId, progressId)
+
+        await updateDoc(progressRef, {
+            currentDay: 0,
+            exercises: {},
+            lastUpdatedAt: new Date(),
+            isCurrentDayCompleted: false
+        })
+    } catch (error) {
+        console.error('Error resetting progress:', error)
+        throw new Error('Failed to reset workout progress')
+    }
+}
