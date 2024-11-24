@@ -37,7 +37,9 @@ service cloud.firestore {
       }
 
       match /workoutProgress/{progressId} {
-        allow read, write: if isOwner(userId);
+        allow create: if isOwner(userId) && 
+                     progressId.matches('^[^_]+_[0-9]+$');
+        allow read, update: if isOwner(userId);
       }
 
       match /stats/{docId} {

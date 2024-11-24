@@ -40,13 +40,29 @@ export const useProgressQuery = () => {
     const saveExerciseMutation = useMutation({
         mutationFn: ({
             userId,
+            progressId,
             dayId,
             exercise
         }: {
             userId: string
+            progressId: string
             dayId: string
             exercise: WorkoutExercise
-        }) => saveExerciseProgress(userId, dayId, exercise),
+        }) => {
+            if (!userId || !progressId || !dayId || !exercise || !exercise.exerciseId) {
+                throw new Error(
+                    `Invalid parameters: ${JSON.stringify({
+                        userId: !!userId,
+                        progressId: !!progressId,
+                        dayId: !!dayId,
+                        exercise: !!exercise,
+                        exerciseId: exercise?.exerciseId
+                    })}`
+                )
+            }
+
+            return saveExerciseProgress(userId, progressId, dayId, exercise)
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({
                 queryKey: [PROGRESS_CONSTANTS.QUERY_KEYS.WORKOUT_PROGRESS]
@@ -54,6 +70,7 @@ export const useProgressQuery = () => {
             showMessage(PROGRESS_CONSTANTS.MESSAGES.SUCCESS.EXERCISE_SAVED, 'success')
         },
         onError: (error) => {
+            console.error('Mutation error details:', error)
             handleError(
                 `${PROGRESS_CONSTANTS.MESSAGES.ERROR.SAVE_FAILED}: ${error}`,
                 'error'
@@ -63,12 +80,18 @@ export const useProgressQuery = () => {
 
     const initializeUserProgress = async (planId: string) => {
         if (!user) throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_USER)
-        await initProgressMutation.mutateAsync({ userId: user.uid, planId })
+
+        return initProgressMutation.mutateAsync({ userId: user.uid, planId })
     }
 
-    const saveUserExerciseProgress = async (dayId: string, exercise: WorkoutExercise) => {
+    const saveUserExerciseProgress = async (progressId: string, dayId: string, exercise: WorkoutExercise) => {
         if (!user) throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_USER)
-        await saveExerciseMutation.mutateAsync({ userId: user.uid, dayId, exercise })
+        await saveExerciseMutation.mutateAsync({
+            userId: user.uid,
+            progressId,
+            dayId,
+            exercise
+        })
     }
 
     return {
