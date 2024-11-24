@@ -1,7 +1,6 @@
 import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
 import { Box, Container } from '@mui/material'
 import { useState } from 'react'
-import { useCompletedDays } from '../hooks/useCompletedDays'
 import { useCompletedExercises } from '../hooks/useCompletedExercises'
 import { useProgress } from '../hooks/useProgress'
 import { DaySlider } from './DaySlider'
@@ -26,8 +25,6 @@ export const Progress = () => {
     const { completedExercises } = useCompletedExercises(
         progressState.selectedDay?.id ?? ''
     )
-
-    const { completedDays } = useCompletedDays()
 
     // Calculate progress values
     const currentDayNumber = progressState.currentDayIndex + 1
@@ -61,7 +58,6 @@ export const Progress = () => {
                         <DaySlider
                             days={progressState.selectedPlan.days}
                             currentDayIndex={progressState.currentDayIndex}
-                            completedDays={completedDays}
                             onDaySelect={handleDaySelect}
                         />
 
