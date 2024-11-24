@@ -2,7 +2,7 @@ import AddIcon from '@mui/icons-material/Add'
 import DeleteIcon from '@mui/icons-material/Delete'
 import { Box, Button, IconButton, MenuItem, Stack, TextField } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
-import { ExerciseSet } from '../types/HistoryTypes'
+import { ExerciseSet, Unit } from '../types/HistoryTypes'
 
 interface ExerciseSetEditorProps {
     sets: ExerciseSet[]
@@ -11,14 +11,14 @@ interface ExerciseSetEditorProps {
 
 export const ExerciseSetEditor = ({ sets, onChange }: ExerciseSetEditorProps) => {
     const handleAddSet = () => {
-        onChange([...sets, { weight: 0, reps: 0, unit: 'kg' }])
+        onChange([...sets, { weight: 0, reps: 0, time: null, unit: 'kg' }])
     }
 
     const handleRemoveSet = (index: number) => {
         onChange(sets.filter((_, i) => i !== index))
     }
 
-    const handleSetChange = (index: number, field: keyof ExerciseSet, value: any) => {
+    const handleSetChange = (index: number, field: keyof ExerciseSet, value: unknown) => {
         onChange(sets.map((set, i) =>
             i === index ? { ...set, [field]: value } : set
         ))
@@ -82,7 +82,7 @@ export const ExerciseSetEditor = ({ sets, onChange }: ExerciseSetEditorProps) =>
                                 label="Unit"
                                 size="small"
                                 value={set.unit}
-                                onChange={(e) => handleSetChange(index, 'unit', e.target.value)}
+                                onChange={(e) => handleSetChange(index, 'unit', e.target.value as Unit)}
                                 sx={{
                                     minWidth: { xs: '100%', sm: '100px' },
                                     '& .MuiOutlinedInput-root': {

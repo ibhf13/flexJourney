@@ -1,4 +1,6 @@
 import { useAuth } from '@/features/auth/hooks/useAuth'
+import { useHistory } from '@/features/history/hooks/useHistory'
+import { ExerciseLog, Unit } from '@/features/history/types/HistoryTypes'
 import { useWorkoutPlans } from '@/features/workout/hooks/useWorkoutQuerys'
 import { WorkoutPlan } from '@/features/workout/types/WorkoutTypes'
 import { useEffect, useState } from 'react'
@@ -20,6 +22,7 @@ export const useProgress = () => {
         initializeUserProgress,
         saveUserExerciseProgress
     } = useProgressQuery()
+    const { saveExerciseLog } = useHistory()
 
     const [progressState, setProgressState] = useState<ProgressState>(initialProgressState)
 
@@ -74,24 +77,42 @@ export const useProgress = () => {
             throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_USER)
         }
 
-        if (!progressState.progressId) {
+        if (!progressState.progressId || !progressState.selectedPlan || !progressState.selectedDay) {
             throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_PROGRESS_ID)
         }
 
-        if (!dayId) {
-            throw new Error('Day ID is required')
-        }
-
-        if (!exercise || !exercise.exerciseId) {
-            throw new Error('Valid exercise data is required')
-        }
-
         try {
+            // Save progress
             await saveUserExerciseProgress(
                 progressState.progressId,
                 dayId,
                 exercise
             )
+
+            // Create history entry if exercise is completed
+            if (exercise.isCompleted) {
+                const historyExerciseLog = {
+                    exerciseId: exercise.exerciseId,
+                    exerciseName: exercise.exerciseName,
+                    sets: exercise.sets.map(set => ({
+                        weight: set.weight || 0,
+                        reps: set.reps || 0,
+                        time: set.time,
+                        unit: set.unit as Unit
+                    })),
+                    completedAt: new Date().toISOString()
+                }
+
+                await saveExerciseLog(
+                    progressState.selectedPlan.id,
+                    progressState.selectedPlan.title,
+                    progressState.selectedDay.id,
+                    progressState.selectedDay.title,
+                    historyExerciseLog as ExerciseLog
+                )
+            }
+
+            return true
         } catch (error) {
             console.error('Failed to save exercise progress:', error)
             throw error

@@ -1,4 +1,4 @@
-// import { useWorkoutPlans } from '@/features/workout/hooks/useWorkoutPlans'
+import { useWorkoutPlans } from '@/features/workout/hooks/useWorkoutQuerys'
 import CloseIcon from '@mui/icons-material/Close'
 import {
     Box,
@@ -37,7 +37,8 @@ export const EditHistoryDialog = ({
 }: EditHistoryDialogProps) => {
     const theme = useTheme()
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
-    // const { plans, isLoading } = useWorkoutPlans()
+    const { data: plans = [], isLoading: isPlansLoading } = useWorkoutPlans()
+
     const {
         selectedPlanId,
         selectedDayId,
@@ -53,7 +54,10 @@ export const EditHistoryDialog = ({
         handleRemoveExercise,
         handleUpdateSets,
         getFormUpdates
-    } = useHistoryForm({ initialEntry: entry, plans: [] })
+    } = useHistoryForm({
+        initialEntry: entry,
+        plans
+    })
 
     const handleSave = () => {
         const updates = getFormUpdates()
@@ -105,7 +109,7 @@ export const EditHistoryDialog = ({
                 }}
             >
                 <Stack spacing={2} mt={1}>
-                    <FormControl fullWidth disabled={isLoading}>
+                    <FormControl fullWidth disabled={isPlansLoading}>
                         <InputLabel>Workout Plan</InputLabel>
                         <Select
                             value={selectedPlanId}
@@ -117,7 +121,7 @@ export const EditHistoryDialog = ({
                                 }
                             }}
                         >
-                            {plans.map(plan => (
+                            {plans?.map(plan => (
                                 <MenuItem key={plan.id} value={plan.id}>
                                     {plan.title} ({plan.level})
                                 </MenuItem>
@@ -125,7 +129,7 @@ export const EditHistoryDialog = ({
                         </Select>
                     </FormControl>
 
-                    <FormControl fullWidth disabled={!selectedPlan || isLoading}>
+                    <FormControl fullWidth disabled={!selectedPlan || isPlansLoading}>
                         <InputLabel>Workout Day</InputLabel>
                         <Select
                             value={selectedDayId}

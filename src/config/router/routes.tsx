@@ -1,6 +1,7 @@
 import MainLayout from '@/components/Layout/MainLayout'
 import ComingSoonPage from '@/pages/ComingSoonPage'
 import { ExercisesPage } from '@/pages/ExercisesPage'
+import { HistoryPage } from '@/pages/HistoryPage'
 import HomePage from '@/pages/HomePage'
 import Login from '@/pages/Login'
 import { PlanDayPage } from '@/pages/plans/PlanDayPage'
@@ -49,7 +50,7 @@ export const privateRoutes: RouteObject = {
         },
         {
             path: '/history',
-            element: <ComingSoonPage />
+            element: <HistoryPage />
         },
         {
             path: '/exercises',
