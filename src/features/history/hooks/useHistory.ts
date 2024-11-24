@@ -1,7 +1,7 @@
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useQueryClient } from '@tanstack/react-query'
-import { v4 as uuidv4 } from 'uuid'
+import { historyService } from '../api/historyService'
 import { ExerciseLog, HistoryFilters, TrainingHistoryEntry } from '../types/HistoryTypes'
 import { useHistoryQueries } from './useHistoryQueries'
 
@@ -42,26 +42,83 @@ export const useHistory = (filters?: HistoryFilters) => {
             throw new Error('User not authenticated')
         }
 
-        const entry: TrainingHistoryEntry = {
-            id: uuidv4(),
-            planId,
-            planName,
-            dayId,
-            dayName,
-            exercises: [exerciseLog],
-            date: new Date().toISOString(),
-            userId: currentUser.uid,
-            createdAt: new Date(),
-            updatedAt: new Date()
+        const sanitizedSets = exerciseLog.sets.map(set => ({
+            weight: set.weight || 0,
+            reps: set.reps || 0,
+            time: set.time || null,
+            unit: set.unit
+        }))
+
+        const sanitizedExerciseLog = {
+            ...exerciseLog,
+            sets: sanitizedSets,
+            completedAt: exerciseLog.completedAt || new Date().toISOString()
         }
 
         try {
-            await createHistory(entry)
+            // Get today's date at midnight for consistent document ID
+            const today = new Date()
+
+            today.setHours(0, 0, 0, 0)
+
+            // Generate a consistent document ID for the day
+            const documentId = `${today.toISOString().split('T')[0]}_${dayId}_${planId}`
+
+            // Try to get existing entry for today
+            const existingEntries = await historyService.getAll(currentUser.uid, {
+                startDate: today,
+                endDate: today,
+                planId,
+                dayId
+            })
+
+            const existingEntry = existingEntries[0]
+
+            if (existingEntry) {
+                // Update existing entry by adding the new exercise
+                const updatedExercises = [...existingEntry.exercises]
+                const exerciseIndex = updatedExercises.findIndex(
+                    ex => ex.exerciseId === sanitizedExerciseLog.exerciseId
+                )
+
+                if (exerciseIndex !== -1) {
+                    updatedExercises[exerciseIndex] = sanitizedExerciseLog
+                } else {
+                    updatedExercises.push(sanitizedExerciseLog)
+                }
+
+                await updateHistory({
+                    entryId: existingEntry._documentId!,
+                    updates: {
+                        exercises: updatedExercises,
+                        updatedAt: new Date()
+                    }
+                })
+            } else {
+                // Create new entry for today
+                const entry: TrainingHistoryEntry = {
+                    id: documentId,
+                    planId,
+                    planName,
+                    dayId,
+                    dayName,
+                    exercises: [sanitizedExerciseLog],
+                    date: today.toISOString(),
+                    userId: currentUser.uid,
+                    createdAt: new Date(),
+                    updatedAt: new Date()
+                }
+
+                await createHistory(entry)
+            }
+
             queryClient.invalidateQueries({ queryKey: ['training-history'] })
+            showMessage('Exercise progress saved to history', 'success')
 
             return true
         } catch (error) {
             console.error('Save exercise log error:', error)
+            handleError('Failed to save exercise progress to history')
 
             return false
         }
@@ -75,6 +132,7 @@ export const useHistory = (filters?: HistoryFilters) => {
                 return true
             } catch (error) {
                 console.error('Fetch history error:', error)
+                handleError(error)
 
                 return false
             }
@@ -83,7 +141,7 @@ export const useHistory = (filters?: HistoryFilters) => {
         return false
     }
 
-    const deleteEntry = async (id: string) => {
+    const deleteEntry = async (documentId: string) => {
         if (!currentUser?.uid) {
             showMessage('Please sign in to delete entries', 'error')
 
@@ -93,17 +151,46 @@ export const useHistory = (filters?: HistoryFilters) => {
         try {
             await deleteHistory({
                 userId: currentUser.uid,
-                entryId: id
-            })
-
-            await queryClient.invalidateQueries({
-                queryKey: ['training-history', currentUser.uid]
+                entryId: documentId
             })
 
             return true
         } catch (error) {
             console.error('Delete entry error:', error)
-            showMessage('Failed to delete entry', 'error')
+            handleError('Failed to delete entry')
+
+            return false
+        }
+    }
+
+    const updateEntry = async (updates: Partial<TrainingHistoryEntry>, entryId: string) => {
+        if (!currentUser?.uid) {
+            showMessage('Please sign in to update entries', 'error')
+
+            return false
+        }
+
+        try {
+            // First get the entry to find its Firestore document ID
+            const historyEntries = await historyService.getAll(currentUser.uid)
+            const entryToUpdate = historyEntries.find(entry => entry.id === entryId)
+
+            if (!entryToUpdate || !entryToUpdate._documentId) {
+                throw new Error('Entry not found')
+            }
+
+            await updateHistory({
+                entryId: entryToUpdate._documentId, // Use Firestore document ID
+                updates
+            })
+
+            queryClient.invalidateQueries({ queryKey: ['training-history'] })
+            showMessage('Entry updated successfully', 'success')
+
+            return true
+        } catch (error) {
+            console.error('Update entry error:', error)
+            handleError(error)
 
             return false
         }
@@ -116,18 +203,7 @@ export const useHistory = (filters?: HistoryFilters) => {
         isError,
         fetchHistory,
         deleteEntry,
-        updateEntry: async (entryId: string, updates: any) => {
-            try {
-                await updateHistory({ entryId, updates })
-                queryClient.invalidateQueries({ queryKey: ['trainingHistory'] })
-
-                return true
-            } catch (error) {
-                console.error('Update entry error:', error)
-
-                return false
-            }
-        },
+        updateEntry,
         saveExerciseLog
     }
 }

@@ -1,19 +1,20 @@
 import { db } from '@/config/firebase'
 import { COLLECTIONS } from '@/config/firebase/collections'
 import {
-    addDoc,
     collection,
     deleteDoc,
     doc,
     getDoc,
     getDocs,
+    limit,
     orderBy,
     query,
+    setDoc,
     Timestamp,
     updateDoc,
     where
 } from 'firebase/firestore'
-import { HistoryFilters, TrainingHistoryEntry } from '../types/HistoryTypes'
+import { ExerciseLog, HistoryFilters, TrainingHistoryEntry } from '../types/HistoryTypes'
 
 const TRAINING_HISTORY_COLLECTION = COLLECTIONS.USERS.SUB_COLLECTIONS.TRAINING_HISTORY
 
@@ -29,49 +30,128 @@ const convertToISOString = (date: Timestamp | string | Date) => {
     return date instanceof Date ? date.toISOString() : date
 }
 
+const generateHistoryEntryId = (entry: TrainingHistoryEntry) => {
+    const date = new Date(entry.date).toISOString().split('T')[0] // Format: YYYY-MM-DD
+
+    return `${date}_${entry.dayId}_${entry.planId}`
+}
+
 export const historyService = {
     create: async (userId: string, entry: TrainingHistoryEntry) => {
         const historyRef = collection(db, 'users', userId, TRAINING_HISTORY_COLLECTION)
+        const customId = generateHistoryEntryId(entry)
+
+        // Sanitize the entry for Firestore
+        const sanitizedExercises = entry.exercises.map(exercise => ({
+            ...exercise,
+            sets: exercise.sets.map(set => ({
+                weight: set.weight || 0,
+                reps: set.reps || 0,
+                time: set.time || null,
+                unit: set.unit
+            })),
+            completedAt: convertToTimestamp(exercise.completedAt)
+        }))
+
         const firestoreEntry = {
             ...entry,
+            exercises: sanitizedExercises,
             date: convertToTimestamp(entry.date),
-            exercises: entry.exercises.map(exercise => ({
-                ...exercise,
-                completedAt: convertToTimestamp(exercise.completedAt)
-            }))
-        }
+            createdAt: convertToTimestamp(entry.createdAt),
+            updatedAt: convertToTimestamp(entry.updatedAt)
+        } as Record<string, any>
 
-        const docRef = await addDoc(historyRef, firestoreEntry)
+        // Use setDoc instead of addDoc to specify custom ID
+        const docRef = doc(historyRef, customId)
 
-        return docRef.id
+        await setDoc(docRef, firestoreEntry)
+
+        return customId
     },
 
     getAll: async (userId: string, filters?: HistoryFilters) => {
         const historyRef = collection(db, 'users', userId, TRAINING_HISTORY_COLLECTION)
-        let baseQuery = query(historyRef, orderBy('date', 'desc'))
 
-        if (filters) {
-            const { startDate, endDate, planId } = filters
-            const conditions = []
+        try {
+            let baseQuery
 
-            if (startDate) conditions.push(where('date', '>=', convertToTimestamp(startDate)))
-            if (endDate) conditions.push(where('date', '<=', convertToTimestamp(endDate)))
-            if (planId) conditions.push(where('planId', '==', planId))
+            if (filters) {
+                const { startDate, endDate, planId, dayId } = filters
 
-            baseQuery = query(historyRef, ...conditions, orderBy('date', 'desc'))
+                // Special case for finding today's entry
+                if (startDate && endDate && planId && dayId) {
+                    // Try the indexed query first
+                    try {
+                        baseQuery = query(
+                            historyRef,
+                            where('date', '>=', convertToTimestamp(startDate)),
+                            where('date', '<=', convertToTimestamp(endDate)),
+                            where('planId', '==', planId),
+                            where('dayId', '==', dayId),
+                            orderBy('date', 'desc'),
+                            limit(1)
+                        )
+
+                        const snapshot = await getDocs(baseQuery)
+
+                        return snapshot.docs.map(doc => ({
+                            ...doc.data(),
+                            id: doc.id,
+                            date: convertToISOString(doc.data().date),
+                            exercises: doc.data().exercises.map((exercise: ExerciseLog) => ({
+                                ...exercise,
+                                completedAt: convertToISOString(exercise.completedAt)
+                            })),
+                            _documentId: doc.id
+                        })) as TrainingHistoryEntry[]
+                    } catch (indexError) {
+                        // Fallback to a simpler query if index isn't ready
+                        console.warn('Index not ready, falling back to date-only query')
+                        baseQuery = query(
+                            historyRef,
+                            where('date', '>=', convertToTimestamp(startDate)),
+                            where('date', '<=', convertToTimestamp(endDate)),
+                            orderBy('date', 'desc')
+                        )
+                    }
+                } else {
+                    // For other queries, use simple conditions
+                    const conditions = []
+
+                    if (startDate) conditions.push(where('date', '>=', convertToTimestamp(startDate)))
+                    if (endDate) conditions.push(where('date', '<=', convertToTimestamp(endDate)))
+
+                    baseQuery = query(
+                        historyRef,
+                        ...conditions,
+                        orderBy('date', 'desc')
+                    )
+                }
+            } else {
+                baseQuery = query(historyRef, orderBy('date', 'desc'))
+            }
+
+            const snapshot = await getDocs(baseQuery)
+            const entries = snapshot.docs.map(doc => ({
+                ...doc.data(),
+                id: doc.id,
+                date: convertToISOString(doc.data().date),
+                exercises: doc.data().exercises.map((exercise: ExerciseLog) => ({
+                    ...exercise,
+                    completedAt: convertToISOString(exercise.completedAt)
+                })),
+                _documentId: doc.id
+            })) as TrainingHistoryEntry[]
+
+            return entries
+        } catch (error) {
+            console.error('Error fetching history:', error)
+            if (error instanceof Error && error.message.includes('requires an index')) {
+                console.error('Missing index. Please create the required index in Firebase Console.')
+            }
+
+            throw error
         }
-
-        const snapshot = await getDocs(baseQuery)
-
-        return snapshot.docs.map(doc => ({
-            id: doc.id,
-            ...doc.data(),
-            date: convertToISOString(doc.data().date),
-            exercises: doc.data().exercises.map((exercise: any) => ({
-                ...exercise,
-                completedAt: convertToISOString(exercise.completedAt)
-            }))
-        })) as (TrainingHistoryEntry)[]
     },
 
     delete: async (userId: string, entryId: string) => {
@@ -80,40 +160,46 @@ export const historyService = {
                 db,
                 'users',
                 userId,
-                'trainingHistory',
+                TRAINING_HISTORY_COLLECTION,
                 entryId
             )
 
-            const docSnap = await getDoc(entryRef)
-
-            if (!docSnap.exists()) {
-                throw new Error(`Document not found at path: ${entryRef.path}`)
-            }
-
             await deleteDoc(entryRef)
 
-            return entryId
+            return true
         } catch (error) {
-            console.error('Error deleting document:', {
+            console.error('Error deleting history entry:', {
                 error,
                 userId,
-                entryId
+                entryId,
+                collection: TRAINING_HISTORY_COLLECTION
             })
             throw error
         }
     },
 
-    update: async (userId: string, entryId: string, updates: Partial<TrainingHistoryEntry>) => {
-        const entryRef = doc(db, 'users', userId, TRAINING_HISTORY_COLLECTION, entryId)
-        const { date, ...otherUpdates } = updates
+    update: async (userId: string, documentId: string, updates: Partial<TrainingHistoryEntry>) => {
+        try {
+            const docRef = doc(db, COLLECTIONS.USERS.COLLECTION, userId,
+                COLLECTIONS.USERS.SUB_COLLECTIONS.TRAINING_HISTORY, documentId)
 
-        const firestoreUpdates = {
-            ...otherUpdates,
-            updatedAt: Timestamp.now()
+            const docSnap = await getDoc(docRef)
+
+            if (!docSnap.exists()) {
+                throw new Error(`History entry with ID ${documentId} not found`)
+            }
+
+            const updatedData = {
+                ...updates,
+                updatedAt: new Date()
+            }
+
+            await updateDoc(docRef, updatedData)
+
+            return true
+        } catch (error) {
+            console.error('Error updating history entry:', error)
+            throw error
         }
-
-        await updateDoc(entryRef, firestoreUpdates)
-
-        return entryId
     }
 }

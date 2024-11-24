@@ -101,13 +101,25 @@ export const useProgressQuery = () => {
         return initProgressMutation.mutateAsync({ userId: user.uid, planId })
     }
 
-    const saveUserExerciseProgress = async (progressId: string, dayId: string, exercise: WorkoutExercise) => {
+    const saveUserExerciseProgress = async (
+        progressId: string,
+        dayId: string,
+        exercise: WorkoutExercise
+    ) => {
         if (!user) throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_USER)
+
+        const isExerciseCompleted = exercise.sets.every(set => set.isCompleted)
+        const exerciseWithStatus = {
+            ...exercise,
+            isCompleted: isExerciseCompleted,
+            completedAt: isExerciseCompleted ? new Date() : undefined
+        }
+
         await saveExerciseMutation.mutateAsync({
             userId: user.uid,
             progressId,
             dayId,
-            exercise
+            exercise: exerciseWithStatus
         })
     }
 

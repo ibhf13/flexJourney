@@ -5,7 +5,6 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { historyService } from '../api/historyService'
 import { HistoryFilters, TrainingHistoryEntry } from '../types/HistoryTypes'
 
-
 const HISTORY_KEYS = {
     all: [COLLECTIONS.USERS.SUB_COLLECTIONS.TRAINING_HISTORY] as const,
     list: (userId: string, filters?: HistoryFilters) =>
@@ -47,8 +46,10 @@ export const useHistoryQueries = () => {
                 return historyService.create(currentUser.uid, entry)
             },
             onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ['training-history'] })
-                showMessage('Training history saved successfully', 'success')
+                queryClient.invalidateQueries({
+                    queryKey: HISTORY_KEYS.all,
+                    exact: false
+                })
             },
             onError: (error) => {
                 console.error('Create history error:', error)
@@ -59,16 +60,17 @@ export const useHistoryQueries = () => {
 
     const useDeleteHistory = () => {
         return useMutation({
-            mutationFn: ({ userId, entryId }: { userId: string; entryId: string }) => {
+            mutationFn: ({ userId, entryId }: { userId?: string; entryId: string }) => {
                 if (!userId) {
                     throw new Error('No user authenticated')
                 }
 
                 return historyService.delete(userId, entryId)
             },
-            onSuccess: (_, variables) => {
+            onSuccess: () => {
                 queryClient.invalidateQueries({
-                    queryKey: HISTORY_KEYS.list(variables.userId)
+                    queryKey: HISTORY_KEYS.all,
+                    exact: false
                 })
                 showMessage('Entry deleted successfully', 'success')
             },
@@ -92,12 +94,18 @@ export const useHistoryQueries = () => {
                 return historyService.update(currentUser.uid, entryId, updates)
             },
             onSuccess: () => {
-                queryClient.invalidateQueries({ queryKey: ['training-history'] })
-                showMessage('Entry updated successfully', 'success')
+                queryClient.invalidateQueries({
+                    queryKey: HISTORY_KEYS.all,
+                    exact: false
+                })
             },
             onError: (error) => {
+                const errorMessage = error instanceof Error && error.message.includes('not found')
+                    ? 'Training entry not found'
+                    : 'Failed to update entry'
+
                 console.error('Update history error:', error)
-                handleError('Failed to update entry', 'error')
+                handleError(errorMessage, 'error')
             }
         })
     }

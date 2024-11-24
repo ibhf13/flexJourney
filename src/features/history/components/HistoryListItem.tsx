@@ -25,7 +25,7 @@ export const HistoryListItem = ({ entry }: HistoryListItemProps) => {
     const handleDelete = async () => {
         try {
             setIsDeleting(true)
-            const success = await deleteEntry(entry.id)
+            const success = await deleteEntry(entry._documentId ?? '')
 
             if (success) {
                 setIsDeleteDialogOpen(false)
@@ -38,7 +38,7 @@ export const HistoryListItem = ({ entry }: HistoryListItemProps) => {
     }
 
     const handleEdit = (updates: Partial<TrainingHistoryEntry>) => {
-        updateEntry(entry.id, updates)
+        updateEntry(updates, entry.id)
         setIsEditDialogOpen(false)
     }
 
