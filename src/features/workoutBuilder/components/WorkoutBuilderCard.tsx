@@ -1,7 +1,7 @@
 import { ConfirmationDialog } from '@/components/common/dialogs/ConfirmationDialog'
 import { Add } from '@mui/icons-material'
 import CloseIcon from '@mui/icons-material/Close'
-import { Box, Card, CardActionArea, CardContent, Dialog, DialogContent, Fade, IconButton, LinearProgress, Typography } from '@mui/material'
+import { Box, Card, CardActionArea, Dialog, DialogContent, Fade, IconButton, LinearProgress, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { useState } from 'react'
 import { useWorkoutBuilderContext } from '../contexts/WorkoutBuilderContext'
@@ -13,14 +13,17 @@ import { WorkoutBuilderStepper } from './WorkoutBuilderWizard/WorkoutBuilderStep
 
 const StyledCard = styled(Card)(({ theme }) => ({
     height: '100%',
-    borderRadius: theme.spacing(2),
+    borderRadius: theme.spacing(3),
     border: `2px dashed ${theme.palette.primary.main}`,
-    backgroundColor: theme.palette.background.paper,
-    transition: 'all 0.3s ease-in-out',
+    background: `linear-gradient(135deg, 
+        ${theme.palette.background.paper} 0%,
+        ${theme.palette.primary.dark}10 100%)`,
+    backdropFilter: 'blur(10px)',
+    transition: 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
     '&:hover': {
         borderStyle: 'solid',
-        transform: 'translateY(-4px)',
-        boxShadow: theme.shadows[8],
+        transform: 'translateY(-8px) scale(1.02)',
+        boxShadow: `0 20px 40px ${theme.palette.primary.main}20`,
     },
 }))
 
@@ -31,23 +34,68 @@ const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
     flexDirection: 'column',
     gap: theme.spacing(4),
     overflowY: 'auto',
+    scrollBehavior: 'smooth',
     '&::-webkit-scrollbar': {
-        display: 'none'
+        width: '8px'
     },
-    scrollbarWidth: 'none',  // Firefox
-    msOverflowStyle: 'none', // IE and Edge
+    '&::-webkit-scrollbar-track': {
+        background: theme.palette.background.default,
+        borderRadius: '4px'
+    },
+    '&::-webkit-scrollbar-thumb': {
+        background: theme.palette.primary.main,
+        borderRadius: '4px',
+        '&:hover': {
+            background: theme.palette.primary.dark
+        }
+    },
     [theme.breakpoints.down('sm')]: {
         padding: theme.spacing(2),
+        minHeight: '85vh'
     },
 }))
 
 const DialogHeader = styled(Box)(({ theme }) => ({
-    padding: theme.spacing(2, 3),
-    background: `linear-gradient(45deg, ${theme.palette.primary.light}, ${theme.palette.primary.dark})`,
+    display: 'flex',
+    flexDirection: 'column',
+    background: `linear-gradient(135deg, 
+        ${theme.palette.primary.dark} 0%,
+        ${theme.palette.primary.main} 100%)`,
     color: theme.palette.common.white,
+    position: 'relative',
+    '&::after': {
+        content: '""',
+        position: 'absolute',
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: '1px',
+        background: `linear-gradient(to right, 
+            transparent 0%,
+            ${theme.palette.common.white}40 50%,
+            transparent 100%
+        )`
+    }
+}))
+
+const HeaderTop = styled(Box)(({ theme }) => ({
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
+    padding: theme.spacing(2, 3),
+}))
+
+const StepIndicator = styled(Box)(({ theme }) => ({
+    display: 'flex',
+    alignItems: 'center',
+    gap: theme.spacing(1),
+    '& .MuiTypography-subtitle2': {
+        opacity: 0.8,
+        transition: 'opacity 0.3s ease'
+    },
+    '&:hover .MuiTypography-subtitle2': {
+        opacity: 1
+    }
 }))
 
 const STEPS = [
@@ -62,6 +110,8 @@ interface WorkoutBuilderCardProps {
 }
 
 export const WorkoutBuilderCard = ({ onPlanCreated }: WorkoutBuilderCardProps) => {
+    const theme = useTheme()
+    const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
     const [open, setOpen] = useState(false)
     const [showConfirmDialog, setShowConfirmDialog] = useState(false)
     const { currentStep, resetBuilder } = useWorkoutBuilderContext()
@@ -80,15 +130,6 @@ export const WorkoutBuilderCard = ({ onPlanCreated }: WorkoutBuilderCardProps) =
         resetBuilder()
     }
 
-    const handleCancelClose = () => {
-        setShowConfirmDialog(false)
-    }
-
-    const handleSuccess = () => {
-        setOpen(false)
-        onPlanCreated?.()
-    }
-
     const currentStepIndex = STEPS.findIndex(step => step.key === currentStep)
     const currentProgress = STEPS[currentStepIndex]?.progress || 0
 
@@ -101,9 +142,10 @@ export const WorkoutBuilderCard = ({ onPlanCreated }: WorkoutBuilderCardProps) =
             case 'exercises':
                 return <ExerciseSelectionStep />
             case 'review':
-                return <ReviewStep onSuccess={handleSuccess} />
-            default:
-                return null
+                return <ReviewStep onSuccess={() => {
+                    setOpen(false)
+                    onPlanCreated?.()
+                }} />
         }
     }
 
@@ -112,48 +154,60 @@ export const WorkoutBuilderCard = ({ onPlanCreated }: WorkoutBuilderCardProps) =
             <StyledCard elevation={0}>
                 <CardActionArea
                     onClick={() => setOpen(true)}
-                    sx={{ height: '100%', p: 1 }}
-                >
-                    <CardContent sx={{
+                    sx={{
                         height: '100%',
+                        p: { xs: 2, sm: 3 },
                         display: 'flex',
                         flexDirection: 'column',
                         alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                >
+                    <Box sx={{
+                        width: { xs: 48, sm: 60 },
+                        height: { xs: 48, sm: 60 },
+                        borderRadius: '50%',
+                        background: `linear-gradient(135deg, 
+                            ${theme.palette.primary.light}20,
+                            ${theme.palette.primary.main}40)`,
+                        display: 'flex',
+                        alignItems: 'center',
                         justifyContent: 'center',
-                        gap: 3,
-                        p: 4
+                        mb: { xs: 2, sm: 3 }
                     }}>
-                        <Box
+                        <Add sx={{
+                            fontSize: { xs: 24, sm: 32 },
+                            color: 'primary.main'
+                        }} />
+                    </Box>
+                    <Box sx={{ textAlign: 'center' }}>
+                        <Typography
+                            variant={isMobile ? "subtitle1" : "h6"}
+                            component="h2"
+                            gutterBottom
                             sx={{
-                                width: 60,
-                                height: 60,
-                                borderRadius: '50%',
-                                bgcolor: 'primary.lighter',
-                                display: 'flex',
-                                alignItems: 'center',
-                                justifyContent: 'center',
-                                mb: 1
+                                fontWeight: 600,
+                                background: `linear-gradient(135deg,
+                                    ${theme.palette.primary.main},
+                                    ${theme.palette.primary.dark})`,
+                                WebkitBackgroundClip: 'text',
+                                WebkitTextFillColor: 'transparent'
                             }}
                         >
-                            <Add sx={{ fontSize: 32, color: 'primary.main' }} />
-                        </Box>
-                        <Box sx={{ textAlign: 'center' }}>
-                            <Typography
-                                variant="h6"
-                                component="h2"
-                                gutterBottom
-                                sx={{ fontWeight: 600 }}
-                            >
-                                Create Custom Plan
-                            </Typography>
-                            <Typography
-                                variant="body2"
-                                color="text.secondary"
-                            >
-                                Build your own workout plan from scratch
-                            </Typography>
-                        </Box>
-                    </CardContent>
+                            Create Custom Plan
+                        </Typography>
+                        <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            sx={{
+                                maxWidth: '80%',
+                                mx: 'auto',
+                                display: { xs: 'none', sm: 'block' }
+                            }}
+                        >
+                            Build your own workout plan from scratch
+                        </Typography>
+                    </Box>
                 </CardActionArea>
             </StyledCard>
 
@@ -161,33 +215,41 @@ export const WorkoutBuilderCard = ({ onPlanCreated }: WorkoutBuilderCardProps) =
                 open={open}
                 onClose={handleClose}
                 maxWidth="md"
-                fullWidth
+                fullScreen={isMobile}
                 TransitionComponent={Fade}
                 PaperProps={{
                     sx: {
-                        borderRadius: 2,
-                        overflow: 'hidden'
+                        borderRadius: { xs: 0, sm: 3 },
+                        overflow: 'hidden',
+                        background: `linear-gradient(135deg,
+                            ${theme.palette.background.paper},
+                            ${theme.palette.background.paper}95)`
                     }
                 }}
             >
-                <DialogHeader>
-                    <Box>
-                        <Typography variant="h6" component="h2">
-                            Create Custom Workout Plan
-                        </Typography>
-                        <Typography variant="body2" sx={{ opacity: 0.8, mt: 0.5 }}>
-                            {STEPS[currentStepIndex]?.label}
-                        </Typography>
-                    </Box>
+                <DialogHeader sx={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    flexDirection: 'row',
+                    justifyContent: 'space-between',
+                    p: theme.spacing(2, 3)
+                }}>
+                    <WorkoutBuilderStepper
+                        steps={STEPS}
+                        currentStep={currentStep}
+                    />
                     <IconButton
                         onClick={handleClose}
+                        size="small"
                         sx={{
+                            mb: 4,
                             color: 'inherit',
+                            bgcolor: 'rgba(255, 255, 255, 0.1)',
+                            backdropFilter: 'blur(4px)',
                             '&:hover': {
-                                bgcolor: 'rgba(255, 255, 255, 0.1)'
+                                bgcolor: 'rgba(255, 255, 255, 0.2)'
                             }
                         }}
-                        size="small"
                     >
                         <CloseIcon />
                     </IconButton>
@@ -198,29 +260,24 @@ export const WorkoutBuilderCard = ({ onPlanCreated }: WorkoutBuilderCardProps) =
                         variant="determinate"
                         value={currentProgress}
                         sx={{
-                            height: 4,
+                            height: 6,
+                            background: theme.palette.divider,
                             '& .MuiLinearProgress-bar': {
-                                transition: 'transform 0.5s ease-in-out',
-                                backgroundColor: '#77d332'
-                            },
-                            backgroundColor: 'success.lighter'
+                                transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                                background: `linear-gradient(to right,
+                                    ${theme.palette.primary.main},
+                                    ${theme.palette.primary.light})`
+                            }
                         }}
                     />
                 </Box>
 
                 <StyledDialogContent>
-                    <WorkoutBuilderStepper
-                        steps={STEPS}
-                        currentStep={currentStep}
-                    />
-
-                    <Box
-                        sx={{
-                            flex: 1,
-                            display: 'flex',
-                            flexDirection: 'column'
-                        }}
-                    >
+                    <Box sx={{
+                        flex: 1,
+                        display: 'flex',
+                        flexDirection: 'column'
+                    }}>
                         {renderStep()}
                     </Box>
                 </StyledDialogContent>
@@ -231,7 +288,7 @@ export const WorkoutBuilderCard = ({ onPlanCreated }: WorkoutBuilderCardProps) =
                 title="Cancel Workout Creation?"
                 message="Are you sure you want to cancel? All progress will be lost."
                 onConfirm={handleConfirmClose}
-                onCancel={handleCancelClose}
+                onCancel={() => setShowConfirmDialog(false)}
             />
         </>
     )
