@@ -1,5 +1,5 @@
-import { Check } from '@mui/icons-material'
-import { Box, Step, StepConnector, StepLabel, Stepper, stepConnectorClasses, styled } from '@mui/material'
+import { Check, RadioButtonUnchecked } from '@mui/icons-material'
+import { Box, Step, StepConnector, StepLabel, Stepper, stepConnectorClasses, styled, useTheme } from '@mui/material'
 import { WorkoutBuilderStep } from '../../types/workoutBuilderTypes'
 
 interface StepperProps {
@@ -12,46 +12,54 @@ interface StepperProps {
 }
 
 const CustomConnector = styled(StepConnector)(({ theme }) => ({
-    [`&.${stepConnectorClasses.alternativeLabel}`]: {
-        top: 10,
-        left: 'calc(-50% + 16px)',
-        right: 'calc(50% + 16px)',
+    [`&.${stepConnectorClasses.alternativeLabel} `]: {
+        top: 12,
+        left: 'calc(-50% + 20px)',
+        right: 'calc(50% + 20px)',
     },
-    [`&.${stepConnectorClasses.active}`]: {
-        [`& .${stepConnectorClasses.line}`]: {
-            borderColor: theme.palette.primary.main,
+    [`&.${stepConnectorClasses.active} `]: {
+        [`& .${stepConnectorClasses.line} `]: {
+            background: `linear - gradient(to right, ${theme.palette.primary.main}, ${theme.palette.primary.light})`,
         },
     },
-    [`&.${stepConnectorClasses.completed}`]: {
-        [`& .${stepConnectorClasses.line}`]: {
-            borderColor: theme.palette.primary.main,
+    [`&.${stepConnectorClasses.completed} `]: {
+        [`& .${stepConnectorClasses.line} `]: {
+            background: theme.palette.primary.main,
         },
     },
-    [`& .${stepConnectorClasses.line}`]: {
-        borderColor: theme.palette.divider,
-        borderTopWidth: 3,
-        borderRadius: 1,
+    [`& .${stepConnectorClasses.line} `]: {
+        height: 3,
+        border: 0,
+        backgroundColor: 'rgba(255, 255, 255, 0.2)',
+        borderRadius: 5,
+        transition: 'all 0.3s ease',
     },
 }))
 
 const StepIconRoot = styled('div')<{ ownerState: { active?: boolean, completed?: boolean } }>(
-    ({ theme, ownerState }) => ({
-        backgroundColor: theme.palette.divider,
+    ({ ownerState }) => ({
+        backgroundColor: 'transparent',
         zIndex: 1,
-        color: theme.palette.common.white,
-        width: 24,
-        height: 24,
+        width: 28,
+        height: 28,
         display: 'flex',
         borderRadius: '50%',
         justifyContent: 'center',
         alignItems: 'center',
-        ...(ownerState.active && {
-            backgroundColor: theme.palette.primary.main,
-            boxShadow: '0 4px 10px 0 rgba(0,0,0,.25)',
-        }),
-        ...(ownerState.completed && {
-            backgroundColor: theme.palette.primary.main,
-        }),
+        transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
+        border: `2px solid ${ownerState.completed || ownerState.active ?
+            'white' :
+            'rgba(255, 255, 255, 0.3)'
+            }`,
+        color: ownerState.completed || ownerState.active ?
+            'white' :
+            'rgba(255, 255, 255, 0.5)',
+        boxShadow: ownerState.active ?
+            `0 0 0 3px ${'white'} 20` :
+            'none',
+        '&:hover': {
+            transform: ownerState.active ? 'scale(1.1)' : 'none',
+        },
     }),
 )
 
@@ -60,18 +68,50 @@ function StepIcon(props: {
     completed?: boolean
     icon: React.ReactNode
 }) {
+    const theme = useTheme()
+
     return (
-        <StepIconRoot ownerState={{ active: !!props.active, completed: !!props.completed }}>
-            {props.completed ? <Check sx={{ fontSize: 18 }} /> : props.icon}
+        <StepIconRoot ownerState={{ active: props.active, completed: props.completed }}>
+            {props.completed ? (
+                <Check
+                    sx={{
+                        fontSize: 18,
+                        color: 'white',
+                        filter: 'drop-shadow(0 2px 2px rgba(0,0,0,0.2))'
+                    }}
+                />
+            ) : (
+                props.active ? (
+                    <Box sx={{
+                        width: 8,
+                        height: 8,
+                        borderRadius: '50%',
+                        bgcolor: 'primary.main',
+                        boxShadow: `0 0 0 4px ${'white'} 20`
+                    }} />
+                ) : (
+                    <RadioButtonUnchecked sx={{ fontSize: 12 }} />
+                )
+            )}
         </StepIconRoot>
     )
 }
 
 export const WorkoutBuilderStepper = ({ steps, currentStep }: StepperProps) => {
     const activeStep = steps.findIndex(step => step.key === currentStep)
+    const theme = useTheme()
 
     return (
-        <Box sx={{ width: '100%' }}>
+        <Box sx={{
+            width: '100%',
+            px: { xs: 1, sm: 3 },
+            py: 2,
+            borderRadius: 0,
+            '& .MuiStepLabel-label': {
+                color: 'white !important',
+                opacity: theme => theme.palette.mode === 'dark' ? 0.7 : 0.9,
+            }
+        }}>
             <Stepper
                 activeStep={activeStep}
                 alternativeLabel
@@ -84,10 +124,14 @@ export const WorkoutBuilderStepper = ({ steps, currentStep }: StepperProps) => {
                             sx={{
                                 '& .MuiStepLabel-label': {
                                     mt: 1,
-                                    typography: 'body2',
+                                    fontSize: { xs: '0.75rem', sm: '0.875rem' },
+                                    transition: 'all 0.3s ease',
+                                    color: index === activeStep ?
+                                        'primary.main' :
+                                        'text.secondary',
+                                    fontWeight: index === activeStep ? 600 : 400,
                                     ...(index === activeStep && {
-                                        color: 'primary.main',
-                                        fontWeight: 'bold',
+                                        transform: 'scale(1.05)',
                                     }),
                                 },
                             }}
