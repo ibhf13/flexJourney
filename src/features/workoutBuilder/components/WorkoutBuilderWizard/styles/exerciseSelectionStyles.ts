@@ -67,5 +67,35 @@ export const exerciseSelectionStyles = (theme: Theme) => ({
         justifyContent: 'space-between',
         mt: 4,
         gap: 2
+    },
+    exerciseCountChip: {
+        background: `linear-gradient(135deg,
+            ${theme.palette.primary.main},
+            ${theme.palette.primary.dark})`
+    },
+    sectionTitle: {
+        display: 'flex',
+        alignItems: 'center',
+        gap: 1,
+        color: theme.palette.primary.main
+    },
+    backButton: {
+        borderRadius: 2,
+        borderColor: theme.palette.primary.main,
+        '&:hover': {
+            borderColor: theme.palette.primary.dark,
+            backgroundColor: `${theme.palette.primary.main}10`
+        }
+    },
+    submitButton: {
+        borderRadius: 2,
+        background: `linear-gradient(135deg,
+            ${theme.palette.primary.main},
+            ${theme.palette.primary.dark})`,
+        '&:hover': {
+            background: `linear-gradient(135deg,
+                ${theme.palette.primary.dark},
+                ${theme.palette.primary.main})`
+        }
     }
 })
