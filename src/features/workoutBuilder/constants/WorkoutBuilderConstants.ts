@@ -14,3 +14,5 @@ export const DIFFICULTY_LEVELS = [
         desc: 'Challenging workouts for experienced athletes'
     }
 ]
+
+export const AVAILABLE_DAYS = [1, 2, 3, 4, 5, 6, 7]

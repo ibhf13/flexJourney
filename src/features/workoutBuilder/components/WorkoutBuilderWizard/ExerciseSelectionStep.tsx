@@ -1,7 +1,8 @@
+import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import SearchIcon from '@mui/icons-material/Search'
 import { Box, Button, Chip, Fade, InputAdornment, Paper, Tab, Tabs, TextField, Typography, useTheme } from '@mui/material'
-import { useExerciseSelection } from '../../hooks/useExerciseSelection'
+import { useExerciseSelectionForm } from '../../hooks/useExerciseSelectionForm'
 import { ExerciseChip } from './ExerciseChip'
 import { SelectedExerciseItem } from './SelectedExerciseItem'
 import { exerciseSelectionStyles } from './styles/exerciseSelectionStyles'
@@ -20,11 +21,17 @@ export const ExerciseSelectionStep = () => {
         handleSearchChange,
         handleDayChange,
         navigateBack,
-        navigateToReview
-    } = useExerciseSelection()
+        handleSubmit,
+        onSubmit,
+        errors
+    } = useExerciseSelectionForm()
 
     return (
-        <Box sx={styles.container}>
+        <Box
+            component="form"
+            onSubmit={handleSubmit(onSubmit)}
+            sx={styles.container}
+        >
             <Paper elevation={0} sx={styles.tabsContainer}>
                 <Tabs
                     value={currentDayIndex}
@@ -39,18 +46,22 @@ export const ExerciseSelectionStep = () => {
                             label={
                                 <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                                     <span>{day.title}</span>
-                                    {day.exercises.length > 0 && (
-                                        <Chip
-                                            size="small"
-                                            label={day.exercises.length}
-                                            color="primary"
-                                            sx={{
-                                                background: `linear-gradient(135deg,
-                                                    ${theme.palette.primary.main},
-                                                    ${theme.palette.primary.dark})`
-                                            }}
-                                        />
-                                    )}
+                                    <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
+                                        {day.exercises.length > 0 && (
+                                            <Chip
+                                                size="small"
+                                                label={day.exercises.length}
+                                                color="primary"
+                                                sx={styles.exerciseCountChip}
+                                            />
+                                        )}
+                                        {errors.days?.[index]?.exercises && (
+                                            <ErrorOutlineIcon
+                                                color="error"
+                                                sx={{ fontSize: 16 }}
+                                            />
+                                        )}
+                                    </Box>
                                 </Box>
                             }
                             value={index}
@@ -76,12 +87,7 @@ export const ExerciseSelectionStep = () => {
 
             <Box sx={styles.exercisesContainer}>
                 <Paper elevation={0} sx={styles.exerciseList}>
-                    <Typography variant="h6" gutterBottom sx={{
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1,
-                        color: theme.palette.primary.main
-                    }}>
+                    <Typography variant="h6" gutterBottom sx={styles.sectionTitle}>
                         <FitnessCenterIcon />
                         Available Exercises
                     </Typography>
@@ -102,6 +108,11 @@ export const ExerciseSelectionStep = () => {
                         <Typography variant="h6" gutterBottom>
                             Selected Exercises for {workoutPlan.days?.[currentDayIndex]?.title}
                         </Typography>
+                        {errors.days?.[currentDayIndex]?.exercises && (
+                            <Typography color="error" variant="caption" sx={{ mb: 2, display: 'block' }}>
+                                {errors.days[currentDayIndex]?.exercises?.message}
+                            </Typography>
+                        )}
                         <Box sx={styles.scrollableContent}>
                             {currentDayExercises.map((exercise, index) => (
                                 <SelectedExerciseItem
@@ -133,7 +144,7 @@ export const ExerciseSelectionStep = () => {
                 </Button>
                 <Button
                     variant="contained"
-                    onClick={navigateToReview}
+                    type="submit"
                     disabled={!currentDayExercises.length}
                     sx={{
                         borderRadius: 2,
