@@ -32,6 +32,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
     setUserMenuAnchor(null)
   }
 
+
   return (
     <AppBar
       position="fixed"
@@ -42,7 +43,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
         borderBottom: '1px solid',
         borderColor: 'divider',
         width: '100%',
-        zIndex: (theme) => theme.zIndex.drawer + 1,
+        zIndex: 2,
       }}
     >
       <Toolbar sx={{ height: '100%' }}>

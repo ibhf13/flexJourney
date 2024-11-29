@@ -1,14 +1,10 @@
+import ResponsivePopup from '@/components/common/Popups/ResponsivePopup'
 import { useWorkoutPlans } from '@/features/workout/hooks/useWorkoutQuerys'
-import CloseIcon from '@mui/icons-material/Close'
 import {
     Box,
     Button,
-    Dialog,
     DialogActions,
-    DialogContent,
-    DialogTitle,
     FormControl,
-    IconButton,
     InputLabel,
     MenuItem,
     Select,
@@ -67,108 +63,85 @@ export const EditHistoryDialog = ({
         }
     }
 
+    const headerContent = (
+        <Typography variant="h6" component="span">
+            Edit Training Entry
+        </Typography>
+    )
+
     return (
-        <Dialog
+        <ResponsivePopup
             open={open}
             onClose={onClose}
             maxWidth="md"
-            fullWidth
-            fullScreen={fullScreen}
-            PaperProps={{
-                sx: {
-                    borderRadius: fullScreen ? 0 : 2,
-                    background: (theme) => theme.palette.background.paper,
-                }
+            headerContent={headerContent}
+            contentStyle={{
+                borderRadius: fullScreen ? 0 : 2,
+                background: theme.palette.background.paper,
             }}
         >
-            <DialogTitle>
-                <Stack
-                    direction="row"
-                    justifyContent="space-between"
-                    alignItems="center"
-                >
-                    <Typography variant="h6" component="span">
-                        Edit Training Entry
-                    </Typography>
-                    <IconButton
-                        edge="end"
-                        color="inherit"
-                        onClick={onClose}
-                        aria-label="close"
-                        size="small"
+
+
+            <Stack spacing={2} sx={{ mt: 1, overflow: 'hidden' }}>
+                <FormControl fullWidth disabled={isPlansLoading} >
+                    <InputLabel>Workout Plan</InputLabel>
+                    <Select
+                        value={selectedPlanId}
+                        label="Workout Plan"
+                        onChange={handlePlanChange}
+                        sx={{
+                            '& .MuiSelect-select': {
+                                py: 1.5,
+                            }
+                        }}
                     >
-                        <CloseIcon />
-                    </IconButton>
-                </Stack>
-            </DialogTitle>
+                        {plans?.map(plan => (
+                            <MenuItem key={plan.id} value={plan.id}>
+                                {plan.title} ({plan.level})
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
 
-            <DialogContent
-                sx={{
-                    pb: { xs: 2, sm: 3 },
-                    px: { xs: 2, sm: 3 }
-                }}
-            >
-                <Stack spacing={2} mt={1}>
-                    <FormControl fullWidth disabled={isPlansLoading}>
-                        <InputLabel>Workout Plan</InputLabel>
-                        <Select
-                            value={selectedPlanId}
-                            label="Workout Plan"
-                            onChange={handlePlanChange}
-                            sx={{
-                                '& .MuiSelect-select': {
-                                    py: 1.5,
-                                }
-                            }}
+                <FormControl fullWidth disabled={!selectedPlan || isPlansLoading}>
+                    <InputLabel>Workout Day</InputLabel>
+                    <Select
+                        value={selectedDayId}
+                        label="Workout Day"
+                        onChange={handleDayChange}
+                        sx={{
+                            '& .MuiSelect-select': {
+                                py: 1.5,
+                            }
+                        }}
+                    >
+                        {availableDays.map(day => (
+                            <MenuItem key={day.id} value={day.id}>
+                                {day.title}
+                            </MenuItem>
+                        ))}
+                    </Select>
+                </FormControl>
+
+                <AnimatePresence>
+                    {selectedDay && (
+                        <Box
+                            component={motion.div}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: -20 }}
                         >
-                            {plans?.map(plan => (
-                                <MenuItem key={plan.id} value={plan.id}>
-                                    {plan.title} ({plan.level})
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-
-                    <FormControl fullWidth disabled={!selectedPlan || isPlansLoading}>
-                        <InputLabel>Workout Day</InputLabel>
-                        <Select
-                            value={selectedDayId}
-                            label="Workout Day"
-                            onChange={handleDayChange}
-                            sx={{
-                                '& .MuiSelect-select': {
-                                    py: 1.5,
-                                }
-                            }}
-                        >
-                            {availableDays.map(day => (
-                                <MenuItem key={day.id} value={day.id}>
-                                    {day.title}
-                                </MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
-
-                    <AnimatePresence>
-                        {selectedDay && (
-                            <Box
-                                component={motion.div}
-                                initial={{ opacity: 0, y: 20 }}
-                                animate={{ opacity: 1, y: 0 }}
-                                exit={{ opacity: 0, y: -20 }}
-                            >
-                                <WorkoutHistoryExercises
-                                    exercises={exercises}
-                                    availableExercises={availableExercises}
-                                    onAddExercise={handleAddExercise}
-                                    onRemoveExercise={handleRemoveExercise}
-                                    onUpdateSets={handleUpdateSets}
-                                />
-                            </Box>
-                        )}
-                    </AnimatePresence>
-                </Stack>
-            </DialogContent>
+                            <WorkoutHistoryExercises
+                                exercises={exercises}
+                                availableExercises={availableExercises}
+                                onAddExercise={handleAddExercise}
+                                onRemoveExercise={handleRemoveExercise}
+                                onUpdateSets={handleUpdateSets}
+                            />
+                        </Box>
+                    )}
+                </AnimatePresence>
+            </Stack>
 
             <DialogActions
                 sx={{
@@ -199,6 +172,6 @@ export const EditHistoryDialog = ({
                     Save Changes
                 </Button>
             </DialogActions>
-        </Dialog>
+        </ResponsivePopup>
     )
 }

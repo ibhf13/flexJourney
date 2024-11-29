@@ -1,4 +1,4 @@
-import { ConfirmationDialog } from '@/components/common/dialogs/ConfirmationDialog'
+import { ConfirmationDialog } from '@/components/common/Popups/ConfirmationDialog'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
