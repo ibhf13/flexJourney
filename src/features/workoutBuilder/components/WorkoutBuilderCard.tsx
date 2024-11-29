@@ -1,7 +1,8 @@
-import { ConfirmationDialog } from '@/components/common/dialogs/ConfirmationDialog'
+import { ConfirmationDialog } from '@/components/common/Popups/ConfirmationDialog'
+import ResponsivePopup from '@/components/common/Popups/ResponsivePopup'
 import { Add } from '@mui/icons-material'
 import CloseIcon from '@mui/icons-material/Close'
-import { Box, Card, CardActionArea, Dialog, DialogContent, Fade, IconButton, LinearProgress, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { Box, Card, CardActionArea, DialogContent, IconButton, LinearProgress, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import { useState } from 'react'
 import { useWorkoutBuilderContext } from '../contexts/WorkoutBuilderContext'
@@ -78,31 +79,12 @@ const DialogHeader = styled(Box)(({ theme }) => ({
     }
 }))
 
-const HeaderTop = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'space-between',
-    padding: theme.spacing(2, 3),
-}))
-
-const StepIndicator = styled(Box)(({ theme }) => ({
-    display: 'flex',
-    alignItems: 'center',
-    gap: theme.spacing(1),
-    '& .MuiTypography-subtitle2': {
-        opacity: 0.8,
-        transition: 'opacity 0.3s ease'
-    },
-    '&:hover .MuiTypography-subtitle2': {
-        opacity: 1
-    }
-}))
 
 const STEPS = [
-    { key: 'basics', label: 'Plan Basics', progress: 25 },
-    { key: 'days', label: 'Training Days', progress: 50 },
-    { key: 'exercises', label: 'Select Exercises', progress: 75 },
-    { key: 'review', label: 'Review & Save', progress: 100 }
+    { key: 'basics', label: 'Plan Basics', progress: 10 },
+    { key: 'days', label: 'Training Days', progress: 35 },
+    { key: 'exercises', label: 'Select Exercises', progress: 60 },
+    { key: 'review', label: 'Review & Save', progress: 90 }
 ] as const
 
 interface WorkoutBuilderCardProps {
@@ -148,6 +130,56 @@ export const WorkoutBuilderCard = ({ onPlanCreated }: WorkoutBuilderCardProps) =
                 }} />
         }
     }
+
+    const headerContent = (
+        <>
+            <DialogHeader sx={{
+                display: 'flex',
+                alignItems: 'center',
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                p: theme.spacing(2, 3)
+            }}>
+                <WorkoutBuilderStepper
+                    steps={STEPS}
+                    currentStep={currentStep}
+                />
+                <IconButton
+                    onClick={handleClose}
+                    size="small"
+                    sx={{
+                        mb: 4,
+                        color: 'inherit',
+                        bgcolor: 'rgba(255, 255, 255, 0.1)',
+                        backdropFilter: 'blur(4px)',
+                        '&:hover': {
+                            bgcolor: 'rgba(255, 255, 255, 0.2)'
+                        }
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+            </DialogHeader>
+
+            <Box sx={{ position: 'relative' }}>
+                <LinearProgress
+                    variant="determinate"
+                    value={currentProgress}
+                    sx={{
+                        height: 6,
+                        background: theme.palette.divider,
+                        '& .MuiLinearProgress-bar': {
+                            transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
+                            background: `linear-gradient(to right,
+                            ${theme.palette.primary.main},
+                            ${theme.palette.primary.light})`
+                        }
+                    }}
+                />
+            </Box>
+        </>
+
+    )
 
     return (
         <>
@@ -211,67 +243,22 @@ export const WorkoutBuilderCard = ({ onPlanCreated }: WorkoutBuilderCardProps) =
                 </CardActionArea>
             </StyledCard>
 
-            <Dialog
+            <ResponsivePopup
                 open={open}
                 onClose={handleClose}
                 maxWidth="md"
-                fullScreen={isMobile}
-                TransitionComponent={Fade}
-                PaperProps={{
-                    sx: {
-                        borderRadius: { xs: 0, sm: 3 },
-                        overflow: 'hidden',
-                        background: `linear-gradient(135deg,
-                            ${theme.palette.background.paper},
-                            ${theme.palette.background.paper}95)`
-                    }
+                isCompleteCustomHeader={true}
+                headerContent={headerContent}
+                headerStyle={{
+                    background: theme => `linear-gradient(135deg, 
+                        ${theme.palette.primary.dark} 0%,
+                        ${theme.palette.primary.main} 100%)`,
+                    color: 'common.white',
+                    borderBottom: '1px solid',
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    width: '100%'
                 }}
             >
-                <DialogHeader sx={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    flexDirection: 'row',
-                    justifyContent: 'space-between',
-                    p: theme.spacing(2, 3)
-                }}>
-                    <WorkoutBuilderStepper
-                        steps={STEPS}
-                        currentStep={currentStep}
-                    />
-                    <IconButton
-                        onClick={handleClose}
-                        size="small"
-                        sx={{
-                            mb: 4,
-                            color: 'inherit',
-                            bgcolor: 'rgba(255, 255, 255, 0.1)',
-                            backdropFilter: 'blur(4px)',
-                            '&:hover': {
-                                bgcolor: 'rgba(255, 255, 255, 0.2)'
-                            }
-                        }}
-                    >
-                        <CloseIcon />
-                    </IconButton>
-                </DialogHeader>
-
-                <Box sx={{ position: 'relative' }}>
-                    <LinearProgress
-                        variant="determinate"
-                        value={currentProgress}
-                        sx={{
-                            height: 6,
-                            background: theme.palette.divider,
-                            '& .MuiLinearProgress-bar': {
-                                transition: 'transform 0.5s cubic-bezier(0.4, 0, 0.2, 1)',
-                                background: `linear-gradient(to right,
-                                    ${theme.palette.primary.main},
-                                    ${theme.palette.primary.light})`
-                            }
-                        }}
-                    />
-                </Box>
-
                 <StyledDialogContent>
                     <Box sx={{
                         flex: 1,
@@ -281,7 +268,7 @@ export const WorkoutBuilderCard = ({ onPlanCreated }: WorkoutBuilderCardProps) =
                         {renderStep()}
                     </Box>
                 </StyledDialogContent>
-            </Dialog>
+            </ResponsivePopup>
 
             <ConfirmationDialog
                 open={showConfirmDialog}

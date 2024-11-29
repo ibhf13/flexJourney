@@ -1,4 +1,4 @@
-import { ConfirmationDialog } from '@/components/common/dialogs/ConfirmationDialog'
+import { ConfirmationDialog } from '@/components/common/Popups/ConfirmationDialog'
 import RestartAltIcon from '@mui/icons-material/RestartAlt'
 import { Button, Tooltip } from '@mui/material'
 import { useState } from 'react'

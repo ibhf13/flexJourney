@@ -1,16 +1,14 @@
+import ResponsivePopup from '@/components/common/Popups/ResponsivePopup'
 import { Exercise } from '@/features/workout/types/WorkoutTypes'
 import AddIcon from '@mui/icons-material/Add'
 import DeleteIcon from '@mui/icons-material/Delete'
 import {
     Box,
     Button,
-    Dialog,
     DialogActions,
-    DialogContent,
-    DialogTitle,
     IconButton,
     TextField,
-    Typography,
+    Typography
 } from '@mui/material'
 import { useState } from 'react'
 import { ExerciseSet, WeightUnit } from '../types/ProgressTypes'
@@ -82,49 +80,47 @@ export const ExerciseFormDialog = ({
         set.reps > 0
     )
 
+    const headerContent = (
+        <Typography variant="h6">
+            {exercise.title}
+        </Typography>
+    )
+
     return (
-        <Dialog
+        <ResponsivePopup
             open={open}
             onClose={onClose}
             maxWidth="sm"
-            fullWidth
-            PaperProps={{
-                sx: { bgcolor: 'background.paper' }
+            title={exercise.title}
+            headerContent={headerContent}
+            contentStyle={{
+                bgcolor: 'background.paper'
             }}
         >
-            <DialogTitle sx={{
-                borderBottom: '1px solid rgba(255,255,255,0.1)',
-                background: 'rgba(0,0,0,0.2)'
-            }}>
-                {exercise.title}
-            </DialogTitle>
-            <DialogContent>
-                <Box sx={{ mb: 3, mt: 2 }}>
-                    <Typography variant="subtitle1" gutterBottom>
-                        Sets
-                    </Typography>
-                    {sets.map((set, index) => (
-                        <SetInputRow
-                            key={index}
-                            set={set}
-                            index={index}
-                            onSetChange={handleSetChange}
-                            onRemove={handleRemoveSet}
-                            isRemoveDisabled={sets.length === 1}
-                        />
-                    ))}
-                    <Button
-                        startIcon={<AddIcon />}
-                        onClick={handleAddSet}
-                        variant="outlined"
-                        size="small"
-                        sx={{ mt: 2 }}
-                    >
-                        Add Set
-                    </Button>
-                </Box>
-
-            </DialogContent>
+            <Box sx={{ mb: 3, mt: 2 }}>
+                <Typography variant="subtitle1" gutterBottom>
+                    Sets
+                </Typography>
+                {sets.map((set, index) => (
+                    <SetInputRow
+                        key={index}
+                        set={set}
+                        index={index}
+                        onSetChange={handleSetChange}
+                        onRemove={handleRemoveSet}
+                        isRemoveDisabled={sets.length === 1}
+                    />
+                ))}
+                <Button
+                    startIcon={<AddIcon />}
+                    onClick={handleAddSet}
+                    variant="outlined"
+                    size="small"
+                    sx={{ mt: 2 }}
+                >
+                    Add Set
+                </Button>
+            </Box>
             <DialogActions sx={{ p: 2, gap: 1 }}>
                 <Button onClick={onClose} disabled={isLoading}>
                     Cancel
@@ -143,7 +139,7 @@ export const ExerciseFormDialog = ({
                     {isLoading ? 'Saving...' : 'Save Progress'}
                 </Button>
             </DialogActions>
-        </Dialog>
+        </ResponsivePopup>
     )
 }
 

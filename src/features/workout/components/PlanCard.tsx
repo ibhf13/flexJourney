@@ -1,6 +1,6 @@
 import { BaseCard } from '@/components/common/Cards'
-import { ConfirmationDialog } from '@/components/common/dialogs/ConfirmationDialog'
 import { DifficultyChip } from '@/components/common/Forms/DifficultyChip'
+import { ConfirmationDialog } from '@/components/common/Popups/ConfirmationDialog'
 import DeleteIcon from '@mui/icons-material/Delete'
 import PersonIcon from '@mui/icons-material/Person'
 import { Box, CardContent, Chip, Menu, MenuItem, Typography } from '@mui/material'

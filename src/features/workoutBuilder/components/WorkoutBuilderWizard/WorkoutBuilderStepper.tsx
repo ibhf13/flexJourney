@@ -99,16 +99,12 @@ function StepIcon(props: {
 
 export const WorkoutBuilderStepper = ({ steps, currentStep }: StepperProps) => {
     const activeStep = steps.findIndex(step => step.key === currentStep)
-    const theme = useTheme()
 
     return (
         <Box sx={{
             width: '100%',
-            px: { xs: 1, sm: 3 },
-            py: 2,
             borderRadius: 0,
             '& .MuiStepLabel-label': {
-                color: 'white !important',
                 opacity: theme => theme.palette.mode === 'dark' ? 0.7 : 0.9,
             }
         }}>

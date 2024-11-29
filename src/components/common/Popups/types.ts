@@ -1,31 +1,28 @@
-import { DialogProps, DrawerProps } from '@mui/material'
+import { DialogProps, SwipeableDrawerProps, SxProps, Theme } from '@mui/material'
 
 export interface BasePopupProps {
   open: boolean
   onClose: () => void
+  headerStyle?: SxProps<Theme>
+  headerContent?: JSX.Element
+  icon?: React.ReactNode
+  iconStyle?: SxProps<Theme>
+  contentStyle?: SxProps<Theme>
   title?: string
   subtitle?: string
-  showCloseButton?: boolean
-  fullHeight?: boolean
-  maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
-  actions?: React.ReactNode
   children: React.ReactNode
-}
-
-export interface DialogPopupProps extends BasePopupProps {
-  fullScreen?: boolean
   preventBackdropClick?: boolean
+  isCompleteCustomHeader?: boolean
+
+}
+
+export interface ResponsivePopupProps extends BasePopupProps {
+  maxWidth?: 'xs' | 'sm' | 'md' | 'lg' | 'xl'
+  fullHeight?: boolean
+  drawerAnchor?: SwipeableDrawerProps['anchor']
+  drawerHeight?: string
+  swipeAreaWidth?: number
+  disableSwipeToOpen?: boolean
   customDialogProps?: Partial<DialogProps>
-}
-
-export interface SideDrawerProps extends BasePopupProps {
-  anchor?: 'left' | 'right'
-  width?: number | string
-  customDrawerProps?: Partial<DrawerProps>
-}
-
-export interface MobileDrawerProps extends BasePopupProps {
-  anchor?: 'bottom' | 'left' | 'right' | 'top'
-  height?: number | string
-  customDrawerProps?: Partial<DrawerProps>
+  customDrawerProps?: Partial<SwipeableDrawerProps>
 }

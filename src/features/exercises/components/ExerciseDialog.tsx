@@ -1,8 +1,8 @@
+import { ResponsivePopup } from '@/components/common/Popups'
 import { Exercise } from '@/features/exercises/types/ExerciseTypes'
-import { Box, Dialog, DialogContent, Grid, useMediaQuery, useTheme } from '@mui/material'
+import { Box, Grid, Typography } from '@mui/material'
 import React from 'react'
 import { ExerciseDetails } from './ExerciseDetails'
-import { ExerciseModalHeader } from './ExerciseModalHeader'
 import { ExerciseVideo } from './ExerciseVideo'
 
 interface ExerciseDialogProps {
@@ -16,46 +16,36 @@ export const ExerciseDialog: React.FC<ExerciseDialogProps> = ({
     open,
     onClose,
 }) => {
-    const theme = useTheme()
-    const isMobile = useMediaQuery(theme.breakpoints.down('md'))
 
     return (
-        <Dialog
+        <ResponsivePopup
             open={open}
             onClose={onClose}
             maxWidth="lg"
-            fullWidth
-            fullScreen={isMobile}
+            headerContent={<Typography variant="h6" component="span">{exercise.title}</Typography>}
         >
-            <ExerciseModalHeader
-                title={exercise.title}
-                onClose={onClose}
-            />
-
-            <DialogContent>
-                <Grid container spacing={3}>
-                    <Grid item xs={12} md={6}>
-                        <ExerciseDetails
-                            imageUrl={exercise.imageUrl}
-                            description={exercise.description}
-                            level={exercise.level}
-                            category={exercise.category}
-                            type={exercise.type}
-                            defaultRestPeriod={exercise.defaultRestPeriod}
-                        />
-                    </Grid>
-
-                    <Grid item xs={12} md={6}>
-                        <Box sx={{ height: '100%' }}>
-                            <ExerciseVideo
-                                title={exercise.title}
-                                videoUrl={exercise.videoUrl}
-                                expanded={true}
-                            />
-                        </Box>
-                    </Grid>
+            <Grid container spacing={3}>
+                <Grid item xs={12} md={6}>
+                    <ExerciseDetails
+                        imageUrl={exercise.imageUrl}
+                        description={exercise.description}
+                        level={exercise.level}
+                        category={exercise.category}
+                        type={exercise.type}
+                        defaultRestPeriod={exercise.defaultRestPeriod}
+                    />
                 </Grid>
-            </DialogContent>
-        </Dialog>
+
+                <Grid item xs={12} md={6}>
+                    <Box sx={{ height: '100%' }}>
+                        <ExerciseVideo
+                            title={exercise.title}
+                            videoUrl={exercise.videoUrl}
+                            expanded={true}
+                        />
+                    </Box>
+                </Grid>
+            </Grid>
+        </ResponsivePopup>
     )
 }

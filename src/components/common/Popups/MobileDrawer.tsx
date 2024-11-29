@@ -1,106 +1,99 @@
-import CloseIcon from '@mui/icons-material/Close'
 import {
   Box,
-  Divider,
-  Drawer,
-  IconButton,
-  Typography,
+  SwipeableDrawer,
+  SwipeableDrawerProps,
+  styled,
   useMediaQuery,
-  useTheme,
+  useTheme
 } from '@mui/material'
-import { MobileDrawerProps } from './types'
+import PopupHeader from './PopupHeader'
+import { StyledDialogContent } from './styles'
+import { BasePopupProps } from './types'
+
+interface MobileDrawerProps extends BasePopupProps {
+  anchor?: SwipeableDrawerProps['anchor']
+  customDrawerProps?: Partial<SwipeableDrawerProps>
+  drawerHeight?: string
+  swipeAreaWidth?: number
+  disableSwipeToOpen?: boolean
+}
+
+const DrawerContent = styled(Box)(({ theme }) => ({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  overflow: 'hidden',
+  backgroundColor: theme.palette.background.paper,
+}))
 
 const MobileDrawer = ({
   open,
   onClose,
-  title,
-  subtitle,
   children,
-  showCloseButton = true,
+  headerStyle,
+  icon,
+  iconStyle,
+  headerContent,
+  contentStyle,
+  drawerHeight = '100dvh',
   anchor = 'bottom',
-  height = '50%',
-  actions,
   customDrawerProps,
+  swipeAreaWidth = 20,
+  disableSwipeToOpen = true,
+  isCompleteCustomHeader = false,
 }: MobileDrawerProps) => {
   const theme = useTheme()
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
-  const isVertical = anchor === 'bottom' || anchor === 'top'
+  const iOS = typeof navigator !== 'undefined' && /iPad|iPhone|iPod/.test(navigator.userAgent)
 
-  if (!isMobile) return null
+  const handleOpen = () => {
+    // Required by SwipeableDrawer, but we disable swipe to open by default
+  }
 
+  const paperProps: SwipeableDrawerProps['PaperProps'] = {
+    sx: {
+      height: anchor === 'bottom' ? drawerHeight : '100%',
+      width: ['left', 'right'].includes(anchor) ? (isMobile ? '100%' : '400px') : '100%',
+      borderTopLeftRadius: anchor === 'bottom' ? 16 : 0,
+      borderTopRightRadius: anchor === 'bottom' ? 16 : 0,
+      position: 'fixed',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      ...customDrawerProps?.PaperProps?.sx,
+    },
+    'aria-modal': 'true',
+    role: 'dialog',
+  }
 
   return (
-    <Drawer
+    <SwipeableDrawer
       anchor={anchor}
       open={open}
       onClose={onClose}
-      PaperProps={{
-        sx: {
-          [isVertical ? 'height' : 'width']: height,
-          borderTopLeftRadius: anchor === 'bottom' ? 16 : 0,
-          borderTopRightRadius: anchor === 'bottom' ? 16 : 0,
-        },
-      }}
+      onOpen={handleOpen}
+      disableBackdropTransition={!iOS}
+      disableDiscovery={iOS}
+      disableSwipeToOpen={disableSwipeToOpen}
+      swipeAreaWidth={swipeAreaWidth}
+      PaperProps={paperProps}
       {...customDrawerProps}
     >
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: 'column',
-          height: '100%',
-        }}
-      >
-        {anchor === 'bottom' && (
-          <Box
-            sx={{
-              width: 40,
-              height: 4,
-              backgroundColor: 'grey.300',
-              borderRadius: 2,
-              margin: '8px auto',
-            }}
-          />
-        )}
-        <Box
-          sx={{
-            p: 2,
-            display: 'flex',
-            alignItems: 'flex-start',
-            justifyContent: 'space-between',
-          }}
+      <DrawerContent>
+        <PopupHeader
+          onClose={onClose}
+          headerStyle={headerStyle}
+          icon={icon}
+          iconStyle={iconStyle}
+          isCompleteCustomHeader={isCompleteCustomHeader}
         >
-          <Box>
-            <Typography variant="h6">{title}</Typography>
-            {subtitle && (
-              <Typography variant="subtitle2" color="text.secondary">
-                {subtitle}
-              </Typography>
-            )}
-          </Box>
-          {showCloseButton && (
-            <IconButton aria-label="close" onClick={onClose} sx={{ ml: 2 }}>
-              <CloseIcon />
-            </IconButton>
-          )}
-        </Box>
-        <Divider />
-        <Box
-          sx={{
-            flexGrow: 1,
-            p: 2,
-            overflowY: 'auto',
-          }}
-        >
+          {headerContent}
+        </PopupHeader>
+        <StyledDialogContent sx={contentStyle}>
           {children}
-        </Box>
-        {actions && (
-          <>
-            <Divider />
-            <Box sx={{ p: 2 }}>{actions}</Box>
-          </>
-        )}
-      </Box>
-    </Drawer>
+        </StyledDialogContent>
+      </DrawerContent>
+    </SwipeableDrawer>
   )
 }
 
