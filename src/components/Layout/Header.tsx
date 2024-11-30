@@ -43,7 +43,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
         borderBottom: '1px solid',
         borderColor: 'divider',
         width: '100%',
-        zIndex: 2,
+        zIndex: theme.zIndex.drawer + 1,
       }}
     >
       <Toolbar sx={{ height: '100%' }}>

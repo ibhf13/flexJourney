@@ -52,7 +52,7 @@ const MobileDrawer = ({
 
   const paperProps: SwipeableDrawerProps['PaperProps'] = {
     sx: {
-      height: anchor === 'bottom' ? drawerHeight : '100%',
+      height: drawerHeight,
       width: ['left', 'right'].includes(anchor) ? (isMobile ? '100%' : '400px') : '100%',
       borderTopLeftRadius: anchor === 'bottom' ? 16 : 0,
       borderTopRightRadius: anchor === 'bottom' ? 16 : 0,
@@ -78,6 +78,7 @@ const MobileDrawer = ({
       swipeAreaWidth={swipeAreaWidth}
       PaperProps={paperProps}
       {...customDrawerProps}
+      sx={{ zIndex: theme.zIndex.drawer + 2 }}
     >
       <DrawerContent>
         <PopupHeader

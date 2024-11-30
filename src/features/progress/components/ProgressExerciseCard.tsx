@@ -1,7 +1,9 @@
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import { ExerciseCard } from '@/features/exercises/components/ExerciseCard'
+import { ExerciseDialog } from '@/features/exercises/components/ExerciseDialog'
 import { Exercise } from '@/features/workout/types/WorkoutTypes'
-import { Box } from '@mui/material'
+import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
+import { Box, IconButton, alpha } from '@mui/material'
 import { useState } from 'react'
 import { useProgress } from '../hooks/useProgress'
 import { ExerciseSet } from '../types/ProgressTypes'
@@ -20,6 +22,7 @@ export const ProgressExerciseCard = ({
     isCompleted
 }: ProgressExerciseCardProps) => {
     const [formOpen, setFormOpen] = useState(false)
+    const [infoOpen, setInfoOpen] = useState(false)
     const { user } = useAuth()
     const { progressState, handleExerciseProgress } = useProgress()
 
@@ -41,8 +44,42 @@ export const ProgressExerciseCard = ({
         setFormOpen(true)
     }
 
+    const handleInfoClick = (event: React.MouseEvent) => {
+        event.stopPropagation()
+        setInfoOpen(true)
+    }
+
     return (
         <Box sx={{ position: 'relative' }}>
+            {!isCompleted && (
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: 12,
+                        right: 12,
+                        zIndex: 1,
+                        borderRadius: '50%',
+                        boxShadow: 2,
+                    }}
+                >
+                    <IconButton
+                        onClick={handleInfoClick}
+                        sx={{
+                            backgroundColor: (theme) => alpha(theme.palette.background.paper, 0.9),
+                            color: 'primary.main',
+                            transition: 'all 0.2s ease-in-out',
+                            '&:hover': {
+                                backgroundColor: (theme) => alpha(theme.palette.background.paper, 1),
+                                transform: 'scale(1.1)',
+                            },
+                        }}
+                        size="small"
+                        aria-label="exercise information"
+                    >
+                        <InfoOutlinedIcon fontSize="small" />
+                    </IconButton>
+                </Box>
+            )}
             <ExerciseCard
                 exercise={exercise}
                 onClick={handleCardClick}
@@ -53,7 +90,12 @@ export const ProgressExerciseCard = ({
                 open={formOpen}
                 onClose={() => setFormOpen(false)}
                 onSave={handleSaveProgress}
-                isLoading={progressState.progressId ? false : true}
+                isLoading={!progressState.progressId}
+            />
+            <ExerciseDialog
+                exercise={exercise}
+                open={infoOpen}
+                onClose={() => setInfoOpen(false)}
             />
         </Box>
     )
