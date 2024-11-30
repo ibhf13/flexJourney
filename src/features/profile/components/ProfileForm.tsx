@@ -56,6 +56,7 @@ export const ProfileForm = ({
             onClose={handleClose}
             maxWidth="md"
             headerContent={dialogHeader}
+            fullHeight
         >
             <DialogContent sx={{ p: 1 }}>
                 <Grid container spacing={2} >

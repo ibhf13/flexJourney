@@ -14,7 +14,7 @@ const ResponsivePopup = ({
     preventBackdropClick = false,
     maxWidth = 'sm',
     drawerAnchor = 'bottom',
-    drawerHeight = '90vh',
+    drawerHeight = '90dvh',
     swipeAreaWidth = 20,
     disableSwipeToOpen = true,
     contentStyle,
@@ -32,7 +32,7 @@ const ResponsivePopup = ({
             <MobileDrawer
                 open={open}
                 anchor={drawerAnchor}
-                drawerHeight={drawerHeight}
+                drawerHeight={fullHeight ? '100%' : drawerHeight}
                 swipeAreaWidth={swipeAreaWidth}
                 disableSwipeToOpen={disableSwipeToOpen}
                 customDrawerProps={customDrawerProps}
