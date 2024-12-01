@@ -17,7 +17,8 @@ export const Progress = () => {
         error,
         progressState,
         handlePlanSelect,
-        handleDaySelect
+        handleDaySelect,
+        completedDays
     } = useProgress()
 
     const [dialogOpen, setDialogOpen] = useState(false)
@@ -60,6 +61,7 @@ export const Progress = () => {
                             days={progressState.selectedPlan.days}
                             currentDayIndex={progressState.currentDayIndex}
                             onDaySelect={handleDaySelect}
+                            completedDays={completedDays}
                         />
 
                         {progressState.selectedDay && (
