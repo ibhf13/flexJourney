@@ -10,7 +10,8 @@ import { useProgressQuery } from './useProgressQuery'
 
 const initialProgressState: ProgressState = {
     currentDayIndex: 0,
-    progressId: null
+    progressId: null,
+    isInitialized: false
 }
 
 export const useProgress = () => {
@@ -19,6 +20,7 @@ export const useProgress = () => {
     const {
         progress,
         isLoading: progressLoading,
+        error: progressError,
         initializeUserProgress,
         saveUserExerciseProgress
     } = useProgressQuery()
@@ -28,19 +30,26 @@ export const useProgress = () => {
 
     // Effect to sync progress state with current plan
     useEffect(() => {
-        if (!progress || !plans) return
+        if (!progress || !plans || plansLoading || progressLoading) return
 
         const currentPlan = plans.find(plan => plan.id === progress.planId)
 
-        if (!currentPlan) return
-
-        setProgressState({
-            selectedPlan: currentPlan,
-            selectedDay: currentPlan.days[progress.currentDay],
-            currentDayIndex: progress.currentDay,
-            progressId: progress.progressId
-        })
-    }, [progress, plans])
+        if (currentPlan) {
+            setProgressState({
+                selectedPlan: currentPlan,
+                selectedDay: currentPlan.days[progress.currentDay],
+                currentDayIndex: progress.currentDay,
+                progressId: progress.progressId,
+                isInitialized: true
+            })
+        } else {
+            // Reset state if no plan is found
+            setProgressState({
+                ...initialProgressState,
+                isInitialized: true
+            })
+        }
+    }, [progress, plans, plansLoading, progressLoading])
 
     const handlePlanSelect = async (plan: WorkoutPlan) => {
         if (!user) {
@@ -54,7 +63,8 @@ export const useProgress = () => {
                 selectedPlan: plan,
                 selectedDay: plan.days[0],
                 currentDayIndex: 0,
-                progressId: newProgressId
+                progressId: newProgressId,
+                isInitialized: true
             })
         } catch (error) {
             console.error(PROGRESS_CONSTANTS.MESSAGES.ERROR.INIT_FAILED, error)
@@ -121,8 +131,9 @@ export const useProgress = () => {
 
     return {
         plans,
-        isLoading: plansLoading || progressLoading,
-        error: plansError,
+        isLoading: plansLoading || progressLoading || !progressState.isInitialized,
+        needsPlanSelection: progressState.isInitialized && !progressState.selectedPlan,
+        error: plansError || progressError,
         progressState,
         handlePlanSelect,
         handleDaySelect,

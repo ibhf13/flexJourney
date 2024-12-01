@@ -55,4 +55,5 @@ export interface ProgressState {
     selectedDay?: WorkoutDay
     currentDayIndex: number
     progressId: string | null
+    isInitialized: boolean
 }
