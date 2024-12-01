@@ -10,10 +10,11 @@ export const useWorkoutDays = (planId: string | undefined) => {
     })
 }
 
-export const useWorkoutPlans = () => {
+export const useWorkoutPlans = (userId: string) => {
     return useQuery({
-        queryKey: ['workoutPlans'],
-        queryFn: fetchWorkoutPlans
+        queryKey: ['workoutPlans', userId],
+        queryFn: () => fetchWorkoutPlans(userId),
+        enabled: !!userId
     })
 }
 
