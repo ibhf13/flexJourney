@@ -35,21 +35,42 @@ export const useProgress = () => {
         const currentPlan = plans.find(plan => plan.id === progress.planId)
 
         if (currentPlan) {
-            setProgressState({
+            setProgressState(prev => ({
                 selectedPlan: currentPlan,
-                selectedDay: currentPlan.days[progress.currentDay],
-                currentDayIndex: progress.currentDay,
+                currentDayIndex: prev.currentDayIndex < currentPlan.days.length ?
+                    prev.currentDayIndex :
+                    progress.currentDay,
+                selectedDay: currentPlan.days[prev.currentDayIndex < currentPlan.days.length ?
+                    prev.currentDayIndex :
+                    progress.currentDay],
                 progressId: progress.progressId,
                 isInitialized: true
-            })
+            }))
         } else {
-            // Reset state if no plan is found
             setProgressState({
                 ...initialProgressState,
                 isInitialized: true
             })
         }
     }, [progress, plans, plansLoading, progressLoading])
+
+    // Helper function to check if a day is completed
+    const isDayCompleted = (dayId: string): boolean => {
+        if (!progress?.exercises[dayId]) return false
+
+        const dayProgress = progress.exercises[dayId]
+        const dayExercises = progressState.selectedPlan?.days.find(d => d.id === dayId)?.exercises || []
+
+        return dayProgress.exercises.length === dayExercises.length &&
+            dayProgress.exercises.every(ex => ex.isCompleted)
+    }
+
+    // Get completed days
+    const completedDays = new Set(
+        Object.entries(progress?.exercises || {})
+            .filter(([dayId]) => isDayCompleted(dayId))
+            .map(([dayId]) => dayId)
+    )
 
     const handlePlanSelect = async (plan: WorkoutPlan) => {
         if (!user) {
@@ -135,6 +156,7 @@ export const useProgress = () => {
         needsPlanSelection: progressState.isInitialized && !progressState.selectedPlan,
         error: plansError || progressError,
         progressState,
+        completedDays,
         handlePlanSelect,
         handleDaySelect,
         handleExerciseProgress
