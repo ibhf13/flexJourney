@@ -7,7 +7,7 @@ import { WorkoutBuilderCard } from '@/features/workoutBuilder/components/Workout
 import { Container, Grid, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 
-export const PlanPage = () => {
+const PlanPage = () => {
   const { user } = useAuth()
   const navigate = useNavigate()
   const { data: plans, isLoading, error } = useWorkoutPlans()
@@ -49,3 +49,4 @@ export const PlanPage = () => {
   )
 }
 
+export default PlanPage

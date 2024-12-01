@@ -7,7 +7,7 @@ import { ViewToggle } from '@/features/exercises/components/ViewToggle'
 import { useExercisesList } from '@/features/exercises/hooks/useExercisesList'
 import { Box, Container, Grid, List, Pagination, Paper, useMediaQuery, useTheme } from '@mui/material'
 
-export const ExercisesPage = () => {
+const ExercisesPage = () => {
     const {
         exercises,
         isExercisesLoading,
@@ -131,3 +131,5 @@ export const ExercisesPage = () => {
         </Container>
     )
 }
+
+export default ExercisesPage

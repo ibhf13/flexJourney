@@ -10,7 +10,7 @@ const STATS_PAGE_TEXTS = {
     NO_DATA: 'No statistics available. Start working out to see your progress!'
 } as const
 
-export const StatisticsPage = () => {
+const StatisticsPage = () => {
     const { stats, isLoading, error } = useStatistics()
 
     if (error) {
@@ -69,3 +69,5 @@ const StatsLoadingSkeleton = () => (
         </Grid>
     </Grid>
 )
+
+export default StatisticsPage

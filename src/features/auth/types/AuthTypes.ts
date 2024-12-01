@@ -7,7 +7,7 @@ export interface User {
 
 export interface AuthContextType {
   user: User | null
-  loading: boolean
+  isLoading: boolean
   error: string | null
   isAuthenticated: boolean
   currentUser: User | null
