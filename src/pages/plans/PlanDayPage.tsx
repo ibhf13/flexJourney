@@ -5,7 +5,7 @@ import { WorkoutDay } from '@/features/workout/types/WorkoutTypes'
 import { Alert, Box, Container, Grid, Typography } from '@mui/material'
 import { useNavigate, useParams } from 'react-router-dom'
 
-export const PlanDayPage = () => {
+const PlanDayPage = () => {
     const { planId } = useParams<{ planId: string }>()
     const navigate = useNavigate()
     const { isLoading, error, data: currentPlan } = useWorkoutDays(planId)
@@ -41,3 +41,5 @@ export const PlanDayPage = () => {
         </LoadingErrorWrapper>
     )
 }
+
+export default PlanDayPage

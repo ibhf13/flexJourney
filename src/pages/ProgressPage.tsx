@@ -1,5 +1,7 @@
 import { Progress } from '@/features/progress/components/Progress'
 
-export const ProgressPage = () => {
+const ProgressPage = () => {
     return <Progress />
 }
+
+export default ProgressPage

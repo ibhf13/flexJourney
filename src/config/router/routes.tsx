@@ -1,84 +1,104 @@
-import MainLayout from '@/components/Layout/MainLayout'
-import ComingSoonPage from '@/pages/ComingSoonPage'
-import { ExercisesPage } from '@/pages/ExercisesPage'
-import { HistoryPage } from '@/pages/HistoryPage'
-import HomePage from '@/pages/HomePage'
-import Login from '@/pages/Login'
-import { PlanDayPage } from '@/pages/plans/PlanDayPage'
-import { PlanExercisePage } from '@/pages/plans/PlanExercisePage'
-import { PlanPage } from '@/pages/plans/PlanPage'
-import ProfilePage from '@/pages/ProfilePage'
-import { ProgressPage } from '@/pages/ProgressPage'
-import ResetPassword from '@/pages/ResetPassword'
-import Signup from '@/pages/Signup'
-import { RouteObject } from 'react-router-dom'
+import { LoadingFallback } from '@/components/common/Layouts/LoadingFallback'
+import { MainLayout } from '@/components/Layout'
+import { ErrorBoundary } from '@/features/errorHandling/components/ErrorBoundary'
+import { lazy, Suspense } from 'react'
+import { ROUTES } from './routeConstants'
 
-export const publicRoutes = [
-    {
-        path: '/login',
-        element: <Login />,
-    },
-    {
-        path: '/signup',
-        element: <Signup />,
-    },
-    {
-        path: '/reset-password',
-        element: <ResetPassword />,
-    },
-]
+// Lazy loaded components
+const Login = lazy(() => import('@/pages/Login'))
+const Signup = lazy(() => import('@/pages/Signup'))
+const ResetPassword = lazy(() => import('@/pages/ResetPassword'))
+const HomePage = lazy(() => import('@/pages/HomePage'))
+const PlanPage = lazy(() => import('@/pages/plans/PlanPage'))
+const PlanDayPage = lazy(() => import('@/pages/plans/PlanDayPage'))
+const PlanExercisePage = lazy(() => import('@/pages/plans/PlanExercisePage'))
+const HistoryPage = lazy(() => import('@/pages/HistoryPage'))
+const ExercisesPage = lazy(() => import('@/pages/ExercisesPage'))
+const ProgressPage = lazy(() => import('@/pages/ProgressPage'))
+const ProfilePage = lazy(() => import('@/pages/ProfilePage'))
+const ComingSoonPage = lazy(() => import('@/pages/ComingSoonPage'))
 
-export const privateRoutes: RouteObject = {
-    path: '/',
-    element: <MainLayout />,
-    children: [
+const withSuspense = (Component: React.ComponentType) => (
+    <ErrorBoundary>
+        <Suspense fallback={<LoadingFallback />}>
+            <Component />
+        </Suspense>
+    </ErrorBoundary>
+)
+
+export const routes = {
+    publicRoutes: [
         {
-            path: '/',
-            element: <HomePage />,
+            path: ROUTES.AUTH.LOGIN,
+            element: withSuspense(Login),
+            title: 'Login'
         },
         {
-            path: 'plan',
-            element: <PlanPage />,
+            path: ROUTES.AUTH.SIGNUP,
+            element: withSuspense(Signup),
+            title: 'Sign Up'
         },
         {
-            path: '/plan/:planId',
-            element: <PlanDayPage />,
-        },
-        {
-            path: '/plan/:planId/day/:dayId',
-            element: <PlanExercisePage />
-        },
-        {
-            path: '/history',
-            element: <HistoryPage />
-        },
-        {
-            path: '/exercises',
-            element: <ExercisesPage />
-        },
-        {
-            path: '/progress',
-            element: <ProgressPage />
-        },
-        {
-            path: '/profile',
-            element: <ProfilePage />
-        },
-        {
-            path: '/statistics',
-            element: <ComingSoonPage />
-        },
-        {
-            path: '/Calendar',
-            element: <ComingSoonPage />
-        },
-        {
-            path: '/community',
-            element: <ComingSoonPage />
-        },
-        {
-            path: '/shop',
-            element: <ComingSoonPage />
-        },
+            path: ROUTES.AUTH.RESET_PASSWORD,
+            element: withSuspense(ResetPassword),
+            title: 'Reset Password'
+        }
     ],
+    privateRoutes: {
+        path: ROUTES.MAIN.HOME,
+        element: <MainLayout />,
+        children: [
+            {
+                path: ROUTES.MAIN.HOME,
+                element: withSuspense(HomePage),
+                title: 'Home'
+            },
+            {
+                path: ROUTES.MAIN.PLAN.ROOT,
+                element: withSuspense(PlanPage),
+                title: 'Plans'
+            },
+            {
+                path: ROUTES.MAIN.PLAN.DETAIL,
+                element: withSuspense(PlanDayPage),
+                title: 'Plan Details'
+            },
+            {
+                path: ROUTES.MAIN.PLAN.DAY,
+                element: withSuspense(PlanExercisePage),
+                title: 'Plan Exercises'
+            },
+            {
+                path: ROUTES.MAIN.HISTORY,
+                element: withSuspense(HistoryPage),
+                title: 'History'
+            },
+            {
+                path: ROUTES.MAIN.EXERCISES,
+                element: withSuspense(ExercisesPage),
+                title: 'Exercises'
+            },
+            {
+                path: ROUTES.MAIN.PROGRESS,
+                element: withSuspense(ProgressPage),
+                title: 'Progress'
+            },
+            {
+                path: ROUTES.MAIN.PROFILE,
+                element: withSuspense(ProfilePage),
+                title: 'Profile'
+            },
+            // Coming soon pages
+            ...[
+                ROUTES.MAIN.STATISTICS,
+                ROUTES.MAIN.CALENDAR,
+                ROUTES.MAIN.COMMUNITY,
+                ROUTES.MAIN.SHOP
+            ].map(path => ({
+                path,
+                element: withSuspense(ComingSoonPage),
+                title: path.slice(1).charAt(0).toUpperCase() + path.slice(2)
+            }))
+        ]
+    }
 }

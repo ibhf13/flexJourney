@@ -1,12 +1,12 @@
+import { VirtualizedList } from '@/components/common/VirtualizedList/VirtualizedList'
 import { DailySummary } from '@/features/history/components/DailySummary'
 import { useHistory } from '@/features/history/hooks/useHistory'
 import { groupHistoryByDate } from '@/features/history/utils/dateUtils'
 import { Box, CircularProgress, Container, Typography } from '@mui/material'
 import { motion } from 'framer-motion'
 
-export const HistoryPage = () => {
+const HistoryPage = () => {
     const { history, isLoading, error, isError } = useHistory()
-
     const groupedHistory = groupHistoryByDate(history)
 
     const renderContent = () => {
@@ -58,29 +58,21 @@ export const HistoryPage = () => {
         }
 
         return (
-            <Box
-                sx={{
-                    display: 'flex',
-                    flexDirection: 'column',
-                    gap: { xs: 2, md: 3 },
-                    p: { xs: 1, md: 0 },
-                    width: '100%',
-                }}
-            >
-                {groupedHistory.map(({ date, workouts }, index) => (
+            <VirtualizedList
+                items={groupedHistory}
+                height={600}
+                itemSize={200}
+                renderItem={({ item: { date, workouts }, index }) => (
                     <motion.div
                         key={date}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: index * 0.1 }}
                     >
-                        <DailySummary
-                            date={date}
-                            entries={workouts.map(workout => workout.entry)}
-                        />
+                        <DailySummary date={date} entries={workouts.map(workout => workout.entry)} />
                     </motion.div>
-                ))}
-            </Box>
+                )}
+            />
         )
     }
 
@@ -97,11 +89,6 @@ export const HistoryPage = () => {
                 px: { xs: 1, sm: 2, md: 3 },
                 py: { xs: 2, md: 4 },
                 overflowX: 'hidden',
-                '&::-webkit-scrollbar': {
-                    display: 'none'
-                },
-                scrollbarWidth: 'none',
-                msOverflowStyle: 'none'
             }}
         >
             <Box
@@ -132,3 +119,5 @@ export const HistoryPage = () => {
         </Container>
     )
 }
+
+export default HistoryPage

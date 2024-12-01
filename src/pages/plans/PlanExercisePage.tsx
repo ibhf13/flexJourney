@@ -4,7 +4,7 @@ import { useWorkoutDays } from '@/features/workout/hooks/useWorkoutQuerys'
 import { Box, Container, Typography } from '@mui/material'
 import { useParams } from 'react-router-dom'
 
-export const PlanExercisePage = () => {
+const PlanExercisePage = () => {
     const { planId, dayId } = useParams<{ planId: string; dayId: string }>()
     const { data: currentPlan, isLoading, error } = useWorkoutDays(planId)
     const currentDay = currentPlan?.days.find(day => day.id === dayId)
@@ -34,3 +34,5 @@ export const PlanExercisePage = () => {
         </LoadingErrorWrapper >
     )
 }
+
+export default PlanExercisePage

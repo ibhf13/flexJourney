@@ -10,7 +10,7 @@ const actions = [
         title: 'Start Workout',
         description: 'Choose from various workout plans',
         icon: <FitnessCenterIcon />,
-        path: '/plan',
+        path: '/progress',
         color: 'primary.main'
     },
     {

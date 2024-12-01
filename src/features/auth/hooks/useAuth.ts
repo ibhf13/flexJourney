@@ -8,7 +8,7 @@ import { useAuthError } from './useAuthError'
 
 export const useAuth = () => {
     const [user, setUser] = useState<User | null>(null)
-    const [loading, setLoading] = useState(true)
+    const [isLoading, setLoading] = useState(true)
     const [error, setError] = useState<string | null>(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const { handleError } = useErrorHandler()
@@ -91,7 +91,7 @@ export const useAuth = () => {
     return {
         user,
         currentUser: user,
-        loading,
+        isLoading,
         error,
         isAuthenticated,
         login,
