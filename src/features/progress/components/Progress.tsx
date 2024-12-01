@@ -8,6 +8,7 @@ import { ExerciseList } from './ExerciseList'
 import { NoPlanSelected } from './NoPlanSelected'
 import { PlanSelectorDialog } from './PlanSelectorDialog'
 import { ProgressHeader } from './ProgressHeader'
+import { ProgressSkeleton } from './ProgressSkeleton'
 
 export const Progress = () => {
     const {
@@ -36,7 +37,7 @@ export const Progress = () => {
     const handleClosePlanSelector = () => setDialogOpen(false)
 
     return (
-        <LoadingErrorWrapper isLoading={isLoading} error={error}>
+        <LoadingErrorWrapper isLoading={isLoading} error={error} loadingComponent={<ProgressSkeleton />}>
             <Container maxWidth="lg" sx={{ py: 4 }}>
                 <ProgressHeader
                     selectedPlan={progressState.selectedPlan}
