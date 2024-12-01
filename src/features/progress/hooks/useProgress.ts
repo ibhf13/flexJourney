@@ -16,7 +16,9 @@ const initialProgressState: ProgressState = {
 
 export const useProgress = () => {
     const { user } = useAuth()
-    const { data: plans, isLoading: plansLoading, error: plansError } = useWorkoutPlans()
+
+    console.log('user', user)
+    const { data: plans, isLoading: plansLoading, error: plansError } = useWorkoutPlans(user?.uid ?? '')
     const {
         progress,
         isLoading: progressLoading,
@@ -75,6 +77,11 @@ export const useProgress = () => {
     const handlePlanSelect = async (plan: WorkoutPlan) => {
         if (!user) {
             throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_USER)
+        }
+
+        // Validate plan ownership
+        if (plan.type === 'custom' && plan.userId !== user.uid) {
+            throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.UNAUTHORIZED_PLAN)
         }
 
         try {
