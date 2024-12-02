@@ -1,4 +1,5 @@
 import ResponsivePopup from '@/components/common/Popups/ResponsivePopup'
+import { useAuth } from '@/features/auth/hooks/useAuth'
 import { useWorkoutPlans } from '@/features/workout/hooks/useWorkoutQuerys'
 import {
     Box,
@@ -32,8 +33,9 @@ export const EditHistoryDialog = ({
     onSave
 }: EditHistoryDialogProps) => {
     const theme = useTheme()
+    const { user } = useAuth()
     const fullScreen = useMediaQuery(theme.breakpoints.down('sm'))
-    const { data: plans = [], isLoading: isPlansLoading } = useWorkoutPlans()
+    const { data: plans = [], isLoading: isPlansLoading } = useWorkoutPlans(user?.uid ?? "")
 
     const {
         selectedPlanId,
