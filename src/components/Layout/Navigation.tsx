@@ -57,7 +57,6 @@ const Navigation = ({ orientation = 'horizontal' }: NavigationProps) => {
           overflowY: 'auto',
           '&::-webkit-scrollbar': { display: 'none' },
           scrollbarWidth: 'none',
-          pb: isMobile ? '80px' : 0, // Add padding to prevent content from being hidden behind logout
         }}
       >
         <List component="nav">
@@ -109,8 +108,7 @@ const Navigation = ({ orientation = 'horizontal' }: NavigationProps) => {
           ))}
         </List>
       </Box>
-
-      {orientation === 'vertical' && (
+      {orientation === 'vertical' && !isMobile && (
         <Box
           sx={{
             position: 'sticky',
@@ -121,7 +119,6 @@ const Navigation = ({ orientation = 'horizontal' }: NavigationProps) => {
             borderTop: '1px solid',
             borderColor: 'divider',
             mt: 'auto',
-            pb: isMobile ? '56px' : 0, // Add padding for mobile bottom bar
           }}
         >
           <List>
