@@ -1,6 +1,7 @@
+import { useAuthContext } from '@/features/auth/contexts/AuthContext'
 import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
+import { AdminExerciseDialog } from '@/features/exercises/components/AdminExerciseDialog'
 import { ExerciseCard } from '@/features/exercises/components/ExerciseCard'
-import { ExerciseDialog } from '@/features/exercises/components/ExerciseDialog'
 import { ExerciseFilters } from '@/features/exercises/components/ExerciseFilters'
 import { ExerciseListItem } from '@/features/exercises/components/ExerciseListItem'
 import { ViewToggle } from '@/features/exercises/components/ViewToggle'
@@ -8,6 +9,8 @@ import { useExercisesList } from '@/features/exercises/hooks/useExercisesList'
 import { Box, Container, Grid, List, Pagination, Paper, useMediaQuery, useTheme } from '@mui/material'
 
 const ExercisesPage = () => {
+    const { user } = useAuthContext()
+    const isAdmin = user?.email === 'admin@example.com' // Replace with your admin check logic
     const {
         exercises,
         isExercisesLoading,
@@ -82,7 +85,8 @@ const ExercisesPage = () => {
                                 <Grid item xs={12} sm={6} md={4} lg={3} key={exercise.id}>
                                     <ExerciseCard
                                         exercise={exercise}
-                                        onClick={handleExerciseSelect}
+                                        onEdit={handleExerciseSelect}
+                                        isAdmin={isAdmin}
                                     />
                                 </Grid>
                             ))}
@@ -122,7 +126,7 @@ const ExercisesPage = () => {
             </Paper>
 
             {selectedExercise && (
-                <ExerciseDialog
+                <AdminExerciseDialog
                     exercise={selectedExercise}
                     open={!!selectedExercise}
                     onClose={handleCloseModal}

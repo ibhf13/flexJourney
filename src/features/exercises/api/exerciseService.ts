@@ -1,7 +1,7 @@
 import { db } from '@/config/firebase'
 import { COLLECTIONS } from '@/config/firebase/collections'
 import { Exercise } from "@/features/exercises/types/ExerciseTypes"
-import { collection, doc, getDoc, getDocs } from 'firebase/firestore'
+import { collection, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore'
 
 const EXERCISES_COLLECTION = COLLECTIONS.GLOBAL.EXERCISES
 
@@ -47,6 +47,24 @@ export const fetchCategories = async (): Promise<string[]> => {
     return Array.from(categories).sort()
   } catch (error) {
     console.error('Error fetching categories:', error)
+    throw error
+  }
+}
+
+export const updateExercise = async (exerciseId: string, updates: Partial<Exercise>): Promise<void> => {
+  try {
+    const exerciseRef = doc(db, EXERCISES_COLLECTION, exerciseId)
+    const timestamp = new Date()
+
+    const updateData = {
+      ...updates,
+      updatedAt: timestamp,
+      ...(updates.imageUrl && { imageUrl: updates.imageUrl }),
+    }
+
+    await updateDoc(exerciseRef, updateData)
+  } catch (error) {
+    console.error('Error updating exercise:', error)
     throw error
   }
 }
