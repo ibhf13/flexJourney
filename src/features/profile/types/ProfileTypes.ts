@@ -1,4 +1,3 @@
-import { Timestamp } from 'firebase/firestore'
 
 export type FitnessLevel = 'Beginner' | 'Intermediate' | 'Advanced'
 export type Gender = 'Male' | 'Female' | 'Other' | 'Prefer not to say'
@@ -35,7 +34,7 @@ export interface ProfileFormData extends BaseProfileData {
 export type UpdateProfileData = Partial<BaseProfileData> & {
     birthDate?: string
     photoURL?: string
-    updatedAt: Timestamp
+    updatedAt: string
     avatarUpdatedAt?: string
     email?: string
 }

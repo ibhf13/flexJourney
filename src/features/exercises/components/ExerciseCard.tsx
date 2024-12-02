@@ -1,20 +1,22 @@
 import { BaseCard, BaseCardContent } from '@/components/common/Cards'
 import { DifficultyLevel } from '@/features/workout/types/WorkoutTypes'
 import CheckCircleIcon from '@mui/icons-material/CheckCircle'
-import { Box, Chip, Typography } from '@mui/material'
+import EditIcon from '@mui/icons-material/Edit'
+import { Box, Chip, IconButton, Typography } from '@mui/material'
 import { alpha } from '@mui/material/styles'
 import { Exercise } from '../types/ExerciseTypes'
 
 interface ExerciseCardProps {
     exercise: Exercise
-    onClick?: (exercise: Exercise) => void
+    onEdit?: (exercise: Exercise) => void
+    isAdmin?: boolean
 }
 
-export const ExerciseCard = ({ exercise, onClick }: ExerciseCardProps) => {
+export const ExerciseCard = ({ exercise, onEdit, isAdmin }: ExerciseCardProps) => {
 
     const handleClick = () => {
-        if (onClick) {
-            onClick(exercise)
+        if (onEdit) {
+            onEdit(exercise)
         }
     }
 
@@ -70,6 +72,25 @@ export const ExerciseCard = ({ exercise, onClick }: ExerciseCardProps) => {
                     color="secondary"
                 />
             </BaseCardContent>
+            {isAdmin && (
+                <IconButton
+                    onClick={(e) => {
+                        e.stopPropagation()
+                        onEdit?.(exercise)
+                    }}
+                    sx={{
+                        position: 'absolute',
+                        top: 8,
+                        right: 8,
+                        bgcolor: 'background.paper',
+                        '&:hover': {
+                            bgcolor: 'action.hover',
+                        },
+                    }}
+                >
+                    <EditIcon />
+                </IconButton>
+            )}
         </BaseCard>
     )
 }
