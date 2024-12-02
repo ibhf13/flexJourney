@@ -4,7 +4,7 @@ import { useRef } from 'react'
 
 interface VirtualizedListProps<T> {
     items: T[]
-    height: number
+    height: number | string
     itemSize: number
     renderItem: (props: { item: T; index: number }) => React.ReactNode
 }
