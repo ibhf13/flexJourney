@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom'
 const PlanPage = () => {
   const { user } = useAuth()
   const navigate = useNavigate()
-  const { data: plans, isLoading, error } = useWorkoutPlans()
+  const { data: plans, isLoading, error } = useWorkoutPlans(user?.uid ?? "")
   const refreshPlans = useRefreshWorkoutPlans()
 
   const filteredPlans = plans?.filter(plan =>
