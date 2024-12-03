@@ -1,3 +1,4 @@
+import { ConfirmationDialog } from '@/components/common/Popups/ConfirmationDialog'
 import { useAuthContext } from '@/features/auth/contexts/AuthContext'
 import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
 import { AdminExerciseDialog } from '@/features/exercises/components/AdminExerciseDialog'
@@ -6,6 +7,7 @@ import { ExerciseDialog } from '@/features/exercises/components/ExerciseDialog'
 import { ExerciseFilters } from '@/features/exercises/components/ExerciseFilters'
 import { ExerciseListItem } from '@/features/exercises/components/ExerciseListItem'
 import { ViewToggle } from '@/features/exercises/components/ViewToggle'
+import { useAdminExercises } from '@/features/exercises/hooks/useAdminExercises'
 import { useExercisesList } from '@/features/exercises/hooks/useExercisesList'
 import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import AddIcon from '@mui/icons-material/Add'
@@ -37,6 +39,8 @@ const ExercisesPage = () => {
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
     const [selectedExerciseForEdit, setSelectedExerciseForEdit] = useState<Exercise | null>(null)
+    const { deleteExercise } = useAdminExercises()
+    const [exerciseToDelete, setExerciseToDelete] = useState<Exercise | null>(null)
 
     const handleOpenCreateModal = () => {
         setIsCreateModalOpen(true)
@@ -48,6 +52,22 @@ const ExercisesPage = () => {
 
     const handleExerciseEdit = (exercise: Exercise) => {
         setSelectedExerciseForEdit(exercise)
+    }
+
+    const handleExerciseDelete = (exercise: Exercise) => {
+        setExerciseToDelete(exercise)
+    }
+
+    const handleConfirmDelete = async () => {
+        if (exerciseToDelete?.id) {
+            try {
+                await deleteExercise(exerciseToDelete.id)
+                setExerciseToDelete(null)
+            } catch (error) {
+                console.error('Failed to delete exercise:', error)
+                // You might want to show an error message to the user here
+            }
+        }
     }
 
     return (
@@ -108,10 +128,11 @@ const ExercisesPage = () => {
                     {isGridView ? (
                         <Grid container spacing={{ xs: 2, sm: 3 }}>
                             {exercises.map(exercise => (
-                                <Grid item xs={12} sm={6} md={4} lg={3} key={`grid-${exercise.id}`}>
+                                <Grid item xs={12} sm={6} md={4} lg={3} key={exercise.id}>
                                     <ExerciseCard
                                         exercise={exercise}
                                         onEdit={handleExerciseEdit}
+                                        onDelete={handleExerciseDelete}
                                         onView={handleExerciseSelect}
                                         isAdmin={isAdmin}
                                     />
@@ -171,6 +192,14 @@ const ExercisesPage = () => {
                 open={isCreateModalOpen}
                 onClose={handleCloseCreateModal}
                 mode="create"
+            />
+            <ConfirmationDialog
+                open={!!exerciseToDelete}
+                title="Delete Exercise"
+                message="Are you sure you want to delete this exercise? This action cannot be undone."
+                onConfirm={handleConfirmDelete}
+                onCancel={() => setExerciseToDelete(null)}
+                buttonText="Delete"
             />
         </Container>
     )

@@ -10,7 +10,10 @@ export const fetchExercises = async (): Promise<Exercise[]> => {
     const exercisesRef = collection(db, EXERCISES_COLLECTION)
     const snapshot = await getDocs(exercisesRef)
 
-    return snapshot.docs.map(doc => doc.data() as Exercise)
+    return snapshot.docs.map(doc => ({
+      id: doc.id,
+      ...doc.data()
+    } as Exercise))
   } catch (error) {
     console.error('Error fetching exercises:', error)
     throw error
@@ -90,6 +93,10 @@ export const createExercise = async (exerciseData: Omit<Exercise, 'id'>): Promis
 }
 
 export const deleteExercise = async (exerciseId: string): Promise<void> => {
+  if (!exerciseId) {
+    throw new Error('Exercise ID is required')
+  }
+
   try {
     const exerciseRef = doc(db, EXERCISES_COLLECTION, exerciseId)
 

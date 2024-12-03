@@ -1,16 +1,15 @@
-import { DifficultyLevel } from "@/features/workout/types/WorkoutTypes"
 
 export interface Exercise {
     id: string
     title: string
     description: string
-    imageUrl: string
-    videoUrl: string
-    level: DifficultyLevel
-    type: string
-    defaultRestPeriod: number
+    imageUrl?: string
     category: string
-    isCompleted?: boolean
+    type: string
+    level: string
+    defaultRestPeriod: number
+    createdAt?: Date
+    updatedAt?: Date
 }
 
 export interface ExerciseSet {
