@@ -14,6 +14,7 @@ interface AdminExerciseDialogProps {
     exercise: Exercise | null
     onClose: () => void
     open: boolean
+    mode: 'create' | 'edit'
 }
 
 const ImageUploadBox = styled(Box)(({ theme }) => ({
@@ -30,8 +31,8 @@ const ImageUploadBox = styled(Box)(({ theme }) => ({
     position: 'relative',
 }))
 
-export const AdminExerciseDialog = ({ exercise, onClose, open }: AdminExerciseDialogProps) => {
-    const { updateExercise, isUpdating } = useAdminExercises()
+export const AdminExerciseDialog = ({ exercise, onClose, open, mode }: AdminExerciseDialogProps) => {
+    const { updateExercise, createExercise, isUpdating, isCreating } = useAdminExercises()
     const { categories } = useExercises()
     const { control, handleSubmit, reset, setValue } = useForm({
         defaultValues: {
@@ -68,12 +69,15 @@ export const AdminExerciseDialog = ({ exercise, onClose, open }: AdminExerciseDi
     }
 
     const onSubmit = async (data: Partial<Exercise>) => {
-        if (!exercise?.id) return
+        if (mode === 'edit' && exercise?.id) {
+            await updateExercise({
+                exerciseId: exercise.id,
+                updates: data,
+            })
+        } else if (mode === 'create') {
+            await createExercise(data as Omit<Exercise, 'id'>)
+        }
 
-        await updateExercise({
-            exerciseId: exercise.id,
-            updates: data,
-        })
         onClose()
     }
 
@@ -85,7 +89,7 @@ export const AdminExerciseDialog = ({ exercise, onClose, open }: AdminExerciseDi
     }
 
     return (
-        <ResponsivePopup open={open} onClose={handleClose} maxWidth="sm" headerContent={<Typography variant="h6">Edit Exercise</Typography>}>
+        <ResponsivePopup open={open} onClose={handleClose} maxWidth="sm" headerContent={<Typography variant="h6">{mode === 'create' ? 'Add New Exercise' : 'Edit Exercise'}</Typography>}>
             <form onSubmit={handleSubmit(onSubmit)}>
                 <Stack spacing={2} p={2}>
                     <Controller
@@ -264,9 +268,9 @@ export const AdminExerciseDialog = ({ exercise, onClose, open }: AdminExerciseDi
                     <LoadingButton
                         type="submit"
                         variant="contained"
-                        loading={isUpdating}
+                        loading={isUpdating || isCreating}
                     >
-                        Save Changes
+                        {mode === 'create' ? 'Create Exercise' : 'Save Changes'}
                     </LoadingButton>
                 </DialogActions>
             </form>

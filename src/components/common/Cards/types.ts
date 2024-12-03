@@ -4,11 +4,12 @@ import { ReactNode } from "react"
 
 export interface BaseCardProps {
     title: string
-    imageUrl: string
+    imageUrl?: string
     imageHeight?: number
     isLoading?: boolean
-    onClick: () => void
-    children: ReactNode
+    onClick?: () => void
+    children?: ReactNode
+    actionButton?: ReactNode
     sx?: SxProps<Theme>
 }
 

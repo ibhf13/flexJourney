@@ -2,15 +2,19 @@ import { useAuthContext } from '@/features/auth/contexts/AuthContext'
 import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
 import { AdminExerciseDialog } from '@/features/exercises/components/AdminExerciseDialog'
 import { ExerciseCard } from '@/features/exercises/components/ExerciseCard'
+import { ExerciseDialog } from '@/features/exercises/components/ExerciseDialog'
 import { ExerciseFilters } from '@/features/exercises/components/ExerciseFilters'
 import { ExerciseListItem } from '@/features/exercises/components/ExerciseListItem'
 import { ViewToggle } from '@/features/exercises/components/ViewToggle'
 import { useExercisesList } from '@/features/exercises/hooks/useExercisesList'
-import { Box, Container, Grid, List, Pagination, Paper, useMediaQuery, useTheme } from '@mui/material'
+import { Exercise } from '@/features/exercises/types/ExerciseTypes'
+import AddIcon from '@mui/icons-material/Add'
+import { Box, Button, Container, Grid, List, Pagination, Paper, useMediaQuery, useTheme } from '@mui/material'
+import { useState } from 'react'
 
 const ExercisesPage = () => {
     const { user } = useAuthContext()
-    const isAdmin = user?.email === 'admin@example.com' // Replace with your admin check logic
+    const isAdmin = user?.email === 'iebo@example.com'
     const {
         exercises,
         isExercisesLoading,
@@ -31,6 +35,20 @@ const ExercisesPage = () => {
 
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+    const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
+    const [selectedExerciseForEdit, setSelectedExerciseForEdit] = useState<Exercise | null>(null)
+
+    const handleOpenCreateModal = () => {
+        setIsCreateModalOpen(true)
+    }
+
+    const handleCloseCreateModal = () => {
+        setIsCreateModalOpen(false)
+    }
+
+    const handleExerciseEdit = (exercise: Exercise) => {
+        setSelectedExerciseForEdit(exercise)
+    }
 
     return (
         <Container
@@ -68,6 +86,14 @@ const ExercisesPage = () => {
                             isGridView={isGridView}
                             onViewChange={setIsGridView}
                         />
+                        <Button
+                            variant="contained"
+                            startIcon={<AddIcon />}
+                            onClick={handleOpenCreateModal}
+                            sx={{ whiteSpace: 'nowrap' }}
+                        >
+                            Add Exercise
+                        </Button>
                     </Box>
                     <ExerciseFilters
                         searchQuery={searchQuery}
@@ -82,10 +108,11 @@ const ExercisesPage = () => {
                     {isGridView ? (
                         <Grid container spacing={{ xs: 2, sm: 3 }}>
                             {exercises.map(exercise => (
-                                <Grid item xs={12} sm={6} md={4} lg={3} key={exercise.id}>
+                                <Grid item xs={12} sm={6} md={4} lg={3} key={`grid-${exercise.id}`}>
                                     <ExerciseCard
                                         exercise={exercise}
-                                        onEdit={handleExerciseSelect}
+                                        onEdit={handleExerciseEdit}
+                                        onView={handleExerciseSelect}
                                         isAdmin={isAdmin}
                                     />
                                 </Grid>
@@ -98,7 +125,7 @@ const ExercisesPage = () => {
                         }}>
                             {exercises.map(exercise => (
                                 <ExerciseListItem
-                                    key={exercise.id}
+                                    key={`list-${exercise.id}`}
                                     exercise={exercise}
                                     onSelect={handleExerciseSelect}
                                 />
@@ -124,14 +151,27 @@ const ExercisesPage = () => {
                     )}
                 </LoadingErrorWrapper>
             </Paper>
-
             {selectedExercise && (
-                <AdminExerciseDialog
+                <ExerciseDialog
                     exercise={selectedExercise}
                     open={!!selectedExercise}
                     onClose={handleCloseModal}
                 />
             )}
+            {selectedExerciseForEdit && (
+                <AdminExerciseDialog
+                    exercise={selectedExerciseForEdit}
+                    open={!!selectedExerciseForEdit}
+                    onClose={() => setSelectedExerciseForEdit(null)}
+                    mode="edit"
+                />
+            )}
+            <AdminExerciseDialog
+                exercise={null}
+                open={isCreateModalOpen}
+                onClose={handleCloseCreateModal}
+                mode="create"
+            />
         </Container>
     )
 }

@@ -1,7 +1,7 @@
 import { db } from '@/config/firebase'
 import { COLLECTIONS } from '@/config/firebase/collections'
 import { Exercise } from "@/features/exercises/types/ExerciseTypes"
-import { collection, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore'
+import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore'
 
 const EXERCISES_COLLECTION = COLLECTIONS.GLOBAL.EXERCISES
 
@@ -65,6 +65,37 @@ export const updateExercise = async (exerciseId: string, updates: Partial<Exerci
     await updateDoc(exerciseRef, updateData)
   } catch (error) {
     console.error('Error updating exercise:', error)
+    throw error
+  }
+}
+
+export const createExercise = async (exerciseData: Omit<Exercise, 'id'>): Promise<string> => {
+  try {
+    const exercisesRef = collection(db, EXERCISES_COLLECTION)
+    const timestamp = new Date()
+
+    const newExercise = {
+      ...exerciseData,
+      createdAt: timestamp,
+      updatedAt: timestamp,
+    }
+
+    const docRef = await addDoc(exercisesRef, newExercise)
+
+    return docRef.id
+  } catch (error) {
+    console.error('Error creating exercise:', error)
+    throw error
+  }
+}
+
+export const deleteExercise = async (exerciseId: string): Promise<void> => {
+  try {
+    const exerciseRef = doc(db, EXERCISES_COLLECTION, exerciseId)
+
+    await deleteDoc(exerciseRef)
+  } catch (error) {
+    console.error('Error deleting exercise:', error)
     throw error
   }
 }

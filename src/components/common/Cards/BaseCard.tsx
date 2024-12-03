@@ -1,5 +1,4 @@
 import { Card, CardActionArea } from '@mui/material'
-import { useCallback } from 'react'
 import CardSkeleton from './CardSkeleton'
 import { sharedCardStyles } from './cardStyles'
 import MediaWithSkeleton from './MediaWithSkeleton'
@@ -12,17 +11,15 @@ const BaseCard = ({
     isLoading = false,
     onClick,
     children,
+    actionButton,
     sx
 }: BaseCardProps) => {
-    const handleKeyPress = useCallback(
-        (event: React.KeyboardEvent) => {
-            if (event.key === 'Enter' || event.key === ' ') {
-                event.preventDefault()
-                onClick()
-            }
-        },
-        [onClick]
-    )
+    const handleKeyPress = (event: React.KeyboardEvent) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+            event.preventDefault()
+            onClick?.()
+        }
+    }
 
     if (isLoading) {
         return <CardSkeleton height={imageHeight} />
@@ -30,6 +27,7 @@ const BaseCard = ({
 
     return (
         <Card sx={sx ?? sharedCardStyles}>
+            {actionButton}
             <CardActionArea
                 onClick={onClick}
                 onKeyPress={handleKeyPress}

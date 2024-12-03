@@ -19,8 +19,9 @@ service cloud.firestore {
     // Global collections
     match /exercises/{exerciseId} {
       allow read: if isAuthenticated();
+      allow create: if isAdmin();
       allow update: if isAdmin();
-      allow create, delete: if false; 
+      allow delete: if isAdmin(); 
     }
 
     match /workoutPlans/{planId} {
