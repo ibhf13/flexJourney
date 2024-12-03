@@ -1,58 +1,63 @@
 import { BaseCard, BaseCardContent } from '@/components/common/Cards'
 import { DifficultyLevel } from '@/features/workout/types/WorkoutTypes'
-import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import EditIcon from '@mui/icons-material/Edit'
-import { Box, Chip, IconButton, Typography } from '@mui/material'
-import { alpha } from '@mui/material/styles'
+import { Chip, IconButton } from '@mui/material'
 import { Exercise } from '../types/ExerciseTypes'
 
 interface ExerciseCardProps {
     exercise: Exercise
     onEdit?: (exercise: Exercise) => void
+    onView?: (exercise: Exercise) => void
     isAdmin?: boolean
 }
 
-export const ExerciseCard = ({ exercise, onEdit, isAdmin }: ExerciseCardProps) => {
-
-    const handleClick = () => {
-        if (onEdit) {
-            onEdit(exercise)
-        }
+export const ExerciseCard = ({
+    exercise,
+    onEdit,
+    onView,
+    isAdmin = false
+}: ExerciseCardProps) => {
+    const handleCardClick = () => {
+        onView?.(exercise)
     }
+
+    const handleEditClick = (e: React.MouseEvent) => {
+        e.stopPropagation()
+        onEdit?.(exercise)
+    }
+
 
     return (
         <BaseCard
             title={exercise.title}
             imageUrl={exercise.imageUrl}
             imageHeight={200}
-            onClick={handleClick}
+            onClick={handleCardClick}
+            actionButton={isAdmin && (
+                <IconButton
+                    onClick={handleEditClick}
+                    sx={{
+                        position: 'absolute',
+                        top: 8,
+                        right: 8,
+                        width: 24,
+                        height: 24,
+                        bgcolor: 'background.paper',
+                        '&:hover': {
+                            bgcolor: 'action.hover',
+                        },
+                        zIndex: 1
+                    }}
+                >
+                    <EditIcon fontSize="small" />
+                </IconButton>
+            )}
             sx={{
                 position: 'relative',
                 transition: 'all 0.3s ease',
+                cursor: 'pointer',
             }}
         >
-            {false && (
-                <Box
-                    sx={{
-                        position: 'absolute',
-                        top: 16,
-                        right: 16,
-                        zIndex: 1,
-                        display: 'flex',
-                        alignItems: 'center',
-                        gap: 1,
-                        bgcolor: (theme) => alpha(theme.palette.success.main, 0.9),
-                        borderRadius: 1,
-                        px: 1,
-                        py: 0.5,
-                    }}
-                >
-                    <CheckCircleIcon color="inherit" fontSize="small" />
-                    <Typography variant="caption" color="white" fontWeight="bold">
-                        Done
-                    </Typography>
-                </Box>
-            )}
             <BaseCardContent
                 title={exercise.title}
                 description={exercise.description}
@@ -72,25 +77,6 @@ export const ExerciseCard = ({ exercise, onEdit, isAdmin }: ExerciseCardProps) =
                     color="secondary"
                 />
             </BaseCardContent>
-            {isAdmin && (
-                <IconButton
-                    onClick={(e) => {
-                        e.stopPropagation()
-                        onEdit?.(exercise)
-                    }}
-                    sx={{
-                        position: 'absolute',
-                        top: 8,
-                        right: 8,
-                        bgcolor: 'background.paper',
-                        '&:hover': {
-                            bgcolor: 'action.hover',
-                        },
-                    }}
-                >
-                    <EditIcon />
-                </IconButton>
-            )}
         </BaseCard>
     )
 }

@@ -17,7 +17,9 @@ export interface Exercise {
   defaultRestPeriod: number
   category: string
   isCompleted?: boolean
+  createdBy?: string
 }
+
 
 export interface WorkoutDay {
   id: string
