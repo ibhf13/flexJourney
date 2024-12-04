@@ -16,12 +16,10 @@ const initialProgressState: ProgressState = {
 
 export const useProgress = () => {
     const { user } = useAuth()
-
-    console.log('user', user)
-    const { data: plans, isLoading: plansLoading, error: plansError } = useWorkoutPlans(user?.uid ?? '')
+    const { data: plans, isLoading: isPlansLoading, error: plansError } = useWorkoutPlans(user?.uid ?? '')
     const {
         progress,
-        isLoading: progressLoading,
+        isLoading: isProgressLoading,
         error: progressError,
         initializeUserProgress,
         saveUserExerciseProgress
@@ -32,7 +30,7 @@ export const useProgress = () => {
 
     // Effect to sync progress state with current plan
     useEffect(() => {
-        if (!progress || !plans || plansLoading || progressLoading) return
+        if (!progress || !plans || isPlansLoading || isProgressLoading) return
 
         const currentPlan = plans.find(plan => plan.id === progress.planId)
 
@@ -54,7 +52,7 @@ export const useProgress = () => {
                 isInitialized: true
             })
         }
-    }, [progress, plans, plansLoading, progressLoading])
+    }, [progress, plans, isPlansLoading, isProgressLoading])
 
     // Helper function to check if a day is completed
     const isDayCompleted = (dayId: string): boolean => {
@@ -159,7 +157,8 @@ export const useProgress = () => {
 
     return {
         plans,
-        isLoading: plansLoading || progressLoading || !progressState.isInitialized,
+        isPlansLoading,
+        isProgressLoading,
         needsPlanSelection: progressState.isInitialized && !progressState.selectedPlan,
         error: plansError || progressError,
         progressState,

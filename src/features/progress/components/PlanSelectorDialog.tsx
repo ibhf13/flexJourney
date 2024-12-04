@@ -1,4 +1,6 @@
+import { CardSkeleton } from '@/components/common/Cards'
 import ResponsivePopup from '@/components/common/Popups/ResponsivePopup'
+import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
 import { WorkoutPlan } from '@/features/workout/types/WorkoutTypes'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import {
@@ -12,6 +14,7 @@ interface PlanSelectorDialogProps {
     onClose: () => void
     plans: WorkoutPlan[]
     isLoading: boolean
+    error: Error | null
     onPlanSelect: (plan: WorkoutPlan) => void
 }
 
@@ -20,6 +23,7 @@ export const PlanSelectorDialog = ({
     onClose,
     plans,
     isLoading,
+    error,
     onPlanSelect
 }: PlanSelectorDialogProps) => {
 
@@ -51,14 +55,18 @@ export const PlanSelectorDialog = ({
                 minHeight: '60vh'
             }}
         >
-            <PlanSelector
-                plans={plans}
-                isLoading={isLoading}
-                onPlanSelect={(plan) => {
-                    onPlanSelect(plan)
-                    onClose()
-                }}
-            />
+            <LoadingErrorWrapper isLoading={isLoading} error={error} loadingComponent={<CardSkeleton />}>
+                <Box p={2}>
+                    <PlanSelector
+                        plans={plans}
+                        isLoading={isLoading}
+                        onPlanSelect={(plan) => {
+                            onPlanSelect(plan)
+                            onClose()
+                        }}
+                    />
+                </Box>
+            </LoadingErrorWrapper>
         </ResponsivePopup>
     )
 }

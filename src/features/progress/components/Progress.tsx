@@ -13,7 +13,8 @@ import { ProgressSkeleton } from './ProgressSkeleton'
 export const Progress = () => {
     const {
         plans,
-        isLoading,
+        isPlansLoading,
+        isProgressLoading,
         error,
         progressState,
         handlePlanSelect,
@@ -38,7 +39,7 @@ export const Progress = () => {
     const handleClosePlanSelector = () => setDialogOpen(false)
 
     return (
-        <LoadingErrorWrapper isLoading={isLoading} error={error} loadingComponent={<ProgressSkeleton />}>
+        <LoadingErrorWrapper isLoading={isPlansLoading || isProgressLoading} error={error} loadingComponent={<ProgressSkeleton />}>
             <Container maxWidth="lg" sx={{ py: 4 }}>
                 <ProgressHeader
                     selectedPlan={progressState.selectedPlan}
@@ -79,7 +80,8 @@ export const Progress = () => {
                     open={dialogOpen}
                     onClose={handleClosePlanSelector}
                     plans={plans || []}
-                    isLoading={isLoading}
+                    isLoading={isPlansLoading || isProgressLoading}
+                    error={error}
                     onPlanSelect={handlePlanSelect}
                 />
             </Container>
