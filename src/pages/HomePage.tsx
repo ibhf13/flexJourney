@@ -9,7 +9,7 @@ import { motion } from 'framer-motion'
 const HomePage = () => {
   const { user } = useAuthContext()
 
-  const allowSeed = user?.uid === 'TZ5qhIjQIphdxb8VlIFhZJJ1NKy2' || 'VvjUP3SpQGNwARNFQl1HjG725Ly1'
+  const allowSeed = user?.uid === 'VvjUP3SpQGNwARNFQl1HjG725Ly1'
 
   return (
     <PageContainer>

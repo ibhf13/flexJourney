@@ -4,6 +4,7 @@ export interface Exercise {
     title: string
     description: string
     imageUrl?: string
+    videoUrl?: string
     category: string
     type: string
     level: string
