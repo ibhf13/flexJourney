@@ -65,7 +65,6 @@ const ExercisesPage = () => {
                 setExerciseToDelete(null)
             } catch (error) {
                 console.error('Failed to delete exercise:', error)
-                // You might want to show an error message to the user here
             }
         }
     }
@@ -131,8 +130,8 @@ const ExercisesPage = () => {
                                 <Grid item xs={12} sm={6} md={4} lg={3} key={exercise.id}>
                                     <ExerciseCard
                                         exercise={exercise}
-                                        onEdit={handleExerciseEdit}
-                                        onDelete={handleExerciseDelete}
+                                        onEdit={isAdmin ? handleExerciseEdit : undefined}
+                                        onDelete={isAdmin ? handleExerciseDelete : undefined}
                                         onView={handleExerciseSelect}
                                         isAdmin={isAdmin}
                                     />
