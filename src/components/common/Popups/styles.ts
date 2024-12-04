@@ -11,6 +11,7 @@ export const DialogHeader = styled(Box)(({ theme }) => ({
 }))
 
 export const StyledDialogContent = styled(DialogContent)(({ theme }) => ({
+    background: theme.palette.grey[800],
     padding: theme.spacing(2, 4),
     overflow: 'scroll',
     '&::-webkit-scrollbar': {
