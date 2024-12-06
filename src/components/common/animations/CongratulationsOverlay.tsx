@@ -1,7 +1,7 @@
 import { useWindowSize } from '@/hooks/useWindowSize'
 import CloseIcon from '@mui/icons-material/Close'
-import { alpha, Box, IconButton, Typography, useTheme } from '@mui/material'
-import { AnimatePresence, motion, Variants } from 'framer-motion'
+import { alpha, IconButton, Typography, useTheme } from '@mui/material'
+import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect } from 'react'
 import Confetti from 'react-confetti'
 
@@ -10,49 +10,6 @@ interface CongratulationsOverlayProps {
     message: string
     onComplete?: () => void
     duration?: number
-}
-
-const overlayVariants: Variants = {
-    hidden: { opacity: 0, scale: 0.5 },
-    visible: {
-        opacity: 1,
-        scale: 1,
-        transition: {
-            duration: 0.5,
-            type: "spring",
-            stiffness: 200,
-            damping: 20
-        }
-    },
-    exit: {
-        opacity: 0,
-        scale: 0.5,
-        transition: { duration: 0.3 }
-    }
-}
-
-const textVariants: Variants = {
-    hidden: { y: 20, opacity: 0 },
-    visible: {
-        y: 0,
-        opacity: 1,
-        transition: {
-            delay: 0.2,
-            duration: 0.4
-        }
-    }
-}
-
-const backdropVariants: Variants = {
-    hidden: { opacity: 0 },
-    visible: {
-        opacity: 1,
-        transition: { duration: 0.3 }
-    },
-    exit: {
-        opacity: 0,
-        transition: { duration: 0.3 }
-    }
 }
 
 export const CongratulationsOverlay = ({
@@ -64,82 +21,65 @@ export const CongratulationsOverlay = ({
     const theme = useTheme()
     const { width, height } = useWindowSize()
 
-    // Auto-hide overlay after duration
-    useEffect(() => {
-        if (show && onComplete) {
-            const timer = setTimeout(onComplete, duration)
-
-            return () => clearTimeout(timer)
-        }
-    }, [show, onComplete, duration])
-
-    // Memoize confetti config for performance
-    const confettiConfig = {
-        width,
-        height,
-        recycle: false,
-        numberOfPieces: Math.min(500, Math.floor((width * height) / 5000)),
-        gravity: 0.3,
-        colors: [
-            theme.palette.primary.main,
-            theme.palette.secondary.main,
-            theme.palette.success.main
-        ]
-    }
-
     const handleClose = useCallback(() => {
         onComplete?.()
     }, [onComplete])
 
+    useEffect(() => {
+        if (show && duration > 0) {
+            const timer = setTimeout(handleClose, duration)
+
+            return () => clearTimeout(timer)
+        }
+    }, [show, duration, handleClose])
+
     return (
-        <AnimatePresence onExitComplete={onComplete}>
+        <AnimatePresence>
             {show && (
                 <>
-                    <Confetti {...confettiConfig} />
-                    <Box
-                        component={motion.div}
-                        variants={backdropVariants}
-                        initial="hidden"
-                        animate="visible"
-                        exit="exit"
-                        sx={{
+                    <Confetti
+                        width={width}
+                        height={height}
+                        recycle={false}
+                        numberOfPieces={200}
+                        gravity={0.3}
+                    />
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        exit={{ opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        style={{
                             position: 'fixed',
                             top: 0,
                             left: 0,
                             right: 0,
                             bottom: 0,
-                            backgroundColor: alpha(theme.palette.background.default, 0.7),
+                            backgroundColor: alpha('#000', 0.7),
+                            backdropFilter: 'blur(4px)',
                             zIndex: theme.zIndex.modal,
                             display: 'flex',
                             alignItems: 'center',
-                            justifyContent: 'center'
+                            justifyContent: 'center',
+                            padding: 16
                         }}
                     >
-                        <Box
-                            component={motion.div}
-                            variants={overlayVariants}
-                            initial="hidden"
-                            animate="visible"
-                            exit="exit"
-                            sx={{
+                        <motion.div
+                            initial={{ scale: 0.5, opacity: 0 }}
+                            animate={{ scale: 1, opacity: 1 }}
+                            exit={{ scale: 0.5, opacity: 0 }}
+                            transition={{
+                                type: "spring",
+                                stiffness: 200,
+                                damping: 20
+                            }}
+                            style={{
                                 position: 'relative',
-                                backgroundColor: alpha(theme.palette.background.paper, 0.95),
-                                padding: {
-                                    xs: 3,
-                                    sm: 4,
-                                    md: 5
-                                },
-                                borderRadius: 3,
-                                maxWidth: {
-                                    xs: '90%',
-                                    sm: '70%',
-                                    md: '50%'
-                                },
-                                minWidth: {
-                                    xs: '280px',
-                                    sm: '400px',
-                                    md: '500px'
-                                },
+                                backgroundColor: theme.palette.background.paper,
+                                borderRadius: 8,
+                                padding: 32,
+                                maxWidth: '500px',
+                                width: '90%',
                                 boxShadow: theme.shadows[10],
                                 textAlign: 'center'
                             }}
@@ -160,41 +100,43 @@ export const CongratulationsOverlay = ({
                                 <CloseIcon />
                             </IconButton>
 
-                            <Typography
-                                variant="h4"
-                                component={motion.h4}
-                                variants={textVariants}
-                                sx={{
-                                    color: theme.palette.text.primary,
-                                    mb: 3,
-                                    mt: 1,
-                                    fontSize: {
-                                        xs: '1.5rem',
-                                        sm: '2rem',
-                                        md: '2.5rem'
-                                    },
-                                    fontWeight: 'bold'
-                                }}
+                            <motion.div
+                                initial={{ y: 20, opacity: 0 }}
+                                animate={{ y: 0, opacity: 1 }}
+                                transition={{ delay: 0.2, duration: 0.4 }}
                             >
-                                🎉 Congratulations! 🎉
-                            </Typography>
-                            <Typography
-                                variant="h6"
-                                component={motion.h6}
-                                variants={textVariants}
-                                sx={{
-                                    color: theme.palette.text.secondary,
-                                    fontSize: {
-                                        xs: '1rem',
-                                        sm: '1.25rem',
-                                        md: '1.5rem'
-                                    }
-                                }}
-                            >
-                                {message}
-                            </Typography>
-                        </Box>
-                    </Box>
+                                <Typography
+                                    variant="h4"
+                                    sx={{
+                                        color: theme.palette.text.primary,
+                                        mb: 3,
+                                        mt: 1,
+                                        fontSize: {
+                                            xs: '1.5rem',
+                                            sm: '2rem',
+                                            md: '2.5rem'
+                                        },
+                                        fontWeight: 'bold'
+                                    }}
+                                >
+                                    🎉 Congratulations! 🎉
+                                </Typography>
+                                <Typography
+                                    variant="h6"
+                                    sx={{
+                                        color: theme.palette.text.secondary,
+                                        fontSize: {
+                                            xs: '1rem',
+                                            sm: '1.25rem',
+                                            md: '1.5rem'
+                                        }
+                                    }}
+                                >
+                                    {message}
+                                </Typography>
+                            </motion.div>
+                        </motion.div>
+                    </motion.div>
                 </>
             )}
         </AnimatePresence>
