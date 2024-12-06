@@ -14,12 +14,18 @@ interface ProgressExerciseCardProps {
     exercise: Exercise
     dayId: string
     isCompleted: boolean
+    onDayComplete: () => void
+    totalExercises: number
+    completedCount: number
 }
 
 export const ProgressExerciseCard = ({
     exercise,
     dayId,
-    isCompleted
+    isCompleted,
+    onDayComplete,
+    totalExercises,
+    completedCount
 }: ProgressExerciseCardProps) => {
     const [formOpen, setFormOpen] = useState(false)
     const [infoOpen, setInfoOpen] = useState(false)
@@ -35,6 +41,10 @@ export const ProgressExerciseCard = ({
             sets,
             isCompleted: true
         })
+
+        if (completedCount + 1 === totalExercises) {
+            onDayComplete()
+        }
 
         setFormOpen(false)
     }
@@ -82,7 +92,7 @@ export const ProgressExerciseCard = ({
             )}
             <ExerciseCard
                 exercise={exercise}
-                onClick={handleCardClick}
+                onView={handleCardClick}
             />
             {isCompleted && <CompletedExerciseOverlay />}
             <ExerciseFormDialog

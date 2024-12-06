@@ -1,3 +1,4 @@
+import { CongratulationsOverlay } from '@/components/common/animations/CongratulationsOverlay'
 import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
 import { Box, Container } from '@mui/material'
 import { useState } from 'react'
@@ -23,6 +24,7 @@ export const Progress = () => {
     } = useProgress()
 
     const [dialogOpen, setDialogOpen] = useState(false)
+    const [showCongrats, setShowCongrats] = useState(false)
 
     // Get completed exercises for the current day
     const { completedExercises } = useCompletedExercises(
@@ -37,6 +39,11 @@ export const Progress = () => {
 
     const handleOpenPlanSelector = () => setDialogOpen(true)
     const handleClosePlanSelector = () => setDialogOpen(false)
+
+    // Add this function to handle completion
+    const handleDayCompletion = () => {
+        setShowCongrats(true)
+    }
 
     return (
         <LoadingErrorWrapper isLoading={isPlansLoading || isProgressLoading} error={error} loadingComponent={<ProgressSkeleton />}>
@@ -70,11 +77,19 @@ export const Progress = () => {
                                 <ExerciseList
                                     exercises={progressState.selectedDay.exercises}
                                     dayId={progressState.selectedDay.id}
+                                    onDayComplete={handleDayCompletion}
                                 />
                             </Box>
                         )}
                     </Box>
                 )}
+
+                <CongratulationsOverlay
+                    show={showCongrats}
+                    message="You've completed all exercises for today! Keep up the great work! 💪"
+                    onComplete={() => setShowCongrats(false)}
+                    duration={5000}
+                />
 
                 <PlanSelectorDialog
                     open={dialogOpen}

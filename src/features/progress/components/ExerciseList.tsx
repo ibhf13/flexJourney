@@ -6,10 +6,11 @@ import { ProgressExerciseCard } from './ProgressExerciseCard'
 interface ExerciseListProps {
     exercises: Exercise[]
     dayId: string
+    onDayComplete: () => void
 }
 
-export const ExerciseList = ({ exercises, dayId }: ExerciseListProps) => {
-    const { isExerciseCompleted } = useCompletedExercises(dayId)
+export const ExerciseList = ({ exercises, dayId, onDayComplete }: ExerciseListProps) => {
+    const { isExerciseCompleted, completedExercises } = useCompletedExercises(dayId)
 
     return (
         <Box>
@@ -27,10 +28,12 @@ export const ExerciseList = ({ exercises, dayId }: ExerciseListProps) => {
                 {exercises.map((exercise) => (
                     <Grid item xs={12} sm={6} md={4} key={exercise.id}>
                         <ProgressExerciseCard
-                            key={exercise.id}
                             exercise={exercise}
                             dayId={dayId}
                             isCompleted={isExerciseCompleted(exercise.id)}
+                            onDayComplete={onDayComplete}
+                            totalExercises={exercises.length}
+                            completedCount={completedExercises.size}
                         />
                     </Grid>
                 ))}
