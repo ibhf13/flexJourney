@@ -1,6 +1,6 @@
 import { BaseCard } from '@/components/common/Cards'
 import { DifficultyChip } from '@/components/common/Forms/DifficultyChip'
-import { ConfirmationDialog } from '@/components/common/Popups/ConfirmationDialog'
+import { ConfirmationPopUp } from '@/components/common/Popups/ConfirmationPopUp'
 import DeleteIcon from '@mui/icons-material/Delete'
 import PersonIcon from '@mui/icons-material/Person'
 import { Box, CardContent, Chip, Menu, MenuItem, Typography } from '@mui/material'
@@ -121,12 +121,13 @@ export const PlanCard = ({ plan, onClick, onDelete, isLoading = false }: PlanCar
         </Box>
       </BaseCard>
 
-      <ConfirmationDialog
+      <ConfirmationPopUp
         open={deleteDialogOpen}
         title="Delete Workout Plan"
         message={`Are you sure you want to delete "${plan.title}"? This action cannot be undone.`}
         onConfirm={handleDeleteConfirm}
         onCancel={() => setDeleteDialogOpen(false)}
+        buttonText="Delete"
       />
     </>
   )

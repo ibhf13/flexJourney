@@ -1,4 +1,4 @@
-import { ConfirmationDialog } from '@/components/common/Popups/ConfirmationDialog'
+import { ConfirmationPopUp } from '@/components/common/Popups/ConfirmationPopUp'
 import DeleteIcon from '@mui/icons-material/Delete'
 import EditIcon from '@mui/icons-material/Edit'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
@@ -224,12 +224,13 @@ export const HistoryListItem = ({ entry }: HistoryListItemProps) => {
                 onSave={handleEdit}
             />
 
-            <ConfirmationDialog
+            <ConfirmationPopUp
                 open={isDeleteDialogOpen}
                 title="Delete Workout Entry"
                 message="Are you sure you want to delete this workout entry? This action cannot be undone."
                 onConfirm={handleDelete}
                 onCancel={() => setIsDeleteDialogOpen(false)}
+                buttonText="Delete"
             />
         </Box>
     )
