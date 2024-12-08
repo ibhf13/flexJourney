@@ -1,4 +1,4 @@
-import { ConfirmationDialog } from '@/components/common/Popups/ConfirmationDialog'
+import { ConfirmationPopUp } from '@/components/common/Popups/ConfirmationPopUp'
 import RestartAltIcon from '@mui/icons-material/RestartAlt'
 import { Button, Tooltip } from '@mui/material'
 import { useState } from 'react'
@@ -56,12 +56,13 @@ export const ResetProgressButton = ({
                 button
             )}
 
-            <ConfirmationDialog
+            <ConfirmationPopUp
                 open={isDialogOpen}
                 title="Reset Progress"
                 message={`Are you sure you want to reset your progress? This will clear all ${completedExercises} completed exercises for this plan.`}
                 onConfirm={handleReset}
                 onCancel={() => setIsDialogOpen(false)}
+                buttonText="Reset"
             />
         </>
     )

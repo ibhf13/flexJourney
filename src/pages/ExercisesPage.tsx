@@ -1,4 +1,4 @@
-import { ConfirmationDialog } from '@/components/common/Popups/ConfirmationDialog'
+import { ConfirmationPopUp } from '@/components/common/Popups/ConfirmationPopUp'
 import { useAuthContext } from '@/features/auth/contexts/AuthContext'
 import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
 import { AdminExerciseDialog } from '@/features/exercises/components/AdminExerciseDialog'
@@ -192,7 +192,7 @@ const ExercisesPage = () => {
                 onClose={handleCloseCreateModal}
                 mode="create"
             />
-            <ConfirmationDialog
+            <ConfirmationPopUp
                 open={!!exerciseToDelete}
                 title="Delete Exercise"
                 message="Are you sure you want to delete this exercise? This action cannot be undone."

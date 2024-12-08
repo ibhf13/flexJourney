@@ -1,4 +1,4 @@
-import { ConfirmationDialog } from '@/components/common/Popups/ConfirmationDialog'
+import { ConfirmationPopUp } from '@/components/common/Popups/ConfirmationPopUp'
 import ResponsivePopup from '@/components/common/Popups/ResponsivePopup'
 import { Add } from '@mui/icons-material'
 import CloseIcon from '@mui/icons-material/Close'
@@ -270,7 +270,7 @@ export const WorkoutBuilderCard = ({ onPlanCreated }: WorkoutBuilderCardProps) =
                 </StyledDialogContent>
             </ResponsivePopup>
 
-            <ConfirmationDialog
+            <ConfirmationPopUp
                 open={showConfirmDialog}
                 title="Cancel Workout Creation?"
                 message="Are you sure you want to cancel? All progress will be lost."

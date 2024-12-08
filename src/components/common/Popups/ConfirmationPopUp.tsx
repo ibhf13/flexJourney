@@ -16,7 +16,7 @@ interface ConfirmationDialogProps {
     buttonText?: string
 }
 
-export const ConfirmationDialog = ({
+export const ConfirmationPopUp = ({
     open,
     title,
     message,
