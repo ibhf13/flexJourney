@@ -3,7 +3,6 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
 import { Box, Collapse, IconButton, Paper, Stack, Typography } from '@mui/material'
 import { alpha } from '@mui/material/styles'
 import { format } from 'date-fns'
-import { AnimatePresence, motion } from 'framer-motion'
 import { useState } from 'react'
 import { TrainingHistoryEntry } from '../types/HistoryTypes'
 import { DailySummaryStats } from './DailySummaryStats'
@@ -19,7 +18,6 @@ export const DailySummary = ({ date, entries }: DailySummaryProps) => {
 
     return (
         <Paper
-            elevation={0}
             sx={{
                 width: '100%',
                 bgcolor: 'background.paper',
@@ -27,6 +25,7 @@ export const DailySummary = ({ date, entries }: DailySummaryProps) => {
                 border: '1px solid',
                 borderColor: 'divider',
                 overflow: 'hidden',
+                mb: 2,
                 transition: 'all 0.2s ease',
                 '&:hover': {
                     borderColor: 'primary.main',
@@ -71,9 +70,7 @@ export const DailySummary = ({ date, entries }: DailySummaryProps) => {
                         alignItems="center"
                         justifyContent="space-between"
                     >
-                        {/* Use DailySummaryStats here */}
                         <DailySummaryStats entries={entries} />
-
                         <IconButton
                             size="small"
                             sx={{
@@ -93,35 +90,31 @@ export const DailySummary = ({ date, entries }: DailySummaryProps) => {
                 </Stack>
             </Box>
 
-            <Collapse in={isExpanded}>
-                <AnimatePresence>
-                    {isExpanded && (
-                        <Box
-                            component={motion.div}
-                            initial={{ opacity: 0 }}
-                            animate={{ opacity: 1 }}
-                            exit={{ opacity: 0 }}
-                            sx={{
-                                p: { xs: 1.5, sm: 2 },
-                                pt: 0
-                            }}
-                        >
-                            <Stack spacing={1.5}>
-                                {entries.map((entry) => (
-                                    <motion.div
-                                        key={entry.id}
-                                        initial={{ opacity: 0, y: 20 }}
-                                        animate={{ opacity: 1, y: 0 }}
-                                        exit={{ opacity: 0, y: -20 }}
-                                        transition={{ duration: 0.2 }}
-                                    >
-                                        <HistoryListItem entry={entry} />
-                                    </motion.div>
-                                ))}
-                            </Stack>
-                        </Box>
-                    )}
-                </AnimatePresence>
+            <Collapse
+                in={isExpanded}
+                timeout={200}
+                sx={{
+                    '& .MuiCollapse-wrapper': {
+                        display: 'flex',
+                        flexDirection: 'column'
+                    }
+                }}
+            >
+                <Box
+                    sx={{
+                        p: { xs: 1.5, sm: 2 },
+                        pt: 0
+                    }}
+                >
+                    <Stack spacing={1.5}>
+                        {entries.map((entry) => (
+                            <HistoryListItem
+                                key={entry.id}
+                                entry={entry}
+                            />
+                        ))}
+                    </Stack>
+                </Box>
             </Collapse>
         </Paper>
     )
