@@ -1,6 +1,7 @@
 import { LoadingFallback } from '@/components/common/Layouts/LoadingFallback'
 import { MainLayout } from '@/components/Layout'
 import { ErrorBoundary } from '@/features/errorHandling/components/ErrorBoundary'
+import StatisticsPage from '@/pages/StatisticsPage'
 import { lazy, Suspense } from 'react'
 import { ROUTES } from './routeConstants'
 
@@ -88,9 +89,13 @@ export const routes = {
                 element: withSuspense(ProfilePage),
                 title: 'Profile'
             },
+            {
+                path: '/statistics',
+                element: <StatisticsPage />,
+                title: 'Stats'
+            },
             // Coming soon pages
             ...[
-                ROUTES.MAIN.STATISTICS,
                 ROUTES.MAIN.CALENDAR,
                 ROUTES.MAIN.COMMUNITY,
                 ROUTES.MAIN.SHOP

@@ -1,80 +1,101 @@
-import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
-import { useAuthContext } from '@features/auth/contexts/AuthContext'
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { statisticsService } from '../api/statisticsService'
-import { WorkoutStat } from '../types/StatisticsTypes'
+import { useHistory } from '@/features/history/hooks/useHistory'
+import { ExerciseLog, TrainingHistoryEntry } from '@/features/history/types/HistoryTypes'
+import { ExerciseStats, Statistics } from '../types/statistics'
+import {
+    calculateDailyStats,
+    createProgressDataPoint,
+    getMonthKey,
+    updateExerciseStats
+} from '../utils/statisticsCalculator'
+
+const initializeExerciseStats = (): ExerciseStats => ({
+    totalSets: 0,
+    totalReps: 0,
+    maxWeight: 0,
+    maxReps: 0,
+    averageWeight: 0,
+    averageReps: 0,
+    lastWeight: 0,
+    lastReps: 0,
+    progressData: []
+})
+
+const processExercise = (
+    exerciseStats: Map<string, ExerciseStats>,
+    exercise: ExerciseLog,
+    entry: TrainingHistoryEntry
+): [Map<string, ExerciseStats>, number] => {
+    const currentStats = exerciseStats.get(exercise.exerciseId) ?? initializeExerciseStats()
+    const dailyStats = calculateDailyStats(exercise.sets)
+
+    const updatedStats = updateExerciseStats(currentStats, exercise.sets, dailyStats)
+
+    const progressPoint = createProgressDataPoint(entry.date, dailyStats)
+
+    updatedStats.progressData = [...updatedStats.progressData, progressPoint]
+        .sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime())
+
+    exerciseStats.set(exercise.exerciseId, updatedStats)
+
+    return [exerciseStats, dailyStats.dailyVolume]
+}
 
 export const useStatistics = () => {
-    const { currentUser } = useAuthContext()
-    const queryClient = useQueryClient()
-    const { handleError, showMessage } = useErrorHandler()
+    const { history, isLoading, error } = useHistory()
 
-    const { data: stats, isLoading, error } = useQuery({
-        queryKey: ['statistics', currentUser?.uid],
-        queryFn: () => currentUser ? statisticsService.getUserStats(currentUser.uid) : null,
-        enabled: !!currentUser,
-    })
+    const calculateStatistics = (): Statistics | null => {
+        if (!history.length) return null
 
-    const { mutate: updateStats } = useMutation({
-        mutationFn: (updateData: Partial<WorkoutStat>) => {
-            if (!currentUser) throw new Error('No user authenticated')
+        const uniqueDays = new Set(history.map(entry => entry.date.split('T')[0])).size
+        const exerciseStats = new Map<string, ExerciseStats>()
+        const months = new Map<string, number>()
+        let totalVolume = 0
+        let mostFrequentExercise = { name: '', count: 0 }
 
-            return statisticsService.updateWorkoutStats(currentUser.uid, updateData)
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['statistics'] })
-        },
-        onError: (error) => {
-            handleError(error instanceof Error ? error.message : 'Failed to update stats', 'error')
-        },
-    })
+        history.forEach(entry => {
+            const monthKey = getMonthKey(entry.date)
 
-    const { mutate: updateExerciseProgress } = useMutation({
-        mutationFn: ({
-            exerciseId,
-            weight,
-            reps,
-        }: {
-            exerciseId: string
-            weight: number
-            reps: number
-        }) => {
-            if (!currentUser) throw new Error('No user authenticated')
+            months.set(monthKey, (months.get(monthKey) ?? 0) + 1)
 
-            return statisticsService.updateExerciseProgress(
-                currentUser.uid,
-                exerciseId,
-                weight,
-                reps
-            )
-        },
-        onSuccess: () => {
-            queryClient.invalidateQueries({ queryKey: ['statistics'] })
-        },
-        onError: (error) => {
-            handleError(error instanceof Error ? error.message : 'Failed to update exercise progress', 'error')
-        },
-    })
+            entry.exercises.forEach(exercise => {
+                const [updatedStats, exerciseVolume] = processExercise(
+                    exerciseStats,
+                    exercise,
+                    entry
+                )
 
-    const { mutate: updateStreak } = useMutation({
-        mutationFn: () => {
-            if (!currentUser) throw new Error('No user authenticated')
+                totalVolume += exerciseVolume
 
-            return statisticsService.calculateAndUpdateStreak(currentUser.uid)
-        },
-        onSuccess: (newStreak) => {
-            queryClient.invalidateQueries({ queryKey: ['statistics'] })
-            showMessage(`Workout streak: ${newStreak} days!`, 'success')
-        },
-    })
+                const exerciseCount = updatedStats.get(exercise.exerciseId)?.totalSets ?? 0
+
+                if (exerciseCount > mostFrequentExercise.count) {
+                    mostFrequentExercise = {
+                        name: exercise.exerciseName,
+                        count: exerciseCount
+                    }
+                }
+            })
+        })
+
+        const monthlyActivity = Array.from(months.entries())
+            .map(([month, workouts]) => ({ month, workouts }))
+            .sort((a, b) => a.month.localeCompare(b.month))
+
+        return {
+            totalTrainingDays: uniqueDays,
+            mostFrequentExercise,
+            totalVolume,
+            monthlyActivity,
+            exerciseStats: Object.fromEntries(exerciseStats),
+            averageWorkoutsPerMonth: monthlyActivity.length > 0
+                ? (uniqueDays / monthlyActivity.length).toFixed(1)
+                : '0'
+        }
+    }
 
     return {
-        stats: stats?.workoutStats,
-        exerciseProgress: stats?.exerciseProgress,
+        stats: calculateStatistics(),
         isLoading,
-        error,
-        updateStats,
-        updateExerciseProgress,
-        updateStreak,
+        error
     }
-}
+} 
