@@ -1,73 +1,30 @@
-import { Alert, Box, Container, Grid, Skeleton, Typography } from '@mui/material'
-
-import { UserStats } from '@/features/statistics/components/UserStats'
-import { WorkoutStatistics } from '@/features/statistics/components/WorkoutStatistics'
+import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
+import { ExerciseProgressCharts } from '@/features/statistics/components/ExerciseProgressCharts'
+import { StatisticsOverview } from '@/features/statistics/components/StatisticsOverview'
+import { StatisticsSkeleton } from '@/features/statistics/components/StatisticsSkeleton'
 import { useStatistics } from '@/features/statistics/hooks/useStatistics'
-
-const STATS_PAGE_TEXTS = {
-    TITLE: 'Statistics Dashboard',
-    ERROR: 'Unable to load statistics. Please try again later.',
-    NO_DATA: 'No statistics available. Start working out to see your progress!'
-} as const
+import { containerStyles } from '@/features/statistics/styles/statisticsStyles'
+import { Box, Container, Paper } from '@mui/material'
 
 const StatisticsPage = () => {
-    const { stats, isLoading, error } = useStatistics()
-
-    if (error) {
-        return (
-            <Container maxWidth="lg">
-                <Alert severity="error" sx={{ mt: 4 }}>
-                    {STATS_PAGE_TEXTS.ERROR}
-                </Alert>
-            </Container>
-        )
-    }
+    const { isLoading, error } = useStatistics()
 
     return (
-        <Container maxWidth="lg">
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', py: 4 }}>
-                <Typography
-                    variant="h4"
-                    component="h1"
-                    sx={{
-                        mb: 4,
-                        fontWeight: 'bold',
-                        textAlign: { xs: 'center', md: 'left' }
-                    }}
-                >
-                    {STATS_PAGE_TEXTS.TITLE}
-                </Typography>
-
-                {isLoading ? (
-                    <StatsLoadingSkeleton />
-                ) : !stats ? (
-                    <Alert severity="info">
-                        {STATS_PAGE_TEXTS.NO_DATA}
-                    </Alert>
-                ) : (
-                    <Grid container direction="column" spacing={4}>
-                        <Grid item xs={12} md={6}>
-                            <UserStats stats={stats} />
-                        </Grid>
-                        <Grid item xs={12} md={6}>
-                            <WorkoutStatistics />
-                        </Grid>
-                    </Grid>
-                )}
-            </Box>
-        </Container>
+        <Box sx={containerStyles.wrapper}>
+            <Container maxWidth="lg">
+                <Paper elevation={0} sx={{ p: { xs: 2, sm: 3 }, borderRadius: 2 }}>
+                    <LoadingErrorWrapper
+                        isLoading={isLoading}
+                        error={error}
+                        loadingComponent={<StatisticsSkeleton />}
+                    >
+                        <StatisticsOverview />
+                        <ExerciseProgressCharts />
+                    </LoadingErrorWrapper>
+                </Paper>
+            </Container>
+        </Box>
     )
 }
 
-const StatsLoadingSkeleton = () => (
-    <Grid container direction="column" spacing={3}>
-        <Grid item xs={12} md={6}>
-            <Skeleton variant="rectangular" height={200} />
-        </Grid>
-        <Grid item xs={12} md={6}>
-            <Skeleton variant="rectangular" height={200} />
-        </Grid>
-    </Grid>
-)
-
-export default StatisticsPage
+export default StatisticsPage 
