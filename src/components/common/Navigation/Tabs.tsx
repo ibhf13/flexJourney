@@ -1,21 +1,21 @@
-import { Tabs as MuiTabs, Tab, useTheme, useMediaQuery, Box } from '@mui/material';
-import { Link } from 'react-router-dom';
-import { CustomTabsProps,TabPanelProps } from './types';
-
+import { Box, Tabs as MuiTabs, Tab, useMediaQuery, useTheme } from '@mui/material'
+import { Link } from 'react-router-dom'
+import { CustomTabsProps, TabPanelProps } from './types'
 
 export const TabPanel = ({ children, value, index, ...other }: TabPanelProps) => {
-    return (
-      <Box
-        role="tabpanel"
-        hidden={value !== index}
-        id={`tabpanel-${index}`}
-        aria-labelledby={`tab-${index}`}
-        {...other}
-      >
-        {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
-      </Box>
-    );
-  };
+
+  return (
+    <Box
+      role="tabpanel"
+      hidden={value !== index}
+      id={`tabpanel-${index}`}
+      aria-labelledby={`tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </Box>
+  )
+}
 
 const Tabs = ({
   items,
@@ -27,14 +27,13 @@ const Tabs = ({
   centered = false,
   ...props
 }: CustomTabsProps) => {
-  const theme = useTheme();
-  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
-
-  const mobileVariant = isMobile ? 'scrollable' : variant;
+  const theme = useTheme()
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
+  const mobileVariant = isMobile ? 'scrollable' : variant
 
   const handleChange = (_: React.SyntheticEvent, newValue: string | number) => {
-    onChange(newValue);
-  };
+    onChange(newValue)
+  }
 
   return (
     <MuiTabs
@@ -68,8 +67,8 @@ const Tabs = ({
           icon={showIcons ? item.icon : undefined}
           iconPosition="start"
           disabled={item.disabled}
-          component={item.path ? Link : 'div'} 
-          to={item.path || ''} 
+          component={item.path ? Link : 'div'}
+          to={item.path || ''}
           sx={{
             minHeight: 48,
             textTransform: 'none',
@@ -80,7 +79,7 @@ const Tabs = ({
         />
       ))}
     </MuiTabs>
-  );
-};
+  )
+}
 
-export default Tabs;
+export default Tabs

@@ -1,13 +1,16 @@
-import { useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { useNavigation } from '@/contexts/NavigationContext';
+import { useNavigationContext } from '@/components/Layout/contexts/NavigationContext'
+import { useEffect } from 'react'
+import { useLocation } from 'react-router-dom'
 
 export const useRouteChange = () => {
-    const location = useLocation();
-    const { setActiveRoute, closeAllMenus } = useNavigation();
+  const location = useLocation()
+  const { setActiveRoute, closeAllMenus } = useNavigationContext()
 
-    useEffect(() => {
-        setActiveRoute(location.pathname);
-        closeAllMenus();
-    }, [location.pathname, setActiveRoute, closeAllMenus]);
-};
+  // Set initial route on mount and when location changes
+  useEffect(() => {
+    const currentPath = location.pathname
+
+    setActiveRoute(currentPath)
+    closeAllMenus()
+  }, [location.pathname, setActiveRoute, closeAllMenus])
+}

@@ -1,40 +1,45 @@
-export type DifficultyLevel = 'Beginner' | 'Intermediate' | 'Advanced' | 'Expert';
+import { FieldValue } from 'firebase/firestore'
 
-export interface WorkoutSet {
-    id: string;
-    repetitions?: number;
-    weight?: number;
-    time?: number;
-    unit: 'kg' | 'sec';
+export enum DifficultyLevel {
+  BEGINNER = 'Beginner',
+  INTERMEDIATE = 'Intermediate',
+  ADVANCED = 'Advanced'
 }
 
 export interface Exercise {
-    id: string;
-    title: string;
-    description: string;
-    imageUrl: string;
-    videoUrl: string;
-    level: DifficultyLevel;
-    type: 'weight' | 'cardio' | 'bodyweight' | 'cable' | 'machine';
-    defaultRestPeriod: number; // in seconds
-    isCompleted?: boolean;
-    sets?: WorkoutSet[];
+  id: string
+  title: string
+  description: string
+  imageUrl: string
+  videoUrl: string
+  level: DifficultyLevel
+  type: string
+  defaultRestPeriod: number
+  category: string
+  isCompleted?: boolean
+  createdBy?: string
 }
+
 
 export interface WorkoutDay {
-    id: string;
-    title: string;
-    description: string;
-    imageUrl: string;
-    level: DifficultyLevel;
-    exercises: Exercise[];
+  id: string
+  title: string
+  description: string
+  imageUrl: string
+  level: DifficultyLevel
+  exercises: Exercise[]
 }
 
+
 export interface WorkoutPlan {
-    id: string;
-    title: string;
-    description: string;
-    imageUrl: string;
-    level: DifficultyLevel;
-    days: WorkoutDay[];
+  id: string
+  title: string
+  description: string
+  imageUrl: string
+  level: DifficultyLevel
+  days: WorkoutDay[]
+  userId?: string
+  type: 'custom' | 'default'
+  createdAt: Date | FieldValue
+  updatedAt: Date | FieldValue
 }

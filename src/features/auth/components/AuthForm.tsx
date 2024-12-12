@@ -1,19 +1,14 @@
-import React from 'react';
-import { useForm } from 'react-hook-form';
-import { yupResolver } from '@hookform/resolvers/yup';
-import {
-    TextField,
-    Button,
-    Typography,
-    CircularProgress,
-} from '@mui/material';
-import { styled } from '@mui/material/styles';
+import { yupResolver } from '@hookform/resolvers/yup'
+import { Button, CircularProgress, TextField, Typography } from '@mui/material'
+import { styled } from '@mui/material/styles'
+import React from 'react'
+import { useForm } from 'react-hook-form'
 
 interface AuthFormProps {
-    mode: 'login' | 'signup';
-    onSubmit: (data: any) => Promise<void>;
-    validationSchema: any;
-    isLoading?: boolean;
+    mode: 'login' | 'signup'
+    onSubmit: (data: any) => Promise<void>
+    validationSchema: any
+    isLoading?: boolean
 }
 
 const FormContainer = styled('form')(({ theme }) => ({
@@ -26,7 +21,7 @@ const FormContainer = styled('form')(({ theme }) => ({
     borderRadius: theme.shape.borderRadius,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[3],
-}));
+}))
 
 const AuthForm: React.FC<AuthFormProps> = ({
     mode,
@@ -40,7 +35,7 @@ const AuthForm: React.FC<AuthFormProps> = ({
         formState: { errors },
     } = useForm({
         resolver: yupResolver(validationSchema),
-    });
+    })
 
     return (
         <FormContainer onSubmit={handleSubmit(onSubmit)}>
@@ -87,21 +82,11 @@ const AuthForm: React.FC<AuthFormProps> = ({
                 />
             )}
 
-            <Button
-                type="submit"
-                variant="contained"
-                fullWidth
-                disabled={isLoading}
-                sx={{ mt: 2 }}
-            >
-                {isLoading ? (
-                    <CircularProgress size={24} />
-                ) : (
-                    mode === 'login' ? 'Login' : 'Sign Up'
-                )}
+            <Button type="submit" variant="contained" fullWidth disabled={isLoading} sx={{ mt: 2 }}>
+                {isLoading ? <CircularProgress size={24} /> : mode === 'login' ? 'Login' : 'Sign Up'}
             </Button>
         </FormContainer>
-    );
-};
+    )
+}
 
-export default AuthForm;
+export default AuthForm

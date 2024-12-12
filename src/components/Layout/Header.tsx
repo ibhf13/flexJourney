@@ -1,41 +1,37 @@
-import { useState } from 'react';
+import { useProfile } from '@/features/profile/hooks/useProfile'
+import { useAuthContext } from '@features/auth/contexts/AuthContext'
+import MenuIcon from '@mui/icons-material/Menu'
 import {
   AppBar,
-  Toolbar,
-  IconButton,
-  Box,
-  useTheme,
-  useMediaQuery,
   Avatar,
-  Typography,
-} from '@mui/material';
-import MenuIcon from '@mui/icons-material/Menu';
-import { Link, useNavigate } from 'react-router-dom';
-import { HeaderProps } from './types';
-import UserMenu from './UserMenu';
-import { PrimaryButton } from '../common/Buttons';
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter';
+  Box,
+  IconButton,
+  Toolbar,
+  useMediaQuery,
+  useTheme,
+} from '@mui/material'
+import { useState } from 'react'
+import { Link } from 'react-router-dom'
+import { PrimaryButton } from '../common/Buttons'
+import AppLogo from './AppLogo'
+import { HeaderProps } from './types'
+import UserMenu from './UserMenu'
 
-const Header = ({ onMobileMenuOpen }: HeaderProps) => {
-  const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null);
-  const theme = useTheme();
-  const navigate = useNavigate();
-  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
-  const isAuthenticated = true; // For testing, replace with actual auth state
+const Header = ({ toggleSidebar }: HeaderProps) => {
+  const [userMenuAnchor, setUserMenuAnchor] = useState<null | HTMLElement>(null)
+  const theme = useTheme()
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'))
+  const isAuthenticated = useAuthContext()
+  const { profile } = useProfile()
 
   const handleUserMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
-    setUserMenuAnchor(event.currentTarget);
-  };
+    setUserMenuAnchor(event.currentTarget)
+  }
 
   const handleUserMenuClose = () => {
-    setUserMenuAnchor(null);
-  };
+    setUserMenuAnchor(null)
+  }
 
-  const handleLogout = () => {
-    // Implement your logout logic here
-    setUserMenuAnchor(null);
-    navigate('/login');
-  };
 
   return (
     <AppBar
@@ -43,39 +39,23 @@ const Header = ({ onMobileMenuOpen }: HeaderProps) => {
       elevation={1}
       sx={{
         height: 64,
-        backgroundColor: '#121212',
+        backgroundColor: 'background.paper',
         borderBottom: '1px solid',
         borderColor: 'divider',
-        width: { md: `calc(100% - 240px)` },
-        ml: { md: '240px' },
+        width: '100%',
+        zIndex: theme.zIndex.drawer + 1,
       }}
     >
-
       <Toolbar sx={{ height: '100%' }}>
-        {isMobile && (
-          <IconButton
-            color="primary"
-            onClick={onMobileMenuOpen}
-            sx={{ mr: 2 }}
-          >
-            <MenuIcon />
-          </IconButton>
-        )}
+        <IconButton
+          color="primary"
+          onClick={toggleSidebar}
+          sx={{ mr: { xs: 1, md: 2 }, display: { xs: 'flex', md: isDesktop ? 'flex' : 'none' } }}
+        >
+          <MenuIcon />
+        </IconButton>
 
-        {isMobile && (
-          <Link to="/" style={{ textDecoration: 'none', color: 'inherit', display: 'flex', alignItems: 'center' }}>
-            <FitnessCenterIcon sx={{ color: 'primary.main', fontSize: 28, mr: 1 }} />
-            <Typography
-              variant="h6"
-              sx={{
-                color: 'primary.main',
-                fontWeight: 600,
-              }}
-            >
-              FitLife
-            </Typography>
-          </Link>
-        )}
+        <AppLogo />
 
         <Box sx={{ flexGrow: 1 }} />
 
@@ -85,15 +65,12 @@ const Header = ({ onMobileMenuOpen }: HeaderProps) => {
             href="/login"
             variant="contained"
             size="large"
-            sx={{
-              borderRadius: 2,
-              px: 3,
-            }}
+            sx={{ borderRadius: 2, px: 3 }}
           >
             Login
           </PrimaryButton>
         ) : (
-          <>
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
             <IconButton
               onClick={handleUserMenuOpen}
               sx={{
@@ -103,6 +80,7 @@ const Header = ({ onMobileMenuOpen }: HeaderProps) => {
               }}
             >
               <Avatar
+                src={profile?.photoURL || undefined}
                 sx={{
                   width: 32,
                   height: 32,
@@ -110,15 +88,12 @@ const Header = ({ onMobileMenuOpen }: HeaderProps) => {
                 }}
               />
             </IconButton>
-            <UserMenu
-              anchorEl={userMenuAnchor}
-              onClose={handleUserMenuClose}
-            />
-          </>
+            <UserMenu anchorEl={userMenuAnchor} onClose={handleUserMenuClose} />
+          </Box>
         )}
       </Toolbar>
     </AppBar>
-  );
-};
+  )
+}
 
-export default Header;
+export default Header

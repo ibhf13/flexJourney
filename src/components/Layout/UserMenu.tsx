@@ -1,31 +1,23 @@
+import { useLogout } from '@/features/auth/hooks/useLogout'
 import {
-  Menu,
-  MenuItem,
-  ListItemIcon,
-  ListItemText,
-  Divider,
-  alpha,
-} from '@mui/material';
-import {
-  Person as PersonIcon,
-  Settings as SettingsIcon,
   ExitToApp as LogoutIcon,
-} from '@mui/icons-material';
-import { Link } from 'react-router-dom';
-import { useLogout } from '@/features/auth/hooks/useLogout';
+  Person as PersonIcon
+} from '@mui/icons-material'
+import { Divider, ListItemIcon, ListItemText, Menu, MenuItem, alpha } from '@mui/material'
+import { Link } from 'react-router-dom'
 
 interface UserMenuProps {
-  anchorEl: HTMLElement | null;
-  onClose: () => void;
+  anchorEl: HTMLElement | null
+  onClose: () => void
 }
 
 const UserMenu = ({ anchorEl, onClose }: UserMenuProps) => {
-  const { handleLogout } = useLogout();
+  const { handleLogout } = useLogout()
 
   const handleLogoutClick = async () => {
-    onClose();
-    await handleLogout();
-  };
+    onClose()
+    await handleLogout()
+  }
 
   return (
     <Menu
@@ -67,13 +59,6 @@ const UserMenu = ({ anchorEl, onClose }: UserMenuProps) => {
         <ListItemText primary="Profile" />
       </MenuItem>
 
-      <MenuItem component={Link} to="/settings">
-        <ListItemIcon>
-          <SettingsIcon fontSize="small" />
-        </ListItemIcon>
-        <ListItemText primary="Settings" />
-      </MenuItem>
-
       <Divider sx={{ my: 1 }} />
 
       <MenuItem onClick={handleLogoutClick}>
@@ -83,7 +68,7 @@ const UserMenu = ({ anchorEl, onClose }: UserMenuProps) => {
         <ListItemText primary="Logout" />
       </MenuItem>
     </Menu>
-  );
-};
+  )
+}
 
-export default UserMenu;
+export default UserMenu

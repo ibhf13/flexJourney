@@ -1,4 +1,5 @@
-export { default as PrimaryButton } from './PrimaryButton';
-export { default as SecondaryButton } from './SecondaryButton';
-export { default as IconButton } from './IconButton';
-export * from './types';
+export { default as IconButton } from './IconButton'
+export { default as PrimaryButton } from './PrimaryButton'
+export { default as SecondaryButton } from './SecondaryButton'
+export * from './types'
+

@@ -1,5 +1,5 @@
-import { Box } from '@mui/material';
-import { GridContainerProps, GridItemProps } from './types';
+import { Box } from '@mui/material'
+import { GridContainerProps, GridItemProps } from './types'
 
 export const GridContainer = ({
   children,
@@ -7,6 +7,7 @@ export const GridContainer = ({
   columns = 12,
   ...props
 }: GridContainerProps) => {
+
   return (
     <Box
       display="grid"
@@ -22,18 +23,11 @@ export const GridContainer = ({
     >
       {children}
     </Box>
-  );
-};
+  )
+}
 
-export const GridItem = ({
-  children,
-  xs = 12,
-  sm,
-  md,
-  lg,
-  xl,
-  ...props
-}: GridItemProps) => {
+export const GridItem = ({ children, xs = 12, sm, md, lg, xl, ...props }: GridItemProps) => {
+
   return (
     <Box
       gridColumn={{
@@ -47,5 +41,5 @@ export const GridItem = ({
     >
       {children}
     </Box>
-  );
-};
+  )
+}

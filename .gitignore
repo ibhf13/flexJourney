@@ -1,17 +1,54 @@
-# Local
-.DS_Store
-*.local
-*.log*
+# Dependencies
+/node_modules
+/.pnp
+.pnp.js
 
-# Dist
-node_modules
-dist/
+# Testing
+/coverage
+
+# Production
+/build
+/dist
+*.cache
+
+# Environment Variables
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# Debug Logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
 
 # IDE
+.idea/
+.vscode
 .vscode/*
-.github/*
 !.vscode/extensions.json
-.idea
 *.md
-*.env
 
+# OS
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Firebase
+.firebase/
+firebase-debug.log
+firebase-debug.*.log
+.firebaserc
+firebase-service-account.json
+
+# Build tools
+.rsbuild
+.rollup.cache
+
+# Local Development
+*.local

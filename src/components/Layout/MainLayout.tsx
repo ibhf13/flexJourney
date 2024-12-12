@@ -1,41 +1,43 @@
-import { Box } from '@mui/material';
-import { Outlet } from 'react-router-dom';
-import Header from './Header';
-import Sidebar from './Sidebar';
-import { useNavigation } from '@/contexts/NavigationContext';
+import { useRouteChange } from '@/utils/navigation'
+import { Box } from '@mui/material'
+import { Outlet } from 'react-router-dom'
+import { useNavigationContext } from './contexts/NavigationContext'
+import Header from './Header'
+import Sidebar from './Sidebar'
 
 const MainLayout = () => {
-  const { isSidebarOpen, toggleMobileMenu } = useNavigation();
+  const { isSidebarOpen, toggleSidebar } = useNavigationContext()
+
+  useRouteChange()
 
   return (
-    <Box sx={{
-      display: 'flex',
-      minHeight: '100vh',
-      width: '100%',
-      height: '100%',
-      backgroundColor: '#121212',
-    }}>
-      <Header onMobileMenuOpen={toggleMobileMenu} />
-      <Sidebar
-        open={isSidebarOpen}
-        onClose={toggleMobileMenu}
-      />
+    <Box sx={{ display: 'flex', width: '100%', height: '100%' }}>
+      <Header toggleSidebar={toggleSidebar} />
+      <Sidebar open={isSidebarOpen} onClose={toggleSidebar} />
 
       <Box
         component="main"
         sx={{
-          flexGrow: 1,
           display: 'flex',
           flexDirection: 'column',
           height: '100vh',
           pt: '64px',
           overflow: 'auto',
+          flexGrow: 1,
+          minHeight: '100vh',
+          transition: 'margin 225ms cubic-bezier(0.4, 0, 0.6, 1)',
+          bgcolor: 'background.default',
+          '&::-webkit-scrollbar': {
+            display: 'none'
+          },
+          scrollbarWidth: 'none',  // Firefox
+          msOverflowStyle: 'none'  // IE and Edge
         }}
       >
         <Outlet />
       </Box>
     </Box>
-  );
-};
+  )
+}
 
-export default MainLayout;
+export default MainLayout

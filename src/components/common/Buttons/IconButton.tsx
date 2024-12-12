@@ -1,5 +1,5 @@
-import { Button, CircularProgress } from '@mui/material';
-import { IconButtonProps } from './types';
+import { Button, CircularProgress } from '@mui/material'
+import { IconButtonProps } from './types'
 
 const IconButton = ({
   icon,
@@ -9,6 +9,7 @@ const IconButton = ({
   disabled,
   ...props
 }: IconButtonProps) => {
+
   return (
     <Button
       startIcon={iconPosition === 'start' && !isLoading ? icon : null}
@@ -20,15 +21,15 @@ const IconButton = ({
       {isLoading ? (
         <CircularProgress
           size={24}
-          sx={{ 
+          sx={{
             color: 'inherit',
-            mr: 1 
+            mr: 1,
           }}
         />
       ) : null}
       {props.children}
     </Button>
-  );
-};
+  )
+}
 
-export default IconButton;
+export default IconButton

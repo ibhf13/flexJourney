@@ -1,19 +1,39 @@
-import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom';
-import { useAuth } from '@/contexts/AuthContext';
-import { publicRoutes, privateRoutes } from './routes';
+import { LoadingFallback } from '@/components/common/Layouts/LoadingFallback'
+import { useAuthContext } from '@/features/auth/contexts/AuthContext'
+import { Suspense } from 'react'
+import { createBrowserRouter, Navigate, RouterProvider } from 'react-router-dom'
+import { ROUTES } from './routeConstants'
+import { routes } from './routes'
 
 const AppRouter = () => {
-    const { isAuthenticated } = useAuth();
+  const { isAuthenticated, isLoading } = useAuthContext()
 
-    const router = createBrowserRouter([
-        ...publicRoutes,
-        ...(isAuthenticated ? [privateRoutes] : [{
-            path: '*',
-            element: <Navigate to="/login" replace />
-        }])
-    ]);
+  if (isLoading) {
+    return <LoadingFallback />
+  }
 
-    return <RouterProvider router={router} />;
-};
+  const router = createBrowserRouter([
+    ...routes.publicRoutes,
 
-export default AppRouter;
+    isAuthenticated
+      ? routes.privateRoutes
+      : {
+        path: '*',
+        element: (
+          <Navigate
+            to={ROUTES.AUTH.LOGIN}
+            replace
+            state={{ from: window.location.pathname }}
+          />
+        ),
+      }
+  ])
+
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      <RouterProvider router={router} />
+    </Suspense>
+  )
+}
+
+export default AppRouter

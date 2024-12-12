@@ -1,30 +1,24 @@
-import { useCallback } from 'react';
-import { signOut } from 'firebase/auth';
-import { auth } from '@/config/firebase';
-import { useNavigate } from 'react-router-dom';
-import { useNotification } from '@/features/Feedback';
-import { useAuthError } from './useAuthError';
+import { auth } from '@/config/firebase/firebaseConfig'
+import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { signOut } from 'firebase/auth'
+import { useCallback } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useAuthError } from './useAuthError'
 
 export const useLogout = () => {
-    const navigate = useNavigate();
-    const { showNotification } = useNotification();
-    const { getErrorMessage } = useAuthError();
+  const navigate = useNavigate()
+  const { handleError, showMessage } = useErrorHandler()
+  const { getErrorMessage } = useAuthError()
 
-    const handleLogout = useCallback(async () => {
-        try {
-            await signOut(auth);
-            showNotification({
-                message: 'Logged out successfully',
-                severity: 'success'
-            });
-            navigate('/login');
-        } catch (error) {
-            showNotification({
-                message: getErrorMessage(error),
-                severity: 'error'
-            });
-        }
-    }, [navigate, showNotification, getErrorMessage]);
+  const handleLogout = useCallback(async () => {
+    try {
+      await signOut(auth)
+      showMessage('Logged out successfully', 'success')
+      navigate('/login')
+    } catch (error) {
+      handleError(getErrorMessage(error), 'error')
+    }
+  }, [navigate, handleError, getErrorMessage, showMessage])
 
-    return { handleLogout };
-};
+  return { handleLogout }
+}

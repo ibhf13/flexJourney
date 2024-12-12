@@ -1,4 +1,6 @@
-export { default as DialogPopup } from './DialogPopup';
-export { default as SideDrawer } from './SideDrawer';
-export { default as MobileDrawer } from './MobileDrawer';
-export * from './types';
+export { default as MobileDrawer } from './MobileDrawer'
+export { default as Popup } from './Popup'
+export { default as ResponsivePopup } from './ResponsivePopup'
+export { default as SideDrawer } from './SideDrawer'
+export * from './types'
+

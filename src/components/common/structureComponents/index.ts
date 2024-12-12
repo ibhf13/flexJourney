@@ -1,4 +1,4 @@
-export { default as Container } from './Container';
-export { default as Paper } from './Paper';
-export { GridContainer, GridItem } from './Grid';
-export * from './types';
+export { default as Container } from './Container'
+export { GridContainer, GridItem } from './Grid'
+export { default as Paper } from './Paper'
+export * from './types'
