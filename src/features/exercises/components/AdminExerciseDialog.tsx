@@ -1,4 +1,5 @@
 import { ResponsivePopup } from '@/components/common/Popups'
+import { DifficultyLevel } from '@/features/workout/types/WorkoutTypes'
 import AddPhotoAlternateIcon from '@mui/icons-material/AddPhotoAlternate'
 import { LoadingButton } from '@mui/lab'
 import { Box, Button, CircularProgress, DialogActions, MenuItem, Stack, TextField, Typography } from '@mui/material'
@@ -8,7 +9,7 @@ import { Controller, useForm } from 'react-hook-form'
 import { useAdminExercises } from '../hooks/useAdminExercises'
 import { useExerciseImage } from '../hooks/useExerciseImage'
 import { useExercises } from '../hooks/useExercises'
-import { Exercise } from '../types/ExerciseTypes'
+import { Exercise, PREDEFINED_EXERCISE_TYPES } from '../types/ExerciseTypes'
 
 interface AdminExerciseDialogProps {
     exercise: Exercise | null
@@ -31,6 +32,11 @@ const ImageUploadBox = styled(Box)(({ theme }) => ({
     position: 'relative',
 }))
 
+const CustomTypeMenuItem = styled(MenuItem)(({ theme }) => ({
+    borderTop: `1px solid ${theme.palette.divider}`,
+    marginTop: theme.spacing(1),
+}))
+
 export const AdminExerciseDialog = ({ exercise, onClose, open, mode }: AdminExerciseDialogProps) => {
     const { updateExercise, createExercise, isUpdating, isCreating } = useAdminExercises()
     const { categories } = useExercises()
@@ -42,6 +48,8 @@ export const AdminExerciseDialog = ({ exercise, onClose, open, mode }: AdminExer
             videoUrl: exercise?.videoUrl || '',
             category: exercise?.category || '',
             defaultRestPeriod: exercise?.defaultRestPeriod || 60,
+            level: exercise?.level || DifficultyLevel.BEGINNER,
+            type: exercise?.type || PREDEFINED_EXERCISE_TYPES.STRENGTH,
         },
     })
     const { processImage, isUploading } = useExerciseImage({
@@ -59,6 +67,8 @@ export const AdminExerciseDialog = ({ exercise, onClose, open, mode }: AdminExer
                 videoUrl: exercise.videoUrl,
                 category: exercise.category,
                 defaultRestPeriod: exercise.defaultRestPeriod,
+                level: exercise.level,
+                type: exercise.type,
             })
         }
     }, [open, exercise, reset])
@@ -206,7 +216,81 @@ export const AdminExerciseDialog = ({ exercise, onClose, open, mode }: AdminExer
                             </Box>
                         )}
                     />
+                    <Controller
+                        name="type"
+                        control={control}
+                        rules={{ required: 'Type is required' }}
+                        render={({ field, fieldState }) => (
+                            <TextField
+                                {...field}
+                                select
+                                label="Exercise Type"
+                                error={!!fieldState.error}
+                                helperText={fieldState.error?.message}
+                                fullWidth
+                                SelectProps={{
+                                    MenuProps: {
+                                        PaperProps: {
+                                            style: {
+                                                maxHeight: 300,
+                                            },
+                                        },
+                                    },
+                                }}
+                            >
+                                {Object.values(PREDEFINED_EXERCISE_TYPES).map((type) => (
+                                    <MenuItem key={type} value={type}>
+                                        {type}
+                                    </MenuItem>
+                                ))}
+                                {field.value && !Object.values(PREDEFINED_EXERCISE_TYPES).includes(field.value as any) && (
+                                    <MenuItem value={field.value}>
+                                        {field.value}
+                                    </MenuItem>
+                                )}
+                                <CustomTypeMenuItem>
+                                    <TextField
+                                        placeholder="Enter custom type"
+                                        fullWidth
+                                        onClick={(e) => e.stopPropagation()}
+                                        onChange={(e) => {
+                                            const sanitizedValue = e.target.value
+                                                .replace(/[^a-zA-Z0-9\s]/g, '')
+                                                .toUpperCase()
 
+                                            e.target.value = sanitizedValue
+                                        }}
+                                        onKeyDown={(e) => {
+                                            if (e.key === 'Enter') {
+                                                e.preventDefault()
+                                                const customValue = (e.target as HTMLInputElement).value
+
+                                                if (customValue) {
+                                                    field.onChange(customValue);
+                                                    (e.target as HTMLInputElement).value = ''
+                                                    const selectElement = e.currentTarget.closest('.MuiSelect-select')
+
+                                                    if (selectElement) {
+                                                        (selectElement as HTMLElement).click()
+                                                    }
+                                                }
+                                            }
+                                        }}
+                                        InputProps={{
+                                            onBlur: (e) => {
+                                                const customValue = e.target.value
+
+                                                if (customValue) {
+                                                    field.onChange(customValue)
+                                                    e.target.value = ''
+                                                }
+                                            },
+                                        }}
+                                    />
+                                </CustomTypeMenuItem>
+                            </TextField>
+                        )}
+                    />
                     <Controller
                         name="videoUrl"
                         control={control}
@@ -260,6 +344,30 @@ export const AdminExerciseDialog = ({ exercise, onClose, open, mode }: AdminExer
                             />
                         )}
                     />
+
+                    <Controller
+                        name="level"
+                        control={control}
+                        rules={{ required: 'Level is required' }}
+                        render={({ field, fieldState }) => (
+                            <TextField
+                                {...field}
+                                select
+                                label="Difficulty Level"
+                                error={!!fieldState.error}
+                                helperText={fieldState.error?.message}
+                                fullWidth
+                            >
+                                {Object.values(DifficultyLevel).map((level) => (
+                                    <MenuItem key={level} value={level}>
+                                        {level}
+                                    </MenuItem>
+                                ))}
+                            </TextField>
+                        )}
+                    />
+
+
                 </Stack>
                 <DialogActions>
                     <Button onClick={handleClose} color="inherit">
