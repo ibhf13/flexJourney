@@ -18,7 +18,7 @@ export const useProfileAvatar = (options: UploadAvatarOptions = {}) => {
     const { handleError, showMessage } = useErrorHandler()
     const queryClient = useQueryClient()
     const {
-        maxSizeMB = 1,
+        maxSizeMB = 5,
         acceptedTypes = ['image/jpeg', 'image/png', 'image/webp'],
         onSuccess,
     } = options
