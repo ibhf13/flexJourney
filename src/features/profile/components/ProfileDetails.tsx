@@ -1,4 +1,3 @@
-import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import PersonIcon from '@mui/icons-material/Person'
 import ScaleIcon from '@mui/icons-material/Scale'
 import {
@@ -10,8 +9,9 @@ import {
     Typography,
     useTheme,
 } from '@mui/material'
-import { format } from 'date-fns'
 import { UserProfile } from '../types/ProfileTypes'
+import { calculateAge } from '../utils/profileUtils'
+import { BMICard } from './BMICard'
 
 interface ProfileSectionProps {
     icon: React.ReactNode
@@ -83,11 +83,31 @@ export const ProfileDetails = ({ profile }: ProfileDetailsProps) => {
                         {profile.birthDate && (
                             <Box>
                                 <Typography variant="subtitle2" color="text.secondary">
-                                    Birth Date
+                                    Age
                                 </Typography>
                                 <Typography>
-                                    {format(new Date(profile.birthDate), 'MMMM d, yyyy')}
+                                    {calculateAge(profile.birthDate)} years
                                 </Typography>
+                            </Box>
+                        )}
+                        <Box>
+                            <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                                Fitness Level
+                            </Typography>
+                            <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} width={{ xs: '50%', md: 'auto' }}>
+                                <Chip label={profile.fitnessLevel} color="primary" variant="outlined" />
+                            </Box>
+                        </Box>
+                        {profile.fitnessGoals && (
+                            <Box>
+                                <Typography variant="subtitle2" color="text.secondary" gutterBottom>
+                                    Fitness Goals
+                                </Typography>
+                                <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} flexWrap="wrap" gap={1} width={{ xs: '50%', md: 'auto' }}>
+                                    {profile.fitnessGoals.map((goal) => (
+                                        <Chip key={goal} label={goal} color="secondary" variant="outlined" />
+                                    ))}
+                                </Box>
                             </Box>
                         )}
                     </Stack>
@@ -108,69 +128,35 @@ export const ProfileDetails = ({ profile }: ProfileDetailsProps) => {
                                 <Typography>{profile.height} cm</Typography>
                             </Box>
                         )}
-                        {profile.weight && (
+                        {(profile.weight || profile.targetWeight) && (
                             <Box>
                                 <Typography variant="subtitle2" color="text.secondary">
-                                    Current Weight
+                                    Weight
                                 </Typography>
-                                <Typography>{profile.weight} kg</Typography>
+                                <Stack direction="row" spacing={2} alignItems="center">
+                                    {profile.weight && (
+                                        <Typography>
+                                            Current: {profile.weight} kg
+                                        </Typography>
+                                    )}
+                                    {profile.targetWeight && (
+                                        <>
+                                            <Divider orientation="vertical" flexItem />
+                                            <Typography>
+                                                Target: {profile.targetWeight} kg
+                                            </Typography>
+                                        </>
+                                    )}
+                                </Stack>
                             </Box>
                         )}
-                        {profile.targetWeight && (
-                            <Box>
-                                <Typography variant="subtitle2" color="text.secondary">
-                                    Target Weight
-                                </Typography>
-                                <Typography>{profile.targetWeight} kg</Typography>
-                            </Box>
-                        )}
+                        <BMICard
+                            height={profile.height}
+                            weight={profile.weight}
+                        />
                     </Stack>
                 </ProfileSection>
             </Box>
-
-            <Box sx={{ width: '100%' }}>
-                <ProfileSection
-                    icon={<FitnessCenterIcon color="primary" />}
-                    title="Fitness Profile"
-                >
-                    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 3 }}>
-                        <Box sx={{ flex: 1 }}>
-                            <Stack spacing={2}>
-                                <Box>
-                                    <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                                        Fitness Level
-                                    </Typography>
-                                    <Chip label={profile.fitnessLevel} color="primary" variant="outlined" />
-                                </Box>
-                                {profile.fitnessGoals && (
-                                    <Box>
-                                        <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                                            Fitness Goals
-                                        </Typography>
-                                        <Stack direction="row" flexWrap="wrap" gap={1}>
-                                            {Array.isArray(profile.fitnessGoals) ? (
-                                                profile.fitnessGoals.map((goal) => (
-                                                    <Chip key={goal} label={goal} size="small" />
-                                                ))
-                                            ) : (
-                                                <Chip label={profile.fitnessGoals} size="small" />
-                                            )}
-                                        </Stack>
-                                    </Box>
-                                )}
-                            </Stack>
-                        </Box>
-                        {profile.bio && (
-                            <Box sx={{ flex: 1 }}>
-                                <Typography variant="subtitle2" color="text.secondary" gutterBottom>
-                                    About Me
-                                </Typography>
-                                <Typography>{profile.bio}</Typography>
-                            </Box>
-                        )}
-                    </Box>
-                </ProfileSection>
-            </Box>
-        </Box>
+        </Box >
     )
 }

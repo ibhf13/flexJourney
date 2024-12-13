@@ -5,7 +5,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { fetchUserProfile, updateUserProfile } from '../api/profileService'
 import type { UpdateProfileData, UserProfile } from '../types/ProfileTypes'
 
-const PROFILE_CACHE_TIME = 5 * 60 * 1000 // 5 minutes
+const PROFILE_CACHE_TIME = 5 * 60 * 1000
 const MAX_RETRIES = 3
 
 export const useProfile = () => {

@@ -1,6 +1,5 @@
-
 export type FitnessLevel = 'Beginner' | 'Intermediate' | 'Advanced'
-export type Gender = 'Male' | 'Female' | 'Other' | 'Prefer not to say'
+export type Gender = 'Male' | 'Female' | 'Other'
 
 export interface BaseProfileData {
     firstName?: string
@@ -24,6 +23,7 @@ export interface UserProfile extends BaseProfileData {
     id: string
     createdAt: Date
     updatedAt: Date
+    fitnessGoals: string[]
 }
 
 export interface ProfileFormData extends BaseProfileData {
