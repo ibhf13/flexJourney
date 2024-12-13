@@ -20,7 +20,7 @@ interface WorkoutBuilderContextType {
 const INITIAL_STATE: WorkoutBuilderState = {
     days: [],
     description: '',
-    level: 'Beginner',
+    level: 'Beginner' as DifficultyLevel,
     type: 'custom'
 }
 
@@ -43,12 +43,19 @@ export const WorkoutBuilderProvider = ({ children }: { children: ReactNode }) =>
         setWorkoutPlan(INITIAL_STATE)
     }
 
+    const setCurrentStepWithScroll = (step: WorkoutBuilderStep) => {
+        setCurrentStep(step)
+        if (document.activeElement instanceof HTMLElement) {
+            document.activeElement.blur()
+        }
+    }
+
     return (
         <WorkoutBuilderContext.Provider
             value={{
                 currentStep,
                 workoutPlan,
-                setCurrentStep,
+                setCurrentStep: setCurrentStepWithScroll,
                 updateWorkoutPlan,
                 resetBuilder
             }}
