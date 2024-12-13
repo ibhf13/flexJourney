@@ -1,5 +1,5 @@
 import { FormControl, MenuItem, Select, SelectChangeEvent } from '@mui/material'
-import { ExerciseProgress } from '../../types/statistics'
+import { ExerciseProgress } from '../types/statisticsTypes'
 
 interface ExerciseSelectorProps {
     exercises: ExerciseProgress[]

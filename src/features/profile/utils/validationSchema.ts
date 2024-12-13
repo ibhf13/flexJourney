@@ -16,5 +16,5 @@ export const profileSchema = yup.object().shape({
     gender: yup.string().oneOf(['Male', 'Female', 'Other', 'Prefer not to say']).nullable(),
     birthDate: yup.date().nullable().transform((curr, orig) => orig === '' ? null : curr),
     phoneNumber: yup.string().trim().nullable(),
-    fitnessGoals: yup.array().of(yup.string()).nullable(),
+    fitnessGoals: yup.string().nullable(),
 }) as yup.ObjectSchema<ProfileFormData>

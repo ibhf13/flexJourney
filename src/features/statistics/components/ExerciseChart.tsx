@@ -1,7 +1,7 @@
 import { Box } from '@mui/material'
 import { LineChart } from '@mui/x-charts'
-import { CHART_DIMENSIONS, CHART_MARGINS } from '../../constants/chart'
-import { ProgressDataPoint } from '../../types/statistics'
+import { CHART_DIMENSIONS, CHART_MARGINS } from '../constants/chart'
+import { ProgressDataPoint } from '../types/statisticsTypes'
 
 interface ExerciseChartProps {
     data: ProgressDataPoint[]

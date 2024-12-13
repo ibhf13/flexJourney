@@ -2,7 +2,7 @@ import { Theme } from '@mui/material'
 
 export const accordionStyles = (theme: Theme) => ({
     root: {
-        borderRadius: 2,
+        borderRadius: '8px 8px 0 0',
         backgroundColor: theme.palette.background.paper,
         '&:before': { display: 'none' },
         boxShadow: theme.shadows[1],
@@ -16,6 +16,7 @@ export const accordionStyles = (theme: Theme) => ({
     summary: {
         borderBottom: 1,
         borderColor: 'divider',
+        borderRadius: '8px 8px 0 0',
         '& .MuiAccordionSummary-content': {
             display: 'flex',
             alignItems: 'center',

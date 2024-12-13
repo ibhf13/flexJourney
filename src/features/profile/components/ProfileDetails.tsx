@@ -148,9 +148,13 @@ export const ProfileDetails = ({ profile }: ProfileDetailsProps) => {
                                             Fitness Goals
                                         </Typography>
                                         <Stack direction="row" flexWrap="wrap" gap={1}>
-                                            {profile.fitnessGoals.map((goal) => (
-                                                <Chip key={goal} label={goal} size="small" />
-                                            ))}
+                                            {Array.isArray(profile.fitnessGoals) ? (
+                                                profile.fitnessGoals.map((goal) => (
+                                                    <Chip key={goal} label={goal} size="small" />
+                                                ))
+                                            ) : (
+                                                <Chip label={profile.fitnessGoals} size="small" />
+                                            )}
                                         </Stack>
                                     </Box>
                                 )}

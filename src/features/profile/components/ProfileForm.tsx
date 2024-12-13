@@ -10,7 +10,7 @@ import {
 } from '@mui/material'
 import { useProfileForm } from '../hooks/useProfileForm'
 import { UserProfile } from '../types/ProfileTypes'
-import { FITNESS_LEVELS, GENDERS } from '../utils/profileConstants'
+import { FITNESS_GOALS, FITNESS_LEVELS, GENDERS } from '../utils/profileConstants'
 
 interface ProfileFormProps {
     open: boolean
@@ -169,6 +169,22 @@ export const ProfileForm = ({
                             label="Phone Number"
                             fullWidth
                         />
+                    </Grid>
+
+                    <Grid item xs={12}>
+                        <FormTextField
+                            control={control}
+                            name="fitnessGoals"
+                            label="Fitness Goal"
+                            select
+                            fullWidth
+                        >
+                            {FITNESS_GOALS.map((goal) => (
+                                <MenuItem key={goal} value={goal}>
+                                    {goal}
+                                </MenuItem>
+                            ))}
+                        </FormTextField>
                     </Grid>
                 </Grid>
             </DialogContent>

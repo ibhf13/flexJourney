@@ -18,17 +18,16 @@ import {
 } from '@mui/material'
 import { BarChart } from '@mui/x-charts'
 import { format } from 'date-fns'
-import { useState } from 'react'
 import { CHART_DIMENSIONS, CHART_MARGINS } from '../constants/chart'
 import { useStatistics } from '../hooks/useStatistics'
 import { accordionStyles } from '../styles/statisticsStyles'
-import { StatCard as StatCardProps } from '../types/statistics'
-import { StatisticCard } from './common/StatisticCard'
+import { StatCard as StatCardProps } from '../types/statisticsTypes'
+import { StatisticCard } from './StatisticCard'
 
-export const StatisticsOverview = () => {
+export const StatisticsOverview = ({ expanded = false }: { expanded?: boolean }) => {
     const { stats } = useStatistics()
     const theme = useTheme()
-    const [expanded, setExpanded] = useState<string>('panel1')
+    const styles = accordionStyles(theme)
 
     if (!stats) return null
 
@@ -59,26 +58,12 @@ export const StatisticsOverview = () => {
         }
     ]
 
-    const handleAccordionChange = (panel: string) => (
-        event: React.SyntheticEvent,
-        isExpanded: boolean
-    ) => {
-        event.stopPropagation()
-        setExpanded(isExpanded ? panel : '')
-    }
-
-    const styles = accordionStyles(theme)
 
     return (
-        <Stack spacing={4} sx={{ p: { xs: 2, sm: 3 }, mb: 2 }}>
+        <Stack spacing={3} sx={{ p: { xs: 2, sm: 3 } }}>
             <Stack
                 direction={{ xs: 'column', sm: 'row' }}
-                sx={{
-                    display: 'flex',
-                    flexWrap: 'wrap',
-                    gap: { xs: 2, sm: 3 },
-
-                }}
+                sx={{ display: 'flex', flexWrap: 'wrap', gap: { xs: 2, sm: 3 } }}
             >
                 {statCards.map((card, index) => (
                     <Box
@@ -93,11 +78,7 @@ export const StatisticsOverview = () => {
                 ))}
             </Stack>
 
-            <Accordion
-                expanded={expanded === 'panel1'}
-                onChange={handleAccordionChange('panel1')}
-                sx={styles.root}
-            >
+            <Accordion defaultExpanded={expanded} sx={styles.root}>
                 <AccordionSummary
                     expandIcon={<ExpandMore />}
                     sx={styles.summary}
@@ -108,13 +89,7 @@ export const StatisticsOverview = () => {
                     </Typography>
                 </AccordionSummary>
                 <AccordionDetails sx={styles.details}>
-                    <Box sx={{
-                        height: CHART_DIMENSIONS.height,
-                        width: '100%',
-                        borderRadius: 1,
-                        p: 2,
-
-                    }}>
+                    <Box sx={{ height: CHART_DIMENSIONS.height, width: '100%', borderRadius: 1, p: 2 }}>
                         <BarChart
                             series={[
                                 {

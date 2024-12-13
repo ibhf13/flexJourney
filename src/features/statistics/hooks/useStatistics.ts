@@ -1,6 +1,6 @@
 import { useHistory } from '@/features/history/hooks/useHistory'
 import { ExerciseLog, TrainingHistoryEntry } from '@/features/history/types/HistoryTypes'
-import { ExerciseStats, Statistics } from '../types/statistics'
+import { ExerciseStats, Statistics } from '../types/statisticsTypes'
 import {
     calculateDailyStats,
     createProgressDataPoint,

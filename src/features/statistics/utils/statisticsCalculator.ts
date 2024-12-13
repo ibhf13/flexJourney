@@ -1,6 +1,6 @@
 import { ExerciseSet } from '@/features/history/types/HistoryTypes'
 import { format, parseISO } from 'date-fns'
-import { ExerciseStats, ProgressDataPoint } from '../types/statistics'
+import { ExerciseStats, ProgressDataPoint } from '../types/statisticsTypes'
 
 export const calculateDailyStats = (sets: ExerciseSet[]): {
     dailyVolume: number
