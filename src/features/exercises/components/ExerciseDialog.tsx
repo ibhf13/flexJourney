@@ -27,7 +27,7 @@ export const ExerciseDialog: React.FC<ExerciseDialogProps> = ({
             <Grid container spacing={3}>
                 <Grid item xs={12} md={6}>
                     <ExerciseDetails
-                        imageUrl={exercise.imageUrl}
+                        imageUrl={exercise.imageUrl ?? ''}
                         description={exercise.description}
                         level={exercise.level}
                         category={exercise.category}
@@ -40,7 +40,7 @@ export const ExerciseDialog: React.FC<ExerciseDialogProps> = ({
                     <Box sx={{ height: '100%' }}>
                         <ExerciseVideo
                             title={exercise.title}
-                            videoUrl={exercise.videoUrl}
+                            videoUrl={exercise.videoUrl ?? ''}
                             expanded={true}
                         />
                     </Box>

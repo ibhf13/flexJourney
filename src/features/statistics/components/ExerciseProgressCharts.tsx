@@ -12,17 +12,16 @@ import {
 import { useState } from 'react'
 import { useStatistics } from '../hooks/useStatistics'
 import { accordionStyles } from '../styles/statisticsStyles'
-import { ExerciseProgress } from '../types/statistics'
-import { ChartLegend } from './chart/ChartLegend'
-import { ExerciseChart } from './common/ExerciseChart'
-import { ExerciseSelector } from './exercise/ExerciseSelector'
-import { ExerciseStats } from './exercise/ExerciseStats'
+import { ExerciseProgress } from '../types/statisticsTypes'
+import { ChartLegend } from './ChartLegend'
+import { ExerciseChart } from './ExerciseChart'
+import { ExerciseSelector } from './ExerciseSelector'
+import { ExerciseStats } from './ExerciseStats'
 
 
-export const ExerciseProgressCharts = () => {
+export const ExerciseProgressCharts = ({ expanded = false }: { expanded?: boolean }) => {
     const { stats } = useStatistics()
     const [selectedExercise, setSelectedExercise] = useState<string>('')
-    const [expanded, setExpanded] = useState<string>('panel1')
     const theme = useTheme()
     const styles = accordionStyles(theme)
 
@@ -49,20 +48,11 @@ export const ExerciseProgressCharts = () => {
 
     if (!selectedData) return null
 
-    const handleAccordionChange = (panel: string) => (
-        _: React.SyntheticEvent,
-        isExpanded: boolean
-    ) => {
-        setExpanded(isExpanded ? panel : '')
-    }
+
 
     return (
-        <Stack spacing={3} p={2}>
-            <Accordion
-                expanded={expanded === 'panel1'}
-                onChange={handleAccordionChange('panel1')}
-                sx={styles.root}
-            >
+        <Stack spacing={3} sx={{ p: { xs: 2, sm: 3 } }}>
+            <Accordion defaultExpanded={expanded} sx={styles.root}>
                 <AccordionSummary
                     expandIcon={<ExpandMoreIcon />}
                     sx={styles.summary}

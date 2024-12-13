@@ -1,9 +1,8 @@
-import { Box, Paper, Typography, useTheme } from '@mui/material'
+import { Box, Paper, Typography } from '@mui/material'
 import { alpha } from '@mui/material/styles'
-import { StatCard as StatCardProps } from '../../types/statistics'
+import { StatCard as StatCardProps } from '../types/statisticsTypes'
 
 export const StatisticCard = ({ icon, title, value, subtitle }: StatCardProps) => {
-    const theme = useTheme()
 
     return (
         <Paper
@@ -15,10 +14,10 @@ export const StatisticCard = ({ icon, title, value, subtitle }: StatCardProps) =
                 alignItems: 'center',
                 textAlign: 'center',
                 borderRadius: 2,
-                bgcolor: 'background.paper',
+                bgcolor: theme => theme.palette.background.paper,
                 transition: 'transform 0.2s, box-shadow 0.2s',
                 border: '1px solid',
-                borderColor: 'divider',
+                borderColor: theme => theme.palette.divider,
                 '&:hover': {
                     transform: 'translateY(-4px)',
                     boxShadow: theme => theme.shadows[4]
