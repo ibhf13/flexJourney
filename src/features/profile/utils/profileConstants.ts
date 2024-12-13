@@ -1,4 +1,4 @@
-import { FitnessLevel, Gender } from '../types/ProfileTypes'
+import { FitnessLevel, Gender, ProfileFormData } from '../types/ProfileTypes'
 
 export const FITNESS_LEVELS: FitnessLevel[] = ['Beginner', 'Intermediate', 'Advanced']
 
@@ -17,16 +17,16 @@ export const FITNESS_GOALS = [
 
 export type FitnessGoal = typeof FITNESS_GOALS[number]
 
-export const DEFAULT_FORM_VALUES = {
+export const DEFAULT_FORM_VALUES: Partial<ProfileFormData> = {
     firstName: '',
     lastName: '',
     displayName: '',
     bio: '',
     height: undefined,
     weight: undefined,
-    fitnessLevel: 'Beginner' as const,
-    gender: 'Male' as const,
+    targetWeight: undefined,
+    fitnessLevel: undefined,
+    gender: undefined,
     birthDate: undefined,
-    phoneNumber: '',
     fitnessGoals: [],
 }

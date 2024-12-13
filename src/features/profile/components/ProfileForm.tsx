@@ -2,9 +2,11 @@ import { PrimaryButton, SecondaryButton } from '@/components/common/Buttons'
 import { FormTextField } from '@/components/common/FormTextField'
 import { ResponsivePopup } from '@/components/common/Popups'
 import {
+    Checkbox,
     DialogActions,
     DialogContent,
     Grid,
+    ListItemText,
     MenuItem,
     Typography
 } from '@mui/material'
@@ -111,7 +113,17 @@ export const ProfileForm = ({
                         <FormTextField
                             control={control}
                             name="weight"
-                            label="Weight (kg)"
+                            label="Current Weight (kg)"
+                            type="number"
+                            fullWidth
+                        />
+                    </Grid>
+
+                    <Grid item xs={12} sm={6}>
+                        <FormTextField
+                            control={control}
+                            name="targetWeight"
+                            label="Target Weight (kg)"
                             type="number"
                             fullWidth
                         />
@@ -162,29 +174,47 @@ export const ProfileForm = ({
                         />
                     </Grid>
 
-                    <Grid item xs={12} sm={6}>
-                        <FormTextField
-                            control={control}
-                            name="phoneNumber"
-                            label="Phone Number"
-                            fullWidth
-                        />
-                    </Grid>
-
                     <Grid item xs={12}>
                         <FormTextField
                             control={control}
                             name="fitnessGoals"
-                            label="Fitness Goal"
+                            label="Fitness Goals"
                             select
                             fullWidth
+                            defaultValue={[]}
+                            slotProps={{
+                                select: {
+                                    multiple: true,
+                                    value: Array.isArray(control._formValues.fitnessGoals)
+                                        ? control._formValues.fitnessGoals
+                                        : [],
+                                    renderValue: (selected) => {
+                                        const selectedArray = Array.isArray(selected) ? selected : []
+                                        return selectedArray.join(', ')
+                                    },
+                                    MenuProps: {
+                                        PaperProps: {
+                                            style: {
+                                                maxHeight: 224,
+                                                width: 250
+                                            }
+                                        }
+                                    }
+                                }
+                            }}
                         >
                             {FITNESS_GOALS.map((goal) => (
                                 <MenuItem key={goal} value={goal}>
-                                    {goal}
+                                    <Checkbox
+                                        checked={Array.isArray(control._formValues.fitnessGoals)
+                                            ? control._formValues.fitnessGoals?.includes(goal)
+                                            : false}
+                                    />
+                                    <ListItemText primary={goal} />
                                 </MenuItem>
                             ))}
                         </FormTextField>
+
                     </Grid>
                 </Grid>
             </DialogContent>

@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { updateUserProfile } from '../api/profileService'
 import { ProfileFormData, UpdateProfileData, UserProfile } from '../types/ProfileTypes'
+import { DEFAULT_FORM_VALUES } from '../utils/profileConstants'
 import { profileSchema } from '../utils/validationSchema'
 
 interface UseProfileFormProps {
@@ -23,29 +24,13 @@ export const useProfileForm = ({ initialData, onSuccess }: UseProfileFormProps =
     const convertedInitialData: Partial<ProfileFormData> = {
         ...initialData,
         birthDate: initialData?.birthDate ? new Date(initialData.birthDate) : undefined,
-        fitnessGoals: initialData?.fitnessGoals || [],
-    }
-
-    // Define default values
-    const defaultValues: ProfileFormData = {
-        firstName: '',
-        lastName: '',
-        displayName: '',
-        bio: '',
-        height: 0,
-        weight: 0,
-        fitnessLevel: 'Beginner',
-        gender: 'Prefer not to say', // Set a default value
-        birthDate: undefined,
-        phoneNumber: '',
-        fitnessGoals: [],
-        // Add any other required fields with default values
+        fitnessGoals: initialData?.fitnessGoals ?? [],
     }
 
     const methods = useForm<ProfileFormData>({
         resolver: yupResolver(profileSchema),
         defaultValues: {
-            ...defaultValues,
+            ...DEFAULT_FORM_VALUES,
             ...convertedInitialData,
         },
         mode: 'onChange',

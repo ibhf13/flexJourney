@@ -16,6 +16,7 @@ const IconButton = ({
       endIcon={iconPosition === 'end' && !isLoading ? icon : null}
       disabled={disabled || isLoading}
       aria-label={label}
+      size={props.size}
       {...props}
     >
       {isLoading ? (

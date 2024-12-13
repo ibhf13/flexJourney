@@ -1,6 +1,5 @@
-import { IconButton } from '@/components/common/Buttons'
 import EditRoundedIcon from '@mui/icons-material/EditRounded'
-import { alpha, Box, Container, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
+import { alpha, Box, Container, IconButton, Stack, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { ProfileAvatar } from './ProfileAvatar'
 
 interface ProfileHeaderProps {
@@ -33,13 +32,16 @@ export const ProfileHeader = ({
                 )}, ${alpha(theme.palette.background.default, 0.8)})`,
             }}
         >
-            {isMobile && (<IconButton
-                icon={<EditRoundedIcon />}
-                onClick={onEditClick}
-                label="Edit profile"
-                size="small"
-                sx={{ position: 'absolute', top: 16, right: 16 }}
-            />)}
+            {isMobile && (
+                <IconButton
+                    onClick={onEditClick}
+                    aria-label="Edit profile"
+                    size="large"
+                    sx={{ position: 'absolute', top: 16, right: 16 }}
+                >
+                    <EditRoundedIcon sx={{ fontSize: 40, color: theme.palette.primary.main }} />
+                </IconButton>
+            )}
             <Container maxWidth="lg">
                 <Stack
                     direction={{ xs: 'column', sm: 'row' }}
@@ -67,12 +69,13 @@ export const ProfileHeader = ({
                                 {displayName}
                             </Typography>
                             <IconButton
-                                icon={<EditRoundedIcon />}
                                 onClick={onEditClick}
-                                label="Edit profile"
-                                size="small"
+                                aria-label="Edit profile"
+                                size="large"
                                 sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
-                            />
+                            >
+                                <EditRoundedIcon sx={{ fontSize: 40, color: theme.palette.primary.main }} />
+                            </IconButton>
                         </Stack>
                         {fitnessLevel && (
                             <Typography
