@@ -15,7 +15,7 @@ const PlanDayPage = lazy(() => import('@/pages/plans/PlanDayPage'))
 const PlanExercisePage = lazy(() => import('@/pages/plans/PlanExercisePage'))
 const HistoryPage = lazy(() => import('@/pages/HistoryPage'))
 const ExercisesPage = lazy(() => import('@/pages/ExercisesPage'))
-const ProgressPage = lazy(() => import('@/pages/ProgressPage'))
+const MyPlanPage = lazy(() => import('@/pages/MyPlanPage'))
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'))
 const ComingSoonPage = lazy(() => import('@/pages/ComingSoonPage'))
 
@@ -55,17 +55,17 @@ export const routes = {
                 title: 'Home'
             },
             {
-                path: ROUTES.MAIN.PLAN.ROOT,
+                path: ROUTES.MAIN.PLANS.ROOT,
                 element: withSuspense(PlanPage),
                 title: 'Plans'
             },
             {
-                path: ROUTES.MAIN.PLAN.DETAIL,
+                path: ROUTES.MAIN.PLANS.DETAIL,
                 element: withSuspense(PlanDayPage),
                 title: 'Plan Details'
             },
             {
-                path: ROUTES.MAIN.PLAN.DAY,
+                path: ROUTES.MAIN.PLANS.DAY,
                 element: withSuspense(PlanExercisePage),
                 title: 'Plan Exercises'
             },
@@ -81,8 +81,8 @@ export const routes = {
             },
             {
                 path: ROUTES.MAIN.PROGRESS,
-                element: withSuspense(ProgressPage),
-                title: 'Progress'
+                element: withSuspense(MyPlanPage),
+                title: 'My Plan'
             },
             {
                 path: ROUTES.MAIN.PROFILE,

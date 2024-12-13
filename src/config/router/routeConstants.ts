@@ -6,10 +6,10 @@ export const ROUTES = {
     },
     MAIN: {
         HOME: '/',
-        PLAN: {
-            ROOT: '/plan',
-            DETAIL: '/plan/:planId',
-            DAY: '/plan/:planId/day/:dayId'
+        PLANS: {
+            ROOT: '/plans',
+            DETAIL: '/plans/:planId',
+            DAY: '/plans/:planId/day/:dayId'
         },
         HISTORY: '/history',
         EXERCISES: '/exercises',

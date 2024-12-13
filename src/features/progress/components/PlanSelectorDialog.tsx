@@ -1,6 +1,7 @@
 import { CardSkeleton } from '@/components/common/Cards'
 import ResponsivePopup from '@/components/common/Popups/ResponsivePopup'
 import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
+import { useRefreshWorkoutPlans } from '@/features/workout/hooks/useWorkoutQuerys'
 import { WorkoutPlan } from '@/features/workout/types/WorkoutTypes'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import {
@@ -26,6 +27,7 @@ export const PlanSelectorDialog = ({
     error,
     onPlanSelect
 }: PlanSelectorDialogProps) => {
+    const refreshPlans = useRefreshWorkoutPlans()
 
     const headerContent = (
         <Box display="flex" alignItems="center" gap={2}>
@@ -64,6 +66,7 @@ export const PlanSelectorDialog = ({
                             onPlanSelect(plan)
                             onClose()
                         }}
+                        onPlanCreated={refreshPlans}
                     />
                 </Box>
             </LoadingErrorWrapper>

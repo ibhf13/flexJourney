@@ -4,7 +4,7 @@ import { Add } from '@mui/icons-material'
 import CloseIcon from '@mui/icons-material/Close'
 import { Box, Card, CardActionArea, DialogContent, IconButton, LinearProgress, Typography, useMediaQuery, useTheme } from '@mui/material'
 import { styled } from '@mui/material/styles'
-import { useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { useWorkoutBuilderContext } from '../contexts/WorkoutBuilderContext'
 import { ExerciseSelectionStep } from './WorkoutBuilderWizard/ExerciseSelectionStep'
 import { PlanBasicsStep } from './WorkoutBuilderWizard/PlanBasicsStep'
@@ -97,6 +97,16 @@ export const WorkoutBuilderCard = ({ onPlanCreated }: WorkoutBuilderCardProps) =
     const [open, setOpen] = useState(false)
     const [showConfirmDialog, setShowConfirmDialog] = useState(false)
     const { currentStep, resetBuilder } = useWorkoutBuilderContext()
+    const dialogContentRef = useRef<HTMLDivElement>(null)
+
+    useEffect(() => {
+        if (dialogContentRef.current) {
+            dialogContentRef.current.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            })
+        }
+    }, [currentStep])
 
     const handleClose = () => {
         if (currentStep !== 'review') {
@@ -259,7 +269,7 @@ export const WorkoutBuilderCard = ({ onPlanCreated }: WorkoutBuilderCardProps) =
                     width: '100%'
                 }}
             >
-                <StyledDialogContent>
+                <StyledDialogContent ref={dialogContentRef}>
                     <Box sx={{
                         flex: 1,
                         display: 'flex',
