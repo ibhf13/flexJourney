@@ -5,7 +5,6 @@ import { collection, doc, getDocs, writeBatch } from 'firebase/firestore'
 
 export const seedWorkoutPlans = async () => {
     try {
-        console.log('Starting workout plans seeding...')
         const workoutPlansRef = collection(db, COLLECTIONS.GLOBAL.WORKOUT_PLANS)
 
         // Clear existing data first
@@ -29,7 +28,6 @@ export const seedWorkoutPlans = async () => {
         })
 
         await batch.commit()
-        console.log('Workout plans seeded successfully')
 
         return { success: true, message: 'Workout plans seeded successfully' }
     } catch (error) {

@@ -1,6 +1,8 @@
+import { auth } from '@/config/firebase'
 import { DifficultyLevel } from '@/features/workout/types/WorkoutTypes'
 import { useEffect } from 'react'
 import { useForm } from 'react-hook-form'
+import { canEditExercise } from '../api/exerciseService'
 import { Exercise, PREDEFINED_EXERCISE_TYPES } from '../types/ExerciseTypes'
 import { useExercisesQuery } from './useExercisesQuery'
 
@@ -13,6 +15,8 @@ interface UseExerciseFormProps {
 
 export const useExerciseForm = ({ exercise, mode, onClose, open }: UseExerciseFormProps) => {
     const { updateExercise, createExercise, isUpdating, isCreating } = useExercisesQuery()
+    const currentUser = auth.currentUser
+
 
     const { control, handleSubmit, reset, setValue } = useForm({
         defaultValues: {
@@ -48,16 +52,33 @@ export const useExerciseForm = ({ exercise, mode, onClose, open }: UseExerciseFo
     }
 
     const onSubmit = async (data: Partial<Exercise>) => {
-        if (mode === 'edit' && exercise?.id) {
-            await updateExercise({
-                exerciseId: exercise.id,
-                updates: data,
-            })
-        } else if (mode === 'create') {
-            await createExercise(data as Omit<Exercise, 'id'>)
-        }
 
-        onClose()
+        if (!currentUser) throw new Error('User must be authenticated')
+
+        try {
+            if (mode === 'edit' && exercise?.id) {
+                if (!canEditExercise(exercise)) {
+                    throw new Error('Unauthorized to edit this exercise')
+                }
+
+                await updateExercise({
+                    exerciseId: exercise.id,
+                    updates: data,
+                })
+            } else if (mode === 'create') {
+
+                await createExercise({
+                    ...data,
+                    id: '',
+                    createdBy: currentUser.uid,
+                } as Exercise)
+            }
+
+            onClose()
+        } catch (error) {
+            console.error('Form submission error:', error)
+            throw error
+        }
     }
 
     return {

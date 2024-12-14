@@ -126,10 +126,9 @@ const ExercisesPage = () => {
                                 <Grid item xs={12} sm={6} md={4} lg={3} key={exercise.id}>
                                     <ExerciseCard
                                         exercise={exercise}
-                                        onEdit={isAdmin ? handleExerciseEdit : undefined}
-                                        onDelete={isAdmin ? handleExerciseDelete : undefined}
+                                        onEdit={handleExerciseEdit}
+                                        onDelete={handleExerciseDelete}
                                         onView={handleExerciseSelect}
-                                        isAdmin={isAdmin}
                                     />
                                 </Grid>
                             ))}
