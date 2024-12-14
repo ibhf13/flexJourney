@@ -1,5 +1,4 @@
 import { ConfirmationPopUp } from '@/components/common/Popups/ConfirmationPopUp'
-import { useAuthContext } from '@/features/auth/contexts/AuthContext'
 import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
 import AddIcon from '@mui/icons-material/Add'
 import { Box, Button, Container, Grid, List, Pagination, Paper, useMediaQuery, useTheme } from '@mui/material'
@@ -11,8 +10,6 @@ import { useExercises, useExercisesQuery } from '../hooks'
 import { Exercise } from '../types/ExerciseTypes'
 
 const ExercisesPage = () => {
-    const { user } = useAuthContext()
-    const isAdmin = user?.email === 'iebo@example.com'
     const {
         exercises,
         isExercisesLoading,
@@ -129,6 +126,7 @@ const ExercisesPage = () => {
                                         onEdit={handleExerciseEdit}
                                         onDelete={handleExerciseDelete}
                                         onView={handleExerciseSelect}
+                                        showActions={true}
                                     />
                                 </Grid>
                             ))}
