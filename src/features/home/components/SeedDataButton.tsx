@@ -8,7 +8,7 @@ import { useState } from 'react'
 export const SeedDataButton = () => {
     const [isSeeding, setIsSeeding] = useState(false)
     const { enqueueSnackbar } = useSnackbar()
-    const { user } = useAuthContext() // Get the current user
+    const { user } = useAuthContext()
 
 
     const handleSeedData = async () => {
@@ -37,7 +37,6 @@ export const SeedDataButton = () => {
         }
     }
 
-    // Only show the button to logged-in users
     if (!user) return null
 
     return (

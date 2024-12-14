@@ -1,42 +1,36 @@
-import * as yup from 'yup'
+import { z } from 'zod'
 
-const exerciseSetSchema = yup.object().shape({
-    sets: yup.array().of(
-        yup.object().shape({
-            repetitions: yup
-                .number()
-                .required('Repetitions are required')
-                .positive('Repetitions must be a positive number')
-                .integer('Repetitions must be a whole number')
-                .min(1, 'Repetitions must be at least 1'),
-            weight: yup
-                .number()
+const exerciseSetSchema = z.object({
+    sets: z.array(
+        z.object({
+            repetitions: z.number()
+                .min(1, 'Repetitions must be at least 1')
+                .int('Repetitions must be a whole number')
+                .positive('Repetitions must be a positive number'),
+            weight: z.number()
                 .nullable()
-                .transform((value, originalValue) =>
-                    originalValue?.trim?.() === '' ? null : value)
-                .typeError('Weight must be a number')
-                .positive('Weight must be a positive number'),
-            time: yup
-                .number()
+                .transform((value) =>
+                    typeof value === 'string' && value === '' ? null : Number(value))
+                .refine((val) => val === null || val > 0, 'Weight must be a positive number')
+                .optional(),
+            time: z.number()
                 .nullable()
-                .transform((value, originalValue) =>
-                    originalValue?.trim?.() === '' ? null : value)
-                .typeError('Time must be a number')
-                .positive('Time must be a positive number'),
-            restPeriod: yup
-                .number()
-                .required('Rest period is required')
-                .positive('Rest period must be a positive number')
-                .integer('Rest period must be a whole number')
-                .min(5, 'Rest period must be at least 5 seconds'),
-        }).test(
-            'weight-or-time',
-            'Either weight or time is required',
-            function (value) {
-                return value.weight != null || value.time != null;
-            }
+                .transform((value) =>
+                    typeof value === 'string' && value === '' ? null : Number(value))
+                .refine((val) => val === null || val > 0, 'Time must be a positive number')
+                .optional(),
+            restPeriod: z.number()
+                .min(5, 'Rest period must be at least 5 seconds')
+                .int('Rest period must be a whole number')
+                .positive('Rest period must be a positive number'),
+        }).refine(
+            (data) => data.weight !== null || data.time !== null,
+            'Either weight or time is required'
         )
-    ).required().min(1, 'At least one set is required'),
-});
+    )
+        .min(1, 'At least one set is required'),
+})
 
+export type ExerciseSetFormData = z.infer<typeof exerciseSetSchema>
 export { exerciseSetSchema }
+

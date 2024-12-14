@@ -1,4 +1,5 @@
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { ErrorSeverity } from '@/features/errorHandling/types/errorTypes'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { deleteWorkoutPlan, fetchWorkoutPlanById, fetchWorkoutPlans } from '../api/workoutService'
 
@@ -35,10 +36,10 @@ export const useDeleteWorkoutPlan = () => {
             queryClient.invalidateQueries({
                 queryKey: ['workoutPlans']
             })
-            showMessage('Plan deleted successfully', 'success')
+            showMessage('Plan deleted successfully', ErrorSeverity.SUCCESS)
         },
         onError: (error) => {
-            handleError(error, 'error')
+            handleError(error, ErrorSeverity.ERROR)
         }
     })
 }

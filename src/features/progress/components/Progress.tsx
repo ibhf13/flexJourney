@@ -26,12 +26,10 @@ export const Progress = () => {
     const [dialogOpen, setDialogOpen] = useState(false)
     const [showCongrats, setShowCongrats] = useState(false)
 
-    // Get completed exercises for the current day
     const { completedExercises } = useCompletedExercises(
         progressState.selectedDay?.id ?? ''
     )
 
-    // Calculate progress values
     const currentDayNumber = progressState.currentDayIndex + 1
     const totalDays = progressState.selectedPlan?.days.length ?? 0
     const totalExercises = progressState.selectedDay?.exercises.length ?? 0
@@ -40,7 +38,6 @@ export const Progress = () => {
     const handleOpenPlanSelector = () => setDialogOpen(true)
     const handleClosePlanSelector = () => setDialogOpen(false)
 
-    // Add this function to handle completion
     const handleDayCompletion = () => {
         setShowCongrats(true)
     }

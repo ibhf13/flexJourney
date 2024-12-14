@@ -5,6 +5,15 @@ export interface User {
   photoURL?: string | null
 }
 
+export interface AuthCredentials {
+  email: string
+  password: string
+}
+
+export interface SignupCredentials extends AuthCredentials {
+  displayName: string
+}
+
 export interface AuthContextType {
   user: User | null
   isLoading: boolean
@@ -17,3 +26,7 @@ export interface AuthContextType {
   resetPassword: (email: string) => Promise<void>
   googleSignIn: () => Promise<void>
 }
+
+export type MessageType = 'error' | 'success' | 'warning' | 'info'
+
+export type AuthFormMode = 'login' | 'signup'

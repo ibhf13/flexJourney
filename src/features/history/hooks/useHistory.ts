@@ -1,4 +1,5 @@
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { ErrorSeverity } from '@/features/errorHandling/types/errorTypes'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useQueryClient } from '@tanstack/react-query'
 import { historyService } from '../api/historyService'
@@ -38,7 +39,7 @@ export const useHistory = (filters?: HistoryFilters) => {
         exerciseLog: ExerciseLog
     ) => {
         if (!currentUser) {
-            showMessage('Please sign in to save your progress', 'error')
+            showMessage('Please sign in to save your progress', ErrorSeverity.ERROR)
             throw new Error('User not authenticated')
         }
 
@@ -56,15 +57,12 @@ export const useHistory = (filters?: HistoryFilters) => {
         }
 
         try {
-            // Get today's date at midnight for consistent document ID
             const today = new Date()
 
             today.setHours(0, 0, 0, 0)
 
-            // Generate a consistent document ID for the day
             const documentId = `${today.toISOString().split('T')[0]}_${dayId}_${planId}`
 
-            // Try to get existing entry for today
             const existingEntries = await historyService.getAll(currentUser.uid, {
                 startDate: today,
                 endDate: today,
@@ -75,7 +73,6 @@ export const useHistory = (filters?: HistoryFilters) => {
             const existingEntry = existingEntries[0]
 
             if (existingEntry) {
-                // Update existing entry by adding the new exercise
                 const updatedExercises = [...existingEntry.exercises]
                 const exerciseIndex = updatedExercises.findIndex(
                     ex => ex.exerciseId === sanitizedExerciseLog.exerciseId
@@ -95,7 +92,6 @@ export const useHistory = (filters?: HistoryFilters) => {
                     }
                 })
             } else {
-                // Create new entry for today
                 const entry: TrainingHistoryEntry = {
                     id: documentId,
                     planId,
@@ -113,12 +109,12 @@ export const useHistory = (filters?: HistoryFilters) => {
             }
 
             queryClient.invalidateQueries({ queryKey: ['training-history'] })
-            showMessage('Exercise progress saved to history', 'success')
+            showMessage('Exercise progress saved to history', ErrorSeverity.SUCCESS)
 
             return true
         } catch (error) {
             console.error('Save exercise log error:', error)
-            handleError('Failed to save exercise progress to history')
+            handleError('Failed to save exercise progress to history', ErrorSeverity.ERROR)
 
             return false
         }
@@ -143,7 +139,7 @@ export const useHistory = (filters?: HistoryFilters) => {
 
     const deleteEntry = async (documentId: string) => {
         if (!currentUser?.uid) {
-            showMessage('Please sign in to delete entries', 'error')
+            showMessage('Please sign in to delete entries', ErrorSeverity.ERROR)
 
             return false
         }
@@ -165,13 +161,12 @@ export const useHistory = (filters?: HistoryFilters) => {
 
     const updateEntry = async (updates: Partial<TrainingHistoryEntry>, entryId: string) => {
         if (!currentUser?.uid) {
-            showMessage('Please sign in to update entries', 'error')
+            showMessage('Please sign in to update entries', ErrorSeverity.ERROR)
 
             return false
         }
 
         try {
-            // First get the entry to find its Firestore document ID
             const historyEntries = await historyService.getAll(currentUser.uid)
             const entryToUpdate = historyEntries.find(entry => entry.id === entryId)
 
@@ -180,12 +175,12 @@ export const useHistory = (filters?: HistoryFilters) => {
             }
 
             await updateHistory({
-                entryId: entryToUpdate._documentId, // Use Firestore document ID
+                entryId: entryToUpdate._documentId,
                 updates
             })
 
             queryClient.invalidateQueries({ queryKey: ['training-history'] })
-            showMessage('Entry updated successfully', 'success')
+            showMessage('Entry updated successfully', ErrorSeverity.SUCCESS)
 
             return true
         } catch (error) {

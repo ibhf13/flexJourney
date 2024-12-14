@@ -39,7 +39,6 @@ export const ExerciseProgressCharts = ({ expanded = false }: { expanded?: boolea
 
     if (exercises.length === 0) return null
 
-    // Initialize selected exercise if not set
     if (!selectedExercise && exercises.length > 0) {
         setSelectedExercise(exercises[0].exerciseId)
     }

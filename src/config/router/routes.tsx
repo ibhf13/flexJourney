@@ -5,14 +5,13 @@ import StatisticsPage from '@/pages/StatisticsPage'
 import { lazy, Suspense } from 'react'
 import { ROUTES } from './routeConstants'
 
-// Lazy loaded components
 const Login = lazy(() => import('@/pages/Login'))
 const Signup = lazy(() => import('@/pages/Signup'))
 const ResetPassword = lazy(() => import('@/pages/ResetPassword'))
 const HomePage = lazy(() => import('@/pages/HomePage'))
-const PlanPage = lazy(() => import('@/pages/plans/PlanPage'))
-const PlanDayPage = lazy(() => import('@/pages/plans/PlanDayPage'))
-const PlanExercisePage = lazy(() => import('@/pages/plans/PlanExercisePage'))
+const PlanPage = lazy(() => import('@/features/workout/pages/PlanPage'))
+const PlanDayPage = lazy(() => import('@/features/workout/pages/PlanDayPage'))
+const PlanExercisePage = lazy(() => import('@/features/workout/pages/PlanExercisePage'))
 const HistoryPage = lazy(() => import('@/pages/HistoryPage'))
 const ExercisesPage = lazy(() => import('@/features/exercises/pages/ExercisesPage'))
 const MyPlanPage = lazy(() => import('@/pages/MyPlanPage'))

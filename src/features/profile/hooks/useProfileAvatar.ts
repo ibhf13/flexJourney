@@ -1,4 +1,5 @@
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { ErrorSeverity } from '@/features/errorHandling/types/errorTypes'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
@@ -57,7 +58,6 @@ export const useProfileAvatar = (options: UploadAvatarOptions = {}) => {
                     let width = img.width
                     let height = img.height
 
-                    // Max dimensions
                     const MAX_WIDTH = 400
                     const MAX_HEIGHT = 400
 
@@ -110,23 +110,19 @@ export const useProfileAvatar = (options: UploadAvatarOptions = {}) => {
             if (validationError) throw new Error(validationError)
 
             try {
-                // Compress the image first
                 const compressedBlob = await compressImage(file)
 
-                // Convert compressed blob to base64
                 const base64String = await convertToBase64(
                     new File([compressedBlob], file.name, { type: 'image/jpeg' })
                 )
 
-                // Prepare update data with minimum required fields
                 const updateData: UpdateProfileData = {
                     displayName: currentUser.displayName || '',
                     photoURL: base64String,
                     avatarUpdatedAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(), // Required by rules
+                    updatedAt: new Date().toISOString(),
                 }
 
-                // Update user profile
                 await updateUserProfile(currentUser.uid, updateData)
 
                 return base64String
@@ -141,13 +137,13 @@ export const useProfileAvatar = (options: UploadAvatarOptions = {}) => {
         },
         onSuccess: (base64String) => {
             queryClient.invalidateQueries({ queryKey: ['profile', currentUser?.uid] })
-            showMessage('Profile picture updated successfully', 'success')
+            showMessage('Profile picture updated successfully', ErrorSeverity.SUCCESS)
             setUploadProgress(0)
             onSuccess?.(base64String)
         },
         onError: (error) => {
             setUploadProgress(0)
-            handleError(error instanceof Error ? error.message : 'Failed to upload avatar', 'error')
+            handleError(error instanceof Error ? error.message : 'Failed to upload avatar', ErrorSeverity.ERROR)
         },
     })
 

@@ -1,4 +1,3 @@
-// src/features/exercises/components/Dialogs/ExercisesFormDialog/ExerciseFormFields.tsx
 import { CustomTypeMenuItem } from '@/features/exercises/styles/exerciseFormStyles'
 import { DifficultyLevel } from '@/features/workout/types/WorkoutTypes'
 import { MenuItem, Stack, TextField } from '@mui/material'
@@ -29,13 +28,12 @@ export const ExerciseFormFields = ({ control, categories, setValue }: ExerciseFo
             <Controller
                 name="title"
                 control={control}
-                rules={{ required: 'Title is required' }}
-                render={({ field, fieldState }) => (
+                render={({ field, fieldState: { error } }) => (
                     <TextField
                         {...field}
                         label="Title"
-                        error={!!fieldState.error}
-                        helperText={fieldState.error?.message}
+                        error={!!error}
+                        helperText={error?.message}
                         fullWidth
                     />
                 )}
@@ -44,15 +42,14 @@ export const ExerciseFormFields = ({ control, categories, setValue }: ExerciseFo
             <Controller
                 name="description"
                 control={control}
-                rules={{ required: 'Description is required' }}
-                render={({ field, fieldState }) => (
+                render={({ field, fieldState: { error } }) => (
                     <TextField
                         {...field}
                         label="Description"
                         multiline
                         rows={3}
-                        error={!!fieldState.error}
-                        helperText={fieldState.error?.message}
+                        error={!!error}
+                        helperText={error?.message}
                         fullWidth
                     />
                 )}
@@ -63,14 +60,13 @@ export const ExerciseFormFields = ({ control, categories, setValue }: ExerciseFo
             <Controller
                 name="type"
                 control={control}
-                rules={{ required: 'Type is required' }}
-                render={({ field, fieldState }) => (
+                render={({ field, fieldState: { error } }) => (
                     <TextField
                         {...field}
                         select
                         label="Exercise Type"
-                        error={!!fieldState.error}
-                        helperText={fieldState.error?.message}
+                        error={!!error}
+                        helperText={error?.message}
                         fullWidth
                         SelectProps={{
                             MenuProps: {
@@ -110,8 +106,8 @@ export const ExerciseFormFields = ({ control, categories, setValue }: ExerciseFo
                                         const customValue = (e.target as HTMLInputElement).value
 
                                         if (customValue) {
-                                            field.onChange(customValue);
-                                            (e.target as HTMLInputElement).value = ''
+                                            field.onChange(customValue)
+                                                ; (e.target as HTMLInputElement).value = ''
                                             const selectElement = e.currentTarget.closest('.MuiSelect-select')
 
                                             if (selectElement) {
@@ -119,16 +115,6 @@ export const ExerciseFormFields = ({ control, categories, setValue }: ExerciseFo
                                             }
                                         }
                                     }
-                                }}
-                                InputProps={{
-                                    onBlur: (e) => {
-                                        const customValue = e.target.value
-
-                                        if (customValue) {
-                                            field.onChange(customValue)
-                                            e.target.value = ''
-                                        }
-                                    },
                                 }}
                             />
                         </CustomTypeMenuItem>
@@ -139,11 +125,13 @@ export const ExerciseFormFields = ({ control, categories, setValue }: ExerciseFo
             <Controller
                 name="videoUrl"
                 control={control}
-                render={({ field }) => (
+                render={({ field, fieldState: { error } }) => (
                     <TextField
                         {...field}
                         label="Video URL"
                         type="url"
+                        error={!!error}
+                        helperText={error?.message}
                         fullWidth
                     />
                 )}
@@ -152,14 +140,13 @@ export const ExerciseFormFields = ({ control, categories, setValue }: ExerciseFo
             <Controller
                 name="category"
                 control={control}
-                rules={{ required: 'Category is required' }}
-                render={({ field, fieldState }) => (
+                render={({ field, fieldState: { error } }) => (
                     <TextField
                         {...field}
                         select
                         label="Category"
-                        error={!!fieldState.error}
-                        helperText={fieldState.error?.message}
+                        error={!!error}
+                        helperText={error?.message}
                         fullWidth
                     >
                         {categories?.map((category) => (
@@ -174,17 +161,13 @@ export const ExerciseFormFields = ({ control, categories, setValue }: ExerciseFo
             <Controller
                 name="defaultRestPeriod"
                 control={control}
-                rules={{
-                    required: 'Rest period is required',
-                    min: { value: 0, message: 'Rest period must be positive' }
-                }}
-                render={({ field, fieldState }) => (
+                render={({ field, fieldState: { error } }) => (
                     <TextField
                         {...field}
                         type="number"
                         label="Default Rest Period (seconds)"
-                        error={!!fieldState.error}
-                        helperText={fieldState.error?.message}
+                        error={!!error}
+                        helperText={error?.message}
                         fullWidth
                     />
                 )}
@@ -193,14 +176,13 @@ export const ExerciseFormFields = ({ control, categories, setValue }: ExerciseFo
             <Controller
                 name="level"
                 control={control}
-                rules={{ required: 'Level is required' }}
-                render={({ field, fieldState }) => (
+                render={({ field, fieldState: { error } }) => (
                     <TextField
                         {...field}
                         select
                         label="Difficulty Level"
-                        error={!!fieldState.error}
-                        helperText={fieldState.error?.message}
+                        error={!!error}
+                        helperText={error?.message}
                         fullWidth
                     >
                         {Object.values(DifficultyLevel).map((level) => (

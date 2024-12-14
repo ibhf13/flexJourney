@@ -3,7 +3,7 @@ import { TrainingHistoryEntry } from '../types/HistoryTypes'
 
 interface GroupedWorkout {
   planName: string
-  entry: TrainingHistoryEntry // Single consolidated entry
+  entry: TrainingHistoryEntry
 }
 
 interface DayGroup {

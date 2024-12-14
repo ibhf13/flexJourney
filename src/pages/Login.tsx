@@ -5,7 +5,7 @@ import { Link as RouterLink } from 'react-router-dom'
 import AuthForm from '../features/auth/components/AuthForm'
 import SocialLoginButtons from '../features/auth/components/SocialLoginButtons'
 import { useLoginHandler } from '../features/auth/hooks/useLoginHandler'
-import { loginSchema } from '../features/auth/utils/validationSchemas'
+import { loginSchema } from '../features/auth/utils/authValidationSchemas'
 
 const Login: React.FC = () => {
   const { isLoading, handleLogin, handleGoogleSignIn } = useLoginHandler()

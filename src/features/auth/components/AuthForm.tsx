@@ -1,13 +1,16 @@
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { Button, CircularProgress, TextField, Typography } from '@mui/material'
 import { styled } from '@mui/material/styles'
 import React from 'react'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
+import { z } from 'zod'
+import { AuthCredentials, AuthFormMode, SignupCredentials } from '../types/AuthTypes'
+import { LoginFormData, SignupFormData } from '../utils/authValidationSchemas'
 
 interface AuthFormProps {
-    mode: 'login' | 'signup'
-    onSubmit: (data: any) => Promise<void>
-    validationSchema: any
+    mode: AuthFormMode
+    onSubmit: (data: AuthCredentials | SignupCredentials) => Promise<void>
+    validationSchema: z.ZodSchema<LoginFormData | SignupFormData>
     isLoading?: boolean
 }
 
@@ -30,11 +33,19 @@ const AuthForm: React.FC<AuthFormProps> = ({
     isLoading = false,
 }) => {
     const {
-        register,
+        control,
         handleSubmit,
-        formState: { errors },
-    } = useForm({
-        resolver: yupResolver(validationSchema),
+    } = useForm<LoginFormData | SignupFormData>({
+        resolver: zodResolver(validationSchema),
+        mode: 'onBlur',
+        defaultValues: {
+            email: '',
+            password: '',
+            ...(mode === 'signup' && {
+                displayName: '',
+                confirmPassword: '',
+            }),
+        },
     })
 
     return (
@@ -44,46 +55,80 @@ const AuthForm: React.FC<AuthFormProps> = ({
             </Typography>
 
             {mode === 'signup' && (
-                <TextField
-                    {...register('displayName')}
-                    label="Name"
-                    fullWidth
-                    error={!!errors.displayName}
-                    helperText={errors.displayName?.message as string}
+                <Controller
+                    name="displayName"
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                        <TextField
+                            {...field}
+                            label="Name"
+                            fullWidth
+                            error={!!error}
+                            helperText={error?.message}
+                        />
+                    )}
                 />
             )}
 
-            <TextField
-                {...register('email')}
-                label="Email"
-                type="email"
-                fullWidth
-                error={!!errors.email}
-                helperText={errors.email?.message as string}
+            <Controller
+                name="email"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                    <TextField
+                        {...field}
+                        label="Email"
+                        type="email"
+                        fullWidth
+                        error={!!error}
+                        helperText={error?.message}
+                    />
+                )}
             />
 
-            <TextField
-                {...register('password')}
-                label="Password"
-                type="password"
-                fullWidth
-                error={!!errors.password}
-                helperText={errors.password?.message as string}
+            <Controller
+                name="password"
+                control={control}
+                render={({ field, fieldState: { error } }) => (
+                    <TextField
+                        {...field}
+                        label="Password"
+                        type="password"
+                        fullWidth
+                        error={!!error}
+                        helperText={error?.message}
+                    />
+                )}
             />
 
             {mode === 'signup' && (
-                <TextField
-                    {...register('confirmPassword')}
-                    label="Confirm Password"
-                    type="password"
-                    fullWidth
-                    error={!!errors.confirmPassword}
-                    helperText={errors.confirmPassword?.message as string}
+                <Controller
+                    name="confirmPassword"
+                    control={control}
+                    render={({ field, fieldState: { error } }) => (
+                        <TextField
+                            {...field}
+                            label="Confirm Password"
+                            type="password"
+                            fullWidth
+                            error={!!error}
+                            helperText={error?.message}
+                        />
+                    )}
                 />
             )}
 
-            <Button type="submit" variant="contained" fullWidth disabled={isLoading} sx={{ mt: 2 }}>
-                {isLoading ? <CircularProgress size={24} /> : mode === 'login' ? 'Login' : 'Sign Up'}
+            <Button
+                type="submit"
+                variant="contained"
+                fullWidth
+                disabled={isLoading}
+                sx={{ mt: 2 }}
+            >
+                {isLoading ? (
+                    <CircularProgress size={24} />
+                ) : (
+                    mode === 'login' ? 'Login' : 'Sign Up'
+                )}
             </Button>
         </FormContainer>
     )

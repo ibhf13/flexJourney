@@ -1,25 +1,10 @@
+import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import { FieldValue } from 'firebase/firestore'
-
 export enum DifficultyLevel {
   BEGINNER = 'Beginner',
   INTERMEDIATE = 'Intermediate',
   ADVANCED = 'Advanced'
 }
-
-export interface Exercise {
-  id: string
-  title: string
-  description: string
-  imageUrl: string
-  videoUrl: string
-  level: DifficultyLevel
-  type: string
-  defaultRestPeriod: number
-  category: string
-  isCompleted?: boolean
-  createdBy?: string
-}
-
 
 export interface WorkoutDay {
   id: string

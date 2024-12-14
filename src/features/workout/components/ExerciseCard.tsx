@@ -1,24 +1,20 @@
 import { BaseCard, BaseCardContent } from '@/components/common/Cards'
 import { ExerciseDialog } from '@/features/exercises/components/Dialogs/ExercisesDialog/ExerciseDialog'
 import { useExercises } from '@/features/exercises/hooks/useExercises'
+import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import { Chip } from '@mui/material'
-import { DifficultyLevel, Exercise } from '../types/WorkoutTypes'
+import { DifficultyLevel } from '../types/WorkoutTypes'
 
-interface ExerciseCardProps {
-    exercise: Exercise
-}
 
-export const ExerciseCard = ({ exercise }: ExerciseCardProps) => {
+export const ExerciseCard = ({ exercise }: { exercise: Exercise }) => {
     const { selectedExercise, handleExerciseSelect, handleCloseModal } = useExercises()
 
     return (
         <>
-
             <BaseCard
                 title={exercise.title}
                 imageUrl={exercise.imageUrl}
                 imageHeight={200}
-                // onClick={() => onClick(exercise)}
                 onClick={() => handleExerciseSelect(exercise)}
                 sx={{
                     position: 'relative',

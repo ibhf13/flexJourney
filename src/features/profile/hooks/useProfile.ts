@@ -1,6 +1,7 @@
 import { FIREBASE_ERROR_CODES } from '@/config/firebase/utils/errors'
 import { useAuthContext } from '@/features/auth/contexts/AuthContext'
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { ErrorSeverity } from '@/features/errorHandling/types/errorTypes'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { fetchUserProfile, updateUserProfile } from '../api/profileService'
 import type { UpdateProfileData, UserProfile } from '../types/ProfileTypes'
@@ -41,11 +42,11 @@ export const useProfile = () => {
             return updateUserProfile(currentUser.uid, data)
         },
         onSuccess: () => {
-            showMessage('Profile updated successfully', 'success')
+            showMessage('Profile updated successfully', ErrorSeverity.SUCCESS)
             queryClient.invalidateQueries({ queryKey: ['profile', currentUser?.uid] })
         },
         onError: (error) => {
-            handleError(error instanceof Error ? error.message : 'Failed to update profile')
+            handleError(error instanceof Error ? error.message : 'Failed to update profile', ErrorSeverity.ERROR)
         },
     })
 

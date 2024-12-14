@@ -7,7 +7,6 @@ export const seedWorkoutPlans = async () => {
     try {
         const workoutPlansRef = collection(db, COLLECTIONS.GLOBAL.WORKOUT_PLANS)
 
-        // Clear existing data first
         const existingDocs = await getDocs(workoutPlansRef)
         const batch = writeBatch(db)
 
@@ -15,13 +14,12 @@ export const seedWorkoutPlans = async () => {
             batch.delete(doc.ref)
         })
 
-        // Add new workout plans
         WORKOUT_PLANS.forEach((plan) => {
             const docRef = doc(workoutPlansRef, plan.id)
 
             batch.set(docRef, {
                 ...plan,
-                isGlobal: true, // Flag to identify seeded plans
+                isGlobal: true,
                 createdAt: new Date(),
                 updatedAt: new Date(),
             })

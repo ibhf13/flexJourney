@@ -1,4 +1,4 @@
-import { Exercise } from '@/features/workout/types/WorkoutTypes'
+import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import { Box, Grid, Typography } from '@mui/material'
 import { useCompletedExercises } from '../hooks/useCompletedExercises'
 import { ProgressExerciseCard } from './ProgressExerciseCard'

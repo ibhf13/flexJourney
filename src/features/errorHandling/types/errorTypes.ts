@@ -1,24 +1,39 @@
-export type ErrorSeverity = 'error' | 'warning' | 'info' | 'success'
+export enum ErrorSeverity {
+    ERROR = 'error',
+    WARNING = 'warning',
+    INFO = 'info',
+    SUCCESS = 'success'
+}
+
+export enum ErrorCode {
+    NETWORK_ERROR = 'ERR_NETWORK',
+    TIMEOUT = 'ERR_TIMEOUT',
+    CANCELED = 'ERR_CANCELED',
+    UNKNOWN = 'UNKNOWN_ERROR',
+    SERVER_ERROR = 'SERVER_ERROR',
+    INVALID_INPUT = 'INVALID_INPUT',
+    REQUIRED_FIELD = 'REQUIRED_FIELD'
+}
 
 export interface ErrorOptions {
-    duration?: number
-    persist?: boolean
-    id?: string
+    readonly duration?: number
+    readonly persist?: boolean
+    readonly id?: string
 }
 
 export interface ErrorState {
-    message: string
-    severity: ErrorSeverity
-    options?: ErrorOptions
+    readonly message: string
+    readonly severity: ErrorSeverity
+    readonly options?: ErrorOptions
 }
 
 export interface ApiError {
-    code: string
-    message: string
-    details?: Record<string, unknown>
+    readonly code: ErrorCode | string
+    readonly message: string
+    readonly details?: Readonly<Record<string, unknown>>
 }
 
 export interface LoadingState {
-    isLoading: boolean
-    error: Error | null
+    readonly isLoading: boolean
+    readonly error: Error | null
 }
