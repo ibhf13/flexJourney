@@ -14,6 +14,7 @@ interface ExerciseCardProps {
     onEdit?: (exercise: Exercise) => void
     onDelete?: (exercise: Exercise) => void
     onView?: (exercise: Exercise) => void
+    showActions?: boolean
 }
 
 export const ExerciseCard = ({
@@ -21,6 +22,7 @@ export const ExerciseCard = ({
     onEdit,
     onDelete,
     onView,
+    showActions = false,
 }: ExerciseCardProps) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const open = Boolean(anchorEl)
@@ -63,7 +65,7 @@ export const ExerciseCard = ({
             imageUrl={exercise.imageUrl}
             imageHeight={200}
             onClick={handleCardClick}
-            actionButton={canEdit && (
+            actionButton={showActions && canEdit && (
                 <>
                     <IconButton
                         onClick={handleMenuOpen}
