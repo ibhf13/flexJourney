@@ -31,10 +31,12 @@ export const accordionStyles = (theme: Theme) => ({
 
 export const containerStyles = {
     wrapper: {
-        py: 4,
+        py: { xs: 2, sm: 4 },
         px: { xs: 2, sm: 3 },
-        minHeight: '100vh',
-        backgroundColor: 'background.default'
+        overflow: 'auto',
+        '&::-webkit-scrollbar': { display: 'none' },
+        msOverflowStyle: 'none',
+        scrollbarWidth: 'none',
     },
     gridContainer: {
         Padding: 1

@@ -1,6 +1,5 @@
 import { useLocalStorage } from './useLocalStorage'
 
-// Define storage keys
 export const STORAGE_KEYS = {
     STREAK: 'streak-data',
     USER_PREFERENCES: 'user-preferences',
@@ -9,7 +8,6 @@ export const STORAGE_KEYS = {
     EXERCISE_PROGRESS: 'exercise-progress',
 } as const
 
-// Type for user preferences
 interface UserPreferences {
     theme: 'light' | 'dark'
     language: string
@@ -17,7 +15,6 @@ interface UserPreferences {
     unit: 'metric' | 'imperial'
 }
 
-// Type for app storage methods
 interface AppStorage {
     getStreakData: <T>() => T | null
     setStreakData: <T>(data: T) => void
@@ -27,7 +24,6 @@ interface AppStorage {
     hasStoredData: (key: keyof typeof STORAGE_KEYS) => boolean
 }
 
-// Default user preferences
 const DEFAULT_PREFERENCES: UserPreferences = {
     theme: 'dark',
     language: 'en',

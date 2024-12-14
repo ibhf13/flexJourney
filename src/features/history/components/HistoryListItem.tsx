@@ -84,7 +84,7 @@ export const HistoryListItem = ({ entry }: HistoryListItemProps) => {
                         direction="row"
                         alignItems="center"
                         spacing={1}
-                        sx={{ minWidth: 0 }} // Allows text truncation
+                        sx={{ minWidth: 0 }}
                     >
                         <FitnessCenterIcon
                             color="primary"

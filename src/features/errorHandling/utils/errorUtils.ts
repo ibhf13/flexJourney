@@ -1,12 +1,13 @@
-
-import { ApiError } from '../types/errorTypes'
+import { ApiError, ErrorCode } from '../types/errorTypes'
 
 export const isApiError = (error: unknown): error is ApiError => {
     return (
         typeof error === 'object' &&
         error !== null &&
         'code' in error &&
-        'message' in error
+        'message' in error &&
+        typeof (error as ApiError).message === 'string' &&
+        typeof (error as ApiError).code === 'string'
     )
 }
 
@@ -26,10 +27,10 @@ export const getErrorMessage = (error: unknown): string => {
     return 'An unexpected error occurred'
 }
 
-export const getErrorCode = (error: unknown): string => {
+export const getErrorCode = (error: unknown): ErrorCode => {
     if (isApiError(error)) {
-        return error.code
+        return error.code as ErrorCode
     }
 
-    return 'UNKNOWN_ERROR'
+    return ErrorCode.UNKNOWN
 }

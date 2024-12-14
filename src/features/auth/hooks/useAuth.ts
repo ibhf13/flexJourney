@@ -1,5 +1,6 @@
 import { auth } from '@/config/firebase'
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { ErrorSeverity } from '@/features/errorHandling/types/errorTypes'
 import { onAuthStateChanged } from 'firebase/auth'
 import { useEffect, useState } from 'react'
 import { authApi } from '../api/AuthServices'
@@ -43,7 +44,7 @@ export const useAuth = () => {
             const errorMessage = getErrorMessage(error)
 
             setError(errorMessage)
-            handleError(errorMessage, 'error')
+            handleError(errorMessage, ErrorSeverity.ERROR)
             throw error
         }
     }
@@ -56,7 +57,7 @@ export const useAuth = () => {
             const errorMessage = getErrorMessage(error)
 
             setError(errorMessage)
-            handleError(errorMessage, 'error')
+            handleError(errorMessage, ErrorSeverity.ERROR)
             throw error
         }
     }
@@ -65,7 +66,7 @@ export const useAuth = () => {
         try {
             await authApi.logout()
         } catch (error) {
-            handleError(getErrorMessage(error), 'error')
+            handleError(getErrorMessage(error), ErrorSeverity.ERROR)
             throw error
         }
     }
@@ -74,7 +75,7 @@ export const useAuth = () => {
         try {
             await authApi.resetPassword(email)
         } catch (error) {
-            handleError(getErrorMessage(error), 'error')
+            handleError(getErrorMessage(error), ErrorSeverity.ERROR)
             throw error
         }
     }
@@ -83,7 +84,7 @@ export const useAuth = () => {
         try {
             await authApi.googleSignIn()
         } catch (error) {
-            handleError(getErrorMessage(error), 'error')
+            handleError(getErrorMessage(error), ErrorSeverity.ERROR)
             throw error
         }
     }

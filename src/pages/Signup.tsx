@@ -5,7 +5,7 @@ import React from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import AuthForm from '../features/auth/components/AuthForm'
 import { useSignup } from '../features/auth/hooks/useSignup'
-import { signupSchema } from '../features/auth/utils/validationSchemas'
+import { signupSchema } from '../features/auth/utils/authValidationSchemas'
 
 const Signup: React.FC = () => {
   const { isLoading, isGoogleLoading, handleSignup, handleGoogleSignIn } = useSignup()

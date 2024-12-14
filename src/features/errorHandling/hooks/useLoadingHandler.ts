@@ -1,11 +1,17 @@
 import { useCallback, useState } from 'react'
-import { LoadingState } from '../types/errorTypes'
+import { ErrorSeverity, LoadingState } from '../types/errorTypes'
 import { useErrorHandler } from './useErrorHandler'
 
+
+interface LoadingHandler<T extends (...args: any[]) => Promise<any>> {
+    readonly isLoading: boolean
+    readonly error: Error | null
+    execute: (...args: Parameters<T>) => Promise<Awaited<ReturnType<T>>>
+}
+
 export const useLoadingHandler = <T extends (...args: any[]) => Promise<any>>(
-    asyncFn: T,
-    errorMessage = 'Operation failed'
-) => {
+    asyncFn: T
+): LoadingHandler<T> => {
     const [state, setState] = useState<LoadingState>({
         isLoading: false,
         error: null
@@ -13,7 +19,7 @@ export const useLoadingHandler = <T extends (...args: any[]) => Promise<any>>(
 
     const { handleError } = useErrorHandler()
 
-    const execute = useCallback(async (...args: Parameters<T>) => {
+    const execute = useCallback(async (...args: Parameters<T>): Promise<Awaited<ReturnType<T>>> => {
         setState({ isLoading: true, error: null })
         try {
             const result = await asyncFn(...args)
@@ -22,11 +28,13 @@ export const useLoadingHandler = <T extends (...args: any[]) => Promise<any>>(
 
             return result
         } catch (error) {
-            setState({ isLoading: false, error: error as Error })
-            handleError(error, errorMessage)
-            throw error
+            const errorObject = error instanceof Error ? error : new Error('Unknown error occurred')
+
+            setState({ isLoading: false, error: errorObject })
+            handleError(error, ErrorSeverity.ERROR)
+            throw errorObject
         }
-    }, [asyncFn, errorMessage, handleError])
+    }, [asyncFn, handleError])
 
     return {
         ...state,

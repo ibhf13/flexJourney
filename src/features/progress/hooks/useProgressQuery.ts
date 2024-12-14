@@ -1,5 +1,6 @@
 import { useAuth } from '@/features/auth/hooks/useAuth'
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { ErrorSeverity } from '@/features/errorHandling/types/errorTypes'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getCurrentProgress, initializeProgress, resetProgress, saveExerciseProgress } from '../api/progressService'
 import { PROGRESS_CONSTANTS } from '../constants/progressConstants'
@@ -27,12 +28,12 @@ export const useProgressQuery = () => {
             queryClient.invalidateQueries({
                 queryKey: [PROGRESS_CONSTANTS.QUERY_KEYS.WORKOUT_PROGRESS]
             })
-            showMessage(PROGRESS_CONSTANTS.MESSAGES.SUCCESS.PROGRESS_INITIALIZED, 'success')
+            showMessage(PROGRESS_CONSTANTS.MESSAGES.SUCCESS.PROGRESS_INITIALIZED, ErrorSeverity.SUCCESS)
         },
         onError: (error) => {
             handleError(
                 `${PROGRESS_CONSTANTS.MESSAGES.ERROR.INIT_FAILED}: ${error}`,
-                'error'
+                ErrorSeverity.ERROR
             )
         }
     })
@@ -67,13 +68,13 @@ export const useProgressQuery = () => {
             queryClient.invalidateQueries({
                 queryKey: [PROGRESS_CONSTANTS.QUERY_KEYS.WORKOUT_PROGRESS]
             })
-            showMessage(PROGRESS_CONSTANTS.MESSAGES.SUCCESS.EXERCISE_SAVED, 'success')
+            showMessage(PROGRESS_CONSTANTS.MESSAGES.SUCCESS.EXERCISE_SAVED, ErrorSeverity.SUCCESS)
         },
         onError: (error) => {
             console.error('Mutation error details:', error)
             handleError(
                 `${PROGRESS_CONSTANTS.MESSAGES.ERROR.SAVE_FAILED}: ${error}`,
-                'error'
+                ErrorSeverity.ERROR
             )
         }
     })
@@ -85,12 +86,12 @@ export const useProgressQuery = () => {
             queryClient.invalidateQueries({
                 queryKey: [PROGRESS_CONSTANTS.QUERY_KEYS.WORKOUT_PROGRESS]
             })
-            showMessage('Progress has been reset successfully', 'success')
+            showMessage('Progress has been reset successfully', ErrorSeverity.SUCCESS)
         },
         onError: (error) => {
             handleError(
                 `Failed to reset progress: ${error}`,
-                'error'
+                ErrorSeverity.ERROR
             )
         }
     })

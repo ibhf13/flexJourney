@@ -30,8 +30,8 @@ const MainLayout = () => {
           '&::-webkit-scrollbar': {
             display: 'none'
           },
-          scrollbarWidth: 'none',  // Firefox
-          msOverflowStyle: 'none'  // IE and Edge
+          scrollbarWidth: 'none',
+          msOverflowStyle: 'none'
         }}
       >
         <Outlet />

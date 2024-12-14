@@ -8,8 +8,8 @@ export const ROUTES = {
         HOME: '/',
         PLANS: {
             ROOT: '/plans',
-            DETAIL: '/plans/:planId',
-            DAY: '/plans/:planId/day/:dayId'
+            DETAIL: '/plan/:planId',
+            DAY: '/plan/:planId/day/:dayId'
         },
         HISTORY: '/history',
         EXERCISES: '/exercises',

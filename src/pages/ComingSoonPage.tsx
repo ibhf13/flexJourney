@@ -1,20 +1,9 @@
+import { bounce, pulse } from '@/styles/animations/keyframes'
 import ConstructionIcon from '@mui/icons-material/Construction'
 import TimerIcon from '@mui/icons-material/Timer'
 import { Box, Button, Container, Paper, Typography, useTheme } from '@mui/material'
-import { keyframes, styled } from '@mui/material/styles'
+import { styled } from '@mui/material/styles'
 import { useNavigate } from 'react-router-dom'
-
-// Keyframes for animations
-const bounce = keyframes`
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-20px); }
-`
-
-const pulse = keyframes`
-  0% { transform: scale(1); }
-  50% { transform: scale(1.05); }
-  100% { transform: scale(1); }
-`
 
 const StyledPaper = styled(Paper)(({ theme }) => ({
     padding: theme.spacing(6),
@@ -123,7 +112,7 @@ const ComingSoonPage = () => {
                                 fontSize: { xs: '0.875rem', sm: '1rem' },
                             }}
                         >
-                            Launch coming in a few days
+                            Launch is coming soon
                         </Typography>
                     </TimerWrapper>
 

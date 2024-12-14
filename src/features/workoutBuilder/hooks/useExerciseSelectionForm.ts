@@ -1,4 +1,4 @@
-import { Exercise } from '@/features/workout/types/WorkoutTypes'
+import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
 import { useWorkoutBuilderContext } from '../contexts/WorkoutBuilderContext'
@@ -36,7 +36,6 @@ export const useExerciseSelectionForm = () => {
             currentDay.exercises.push(exercise)
             updateWorkoutPlan({ days: newDays })
 
-            // Update form values
             setValue(`days.${currentDayIndex}.exercises`, currentDay.exercises)
         }
     }
@@ -49,7 +48,6 @@ export const useExerciseSelectionForm = () => {
         currentDay.exercises = currentDay.exercises.filter(e => e.id !== exerciseId)
         updateWorkoutPlan({ days: newDays })
 
-        // Update form values
         setValue(`days.${currentDayIndex}.exercises`, currentDay.exercises)
     }
 

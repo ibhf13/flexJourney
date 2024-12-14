@@ -13,12 +13,10 @@ export const fetchWorkoutPlans = async (userId: string): Promise<WorkoutPlan[]> 
 
     const plans = snapshot.docs.map(doc => doc.data() as WorkoutPlan)
 
-    // Admin can see all plans
     if (userId === ADMIN_USER_ID) {
       return plans
     }
 
-    // Regular users can only see default plans and their own custom plans
     return plans.filter(plan =>
       plan.type === 'default' ||
       (plan.type === 'custom' && plan.userId === userId)

@@ -1,4 +1,5 @@
 import { useNavigationContext } from '@/components/Layout/contexts/NavigationContext'
+import { ROUTES } from '@/config/router/routeConstants'
 import { useLogout } from '@/features/auth/hooks/useLogout'
 import { useBreakpoints } from '@/hooks/useBreakpoints'
 import {
@@ -18,16 +19,16 @@ import { Link } from 'react-router-dom'
 import { NavigationProps } from './types'
 
 const navigationItems = [
-  { label: 'Home', path: '/', icon: <HomeIcon /> },
-  { label: 'My Plan', path: '/progress', icon: <PlanIcon /> },
-  { label: 'Exercises', path: '/exercises', icon: <WorkoutIcon /> },
-  { label: 'Plans', path: '/plans', icon: <PlanIcon /> },
-  { label: 'History', path: '/history', icon: <HistoryIcon /> },
-  { label: 'Profile', path: '/profile', icon: <ProfileIcon /> },
-  { label: 'Statistics', path: '/statistics', icon: <StatisticsIcon /> },
-  { label: 'Calendar', path: '/calendar', icon: <CalendarMonthIcon /> },
-  { label: 'Community', path: '/community', icon: <PeopleIcon /> },
-  { label: 'Shop', path: '/shop', icon: <ShoppingCartIcon /> },
+  { label: 'Home', path: ROUTES.MAIN.HOME, icon: <HomeIcon /> },
+  { label: 'My Plan', path: ROUTES.MAIN.PROGRESS, icon: <PlanIcon /> },
+  { label: 'Exercises', path: ROUTES.MAIN.EXERCISES, icon: <WorkoutIcon /> },
+  { label: 'Plans', path: ROUTES.MAIN.PLANS.ROOT, icon: <PlanIcon /> },
+  { label: 'History', path: ROUTES.MAIN.HISTORY, icon: <HistoryIcon /> },
+  { label: 'Profile', path: ROUTES.MAIN.PROFILE, icon: <ProfileIcon /> },
+  { label: 'Statistics', path: ROUTES.MAIN.STATISTICS, icon: <StatisticsIcon /> },
+  { label: 'Calendar', path: ROUTES.MAIN.CALENDAR, icon: <CalendarMonthIcon /> },
+  { label: 'Community', path: ROUTES.MAIN.COMMUNITY, icon: <PeopleIcon /> },
+  { label: 'Shop', path: ROUTES.MAIN.SHOP, icon: <ShoppingCartIcon /> },
 ]
 
 const Navigation = ({ orientation = 'horizontal' }: NavigationProps) => {

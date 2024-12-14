@@ -1,5 +1,6 @@
 import { COLLECTIONS } from '@/config/firebase/collections'
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { ErrorSeverity } from '@/features/errorHandling/types/errorTypes'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { historyService } from '../api/historyService'
@@ -53,7 +54,7 @@ export const useHistoryQueries = () => {
             },
             onError: (error) => {
                 console.error('Create history error:', error)
-                handleError('Failed to save training history', 'error')
+                handleError('Failed to save training history', ErrorSeverity.ERROR)
             }
         })
     }
@@ -72,11 +73,11 @@ export const useHistoryQueries = () => {
                     queryKey: HISTORY_KEYS.all,
                     exact: false
                 })
-                showMessage('Entry deleted successfully', 'success')
+                showMessage('Entry deleted successfully', ErrorSeverity.SUCCESS)
             },
             onError: (error) => {
                 console.error('Delete history error:', error)
-                handleError('Failed to delete entry', 'error')
+                handleError('Failed to delete entry', ErrorSeverity.ERROR)
             }
         })
     }
@@ -105,7 +106,7 @@ export const useHistoryQueries = () => {
                     : 'Failed to update entry'
 
                 console.error('Update history error:', error)
-                handleError(errorMessage, 'error')
+                handleError(errorMessage, ErrorSeverity.ERROR)
             }
         })
     }

@@ -28,7 +28,6 @@ export const useProgress = () => {
 
     const [progressState, setProgressState] = useState<ProgressState>(initialProgressState)
 
-    // Effect to sync progress state with current plan
     useEffect(() => {
         if (!progress || !plans || isPlansLoading || isProgressLoading) return
 
@@ -54,7 +53,6 @@ export const useProgress = () => {
         }
     }, [progress, plans, isPlansLoading, isProgressLoading])
 
-    // Helper function to check if a day is completed
     const isDayCompleted = (dayId: string): boolean => {
         if (!progress?.exercises[dayId]) return false
 
@@ -65,7 +63,6 @@ export const useProgress = () => {
             dayProgress.exercises.every(ex => ex.isCompleted)
     }
 
-    // Get completed days
     const completedDays = new Set(
         Object.entries(progress?.exercises || {})
             .filter(([dayId]) => isDayCompleted(dayId))
@@ -77,7 +74,6 @@ export const useProgress = () => {
             throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_USER)
         }
 
-        // Validate plan ownership
         if (plan.type === 'custom' && plan.userId !== user.uid) {
             throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.UNAUTHORIZED_PLAN)
         }
@@ -118,14 +114,12 @@ export const useProgress = () => {
         }
 
         try {
-            // Save progress
             await saveUserExerciseProgress(
                 progressState.progressId,
                 dayId,
                 exercise
             )
 
-            // Create history entry if exercise is completed
             if (exercise.isCompleted) {
                 const historyExerciseLog = {
                     exerciseId: exercise.exerciseId,

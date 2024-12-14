@@ -4,27 +4,26 @@ import {
 import React from 'react'
 
 interface YoutubePlayerProps {
-    videoUrl: string;
+    videoUrl: string
 }
 
 export const YoutubePlayer: React.FC<YoutubePlayerProps> = ({ videoUrl }) => {
-    // Extract video ID from URL
     const getVideoId = (url: string) => {
-        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
-        const match = url.match(regExp);
+        const regExp = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/
+        const match = url.match(regExp)
 
-        return match && match[2].length === 11 ? match[2] : null;
-    };
+        return match && match[2].length === 11 ? match[2] : null
+    }
 
-    const videoId = getVideoId(videoUrl);
+    const videoId = getVideoId(videoUrl)
 
-    if (!videoId) return null;
+    if (!videoId) return null
 
     return (
         <Box
             sx={{
                 position: 'relative',
-                paddingTop: '56.25%', // 16:9 Aspect Ratio
+                paddingTop: '56.25%',
                 width: '100%',
             }}
         >
@@ -43,5 +42,5 @@ export const YoutubePlayer: React.FC<YoutubePlayerProps> = ({ videoUrl }) => {
                 loading="lazy"
             />
         </Box>
-    );
-};
+    )
+}

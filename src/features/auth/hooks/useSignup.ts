@@ -1,4 +1,5 @@
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { ErrorSeverity } from '@/features/errorHandling/types/errorTypes'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -28,9 +29,9 @@ export const useSignup = () => {
     try {
       setIsLoading(true)
       await register(data.email, data.password, data.displayName)
-      showMessage('Account created successfully!', 'success')
+      showMessage('Account created successfully!', ErrorSeverity.SUCCESS)
     } catch (error) {
-      handleError(getErrorMessage(error), 'error')
+      handleError(getErrorMessage(error), ErrorSeverity.ERROR)
     } finally {
       setIsLoading(false)
     }
@@ -40,9 +41,9 @@ export const useSignup = () => {
     try {
       setIsGoogleLoading(true)
       await googleSignIn()
-      showMessage('Signed in successfully with Google!', 'success')
+      showMessage('Signed in successfully with Google!', ErrorSeverity.SUCCESS)
     } catch (error) {
-      handleError(getErrorMessage(error), 'error')
+      handleError(getErrorMessage(error), ErrorSeverity.ERROR)
     } finally {
       setIsGoogleLoading(false)
     }

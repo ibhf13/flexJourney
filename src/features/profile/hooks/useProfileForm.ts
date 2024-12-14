@@ -1,13 +1,14 @@
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { ErrorSeverity } from '@/features/errorHandling/types/errorTypes'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
-import { yupResolver } from '@hookform/resolvers/yup'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { updateUserProfile } from '../api/profileService'
 import { ProfileFormData, UpdateProfileData, UserProfile } from '../types/ProfileTypes'
 import { DEFAULT_FORM_VALUES } from '../utils/profileConstants'
-import { profileSchema } from '../utils/validationSchema'
+import { profileSchema } from '../utils/profileValidationSchema'
 
 interface UseProfileFormProps {
     initialData?: Partial<UserProfile>
@@ -20,7 +21,6 @@ export const useProfileForm = ({ initialData, onSuccess }: UseProfileFormProps =
     const queryClient = useQueryClient()
     const { handleError, showMessage } = useErrorHandler()
 
-    // Convert the initial data to match the form data structure
     const convertedInitialData: Partial<ProfileFormData> = {
         ...initialData,
         birthDate: initialData?.birthDate ? new Date(initialData.birthDate) : undefined,
@@ -28,7 +28,7 @@ export const useProfileForm = ({ initialData, onSuccess }: UseProfileFormProps =
     }
 
     const methods = useForm<ProfileFormData>({
-        resolver: yupResolver(profileSchema),
+        resolver: zodResolver(profileSchema),
         defaultValues: {
             ...DEFAULT_FORM_VALUES,
             ...convertedInitialData,
@@ -44,17 +44,16 @@ export const useProfileForm = ({ initialData, onSuccess }: UseProfileFormProps =
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['profile'] })
-            showMessage('Profile updated successfully', 'success')
+            showMessage('Profile updated successfully', ErrorSeverity.SUCCESS)
             setIsDirty(false)
             onSuccess?.()
         },
         onError: (error) => {
-            handleError(error instanceof Error ? error.message : 'Failed to update profile', 'error')
+            handleError(error instanceof Error ? error.message : 'Failed to update profile', ErrorSeverity.ERROR)
         },
     })
 
     const handleSubmit = methods.handleSubmit((data: ProfileFormData) => {
-        // Convert form data to update data format
         const formattedData: UpdateProfileData = {
             ...data,
             birthDate: data.birthDate?.toISOString(),
@@ -64,7 +63,6 @@ export const useProfileForm = ({ initialData, onSuccess }: UseProfileFormProps =
         submitForm(formattedData)
     })
 
-    // Track form changes
     const watchAllFields = methods.watch()
 
     useEffect(() => {

@@ -1,4 +1,5 @@
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { ErrorSeverity } from '@/features/errorHandling/types/errorTypes'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createExercise, deleteExercise, fetchCategories, fetchExerciseById, fetchExercises, updateExercise } from '../api/exerciseService'
 import { Exercise } from '../types/ExerciseTypes'
@@ -38,7 +39,7 @@ export const useExercisesQuery = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['exercises'] })
-            showMessage('Exercise updated successfully', 'success')
+            showMessage('Exercise updated successfully', ErrorSeverity.SUCCESS)
         },
         onError: (error) => {
             handleError(error instanceof Error ? error.message : 'Failed to update exercise')
@@ -50,7 +51,7 @@ export const useExercisesQuery = () => {
             createExercise(exerciseData),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['exercises'] })
-            showMessage('Exercise created successfully', 'success')
+            showMessage('Exercise created successfully', ErrorSeverity.SUCCESS)
         },
         onError: (error) => {
             handleError(`Failed to create exercise: ${error}`)
@@ -69,7 +70,7 @@ export const useExercisesQuery = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['exercises'] })
-            showMessage('Exercise deleted successfully', 'success')
+            showMessage('Exercise deleted successfully', ErrorSeverity.SUCCESS)
         },
         onError: (error) => {
             handleError(error instanceof Error ? error.message : 'Failed to delete exercise')

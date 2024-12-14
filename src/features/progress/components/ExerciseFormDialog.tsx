@@ -1,5 +1,5 @@
 import ResponsivePopup from '@/components/common/Popups/ResponsivePopup'
-import { Exercise } from '@/features/workout/types/WorkoutTypes'
+import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import AddIcon from '@mui/icons-material/Add'
 import DeleteIcon from '@mui/icons-material/Delete'
 import {

@@ -1,4 +1,5 @@
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { ErrorSeverity } from '@/features/errorHandling/types/errorTypes'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useState } from 'react'
 import { WorkoutPlan } from '../types/WorkoutTypes'
@@ -53,7 +54,7 @@ export const usePlanCard = ({ plan, onClick, onDelete, isLoading, refreshPlans }
             refreshPlans?.()
         } catch (error) {
             console.error(`Error deleting workout plan: ${error}`)
-            handleError(error, 'error')
+            handleError(error, ErrorSeverity.ERROR)
         }
     }
 

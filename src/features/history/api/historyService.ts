@@ -31,7 +31,7 @@ const convertToISOString = (date: Timestamp | string | Date) => {
 }
 
 const generateHistoryEntryId = (entry: TrainingHistoryEntry) => {
-    const date = new Date(entry.date).toISOString().split('T')[0] // Format: YYYY-MM-DD
+    const date = new Date(entry.date).toISOString().split('T')[0]
 
     return `${date}_${entry.dayId}_${entry.planId}`
 }
@@ -41,7 +41,6 @@ export const historyService = {
         const historyRef = collection(db, 'users', userId, TRAINING_HISTORY_COLLECTION)
         const customId = generateHistoryEntryId(entry)
 
-        // Sanitize the entry for Firestore
         const sanitizedExercises = entry.exercises.map(exercise => ({
             ...exercise,
             sets: exercise.sets.map(set => ({
@@ -61,7 +60,6 @@ export const historyService = {
             updatedAt: convertToTimestamp(entry.updatedAt)
         } as Record<string, any>
 
-        // Use setDoc instead of addDoc to specify custom ID
         const docRef = doc(historyRef, customId)
 
         await setDoc(docRef, firestoreEntry)
@@ -78,9 +76,7 @@ export const historyService = {
             if (filters) {
                 const { startDate, endDate, planId, dayId } = filters
 
-                // Special case for finding today's entry
                 if (startDate && endDate && planId && dayId) {
-                    // Try the indexed query first
                     try {
                         baseQuery = query(
                             historyRef,
@@ -105,7 +101,6 @@ export const historyService = {
                             _documentId: doc.id
                         })) as TrainingHistoryEntry[]
                     } catch (indexError) {
-                        // Fallback to a simpler query if index isn't ready
                         console.warn('Index not ready, falling back to date-only query')
                         baseQuery = query(
                             historyRef,
@@ -115,7 +110,6 @@ export const historyService = {
                         )
                     }
                 } else {
-                    // For other queries, use simple conditions
                     const conditions = []
 
                     if (startDate) conditions.push(where('date', '>=', convertToTimestamp(startDate)))

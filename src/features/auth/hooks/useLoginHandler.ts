@@ -1,57 +1,49 @@
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
-import { useAuthContext } from '@features/auth/contexts/AuthContext'
-import { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useAuthContext } from '../contexts/AuthContext'
+import { AuthCredentials } from '../types/AuthTypes'
+import { createAuthHandler } from '../utils/authErrorHandler'
 import { useAuthError } from './useAuthError'
-
-interface LoginCredentials {
-  email: string
-  password: string
-}
+import { useAuthSuccess } from './useAuthSuccess'
+import { useLoadingState } from './useLoadingState'
 
 export const useLoginHandler = () => {
-  const [isLoading, setIsLoading] = useState(false)
-  const [authSuccess, setAuthSuccess] = useState(false)
-  const { handleError, showMessage } = useErrorHandler()
-  const { login, googleSignIn, currentUser } = useAuthContext()
-  const navigate = useNavigate()
+  const { loadingStates, withLoading } = useLoadingState({
+    login: false,
+    google: false
+  })
+  const { handleAuthSuccess } = useAuthSuccess()
+  const { handleError } = useErrorHandler()
+  const { login, googleSignIn } = useAuthContext()
   const { getErrorMessage } = useAuthError()
 
-  useEffect(() => {
-    if (authSuccess && currentUser) {
-      navigate('/')
-      showMessage('Successfully logged in!', 'success')
-      setAuthSuccess(false)
+  const handleLogin = createAuthHandler<void, [AuthCredentials]>(
+    async (credentials) => {
+      await withLoading('login', () =>
+        login(credentials.email, credentials.password)
+      )
+    },
+    {
+      handleError,
+      getErrorMessage,
+      onSuccess: () => handleAuthSuccess('LOGIN_SUCCESS')
     }
-  }, [authSuccess, currentUser, navigate, handleError, showMessage])
+  )
 
-  const handleLogin = async (data: LoginCredentials) => {
-    try {
-      setIsLoading(true)
-      await login(data.email, data.password)
-      setAuthSuccess(true)
-    } catch (error) {
-      handleError(getErrorMessage(error), 'error')
-    } finally {
-      setIsLoading(false)
+  const handleGoogleSignIn = createAuthHandler<void, []>(
+    async () => {
+      await withLoading('google', googleSignIn)
+    },
+    {
+      handleError,
+      getErrorMessage,
+      onSuccess: () => handleAuthSuccess('LOGIN_SUCCESS')
     }
-  }
-
-  const handleGoogleSignIn = async () => {
-    try {
-      setIsLoading(true)
-      await googleSignIn()
-      setAuthSuccess(true)
-    } catch (error) {
-      handleError(getErrorMessage(error), 'error')
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  )
 
   return {
-    isLoading,
+    isLoading: loadingStates.login,
+    isGoogleLoading: loadingStates.google,
     handleLogin,
-    handleGoogleSignIn,
+    handleGoogleSignIn
   }
 }

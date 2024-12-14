@@ -33,6 +33,7 @@ export const ProfileForm = ({
         isSubmitting,
         isDirty,
         resetForm,
+        watch,
     } = useProfileForm({
         initialData,
         onSuccess: () => {
@@ -40,6 +41,8 @@ export const ProfileForm = ({
             onClose()
         },
     })
+
+    const fitnessGoals = watch('fitnessGoals')
 
     const handleClose = () => {
         resetForm()
@@ -190,6 +193,7 @@ export const ProfileForm = ({
                                         : [],
                                     renderValue: (selected) => {
                                         const selectedArray = Array.isArray(selected) ? selected : []
+
                                         return selectedArray.join(', ')
                                     },
                                     MenuProps: {

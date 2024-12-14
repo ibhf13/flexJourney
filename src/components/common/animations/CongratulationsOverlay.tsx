@@ -1,12 +1,12 @@
 import { useWindowSize } from '@/hooks/useWindowSize'
-import { bounceAnimation } from '@/styles/animations/keyframes'
-import { overlayStyles } from '@/styles/components/congratulationsOverlay'
+import { congratsAnimation } from '@/styles/animations/keyframes'
 import CloseIcon from '@mui/icons-material/Close'
 import { Box, IconButton, Typography, useTheme } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
 import { useCallback, useEffect } from 'react'
 import Confetti from 'react-confetti'
 import { ANIMATION_DURATION, CONFETTI_GRAVITY, CONFETTI_PIECES, DEFAULT_DURATION, springTransition } from './constants/animationsConsts'
+import { overlayStyles } from './styles/congratulationsOverlay'
 
 
 interface CongratulationsOverlayProps {
@@ -64,7 +64,7 @@ export const CongratulationsOverlay = ({
                                 <CloseIcon />
                             </IconButton>
 
-                            <Box sx={{ animation: `${bounceAnimation} 2s ease infinite` }}>
+                            <Box sx={{ animation: `${congratsAnimation} 2s ease infinite` }}>
                                 <Typography
                                     variant="h4"
                                     sx={overlayStyles.title}

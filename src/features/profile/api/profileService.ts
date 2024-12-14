@@ -43,11 +43,10 @@ export const updateUserProfile = async (userId: string, data: UpdateProfileData)
         const cleanedData = cleanData(data)
 
         if (docSnap.exists()) {
-            // Preserve existing data that's not being updated
             const existingData = docSnap.data()
             const updateData = {
-                ...existingData, // Keep existing data
-                ...cleanedData,  // Override with new data
+                ...existingData,
+                ...cleanedData,
                 updatedAt: timestamp,
                 photoURL: cleanedData.photoURL || existingData.photoURL,
             }

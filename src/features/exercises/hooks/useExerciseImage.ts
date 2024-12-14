@@ -1,4 +1,5 @@
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
+import { ErrorSeverity } from '@/features/errorHandling/types/errorTypes'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 
@@ -111,13 +112,13 @@ export const useExerciseImage = (options: UploadImageOptions = {}) => {
         },
         onSuccess: (base64String) => {
             queryClient.invalidateQueries({ queryKey: ['exercises'] })
-            showMessage('Image uploaded successfully', 'success')
+            showMessage('Image uploaded successfully', ErrorSeverity.SUCCESS)
             setUploadProgress(0)
             onSuccess?.(base64String)
         },
         onError: (error) => {
             setUploadProgress(0)
-            handleError(error instanceof Error ? error.message : 'Failed to upload image', 'error')
+            handleError(error instanceof Error ? error.message : 'Failed to upload image', ErrorSeverity.ERROR)
         },
     })
 
