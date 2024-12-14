@@ -1,18 +1,14 @@
 import { ConfirmationPopUp } from '@/components/common/Popups/ConfirmationPopUp'
 import { useAuthContext } from '@/features/auth/contexts/AuthContext'
 import { LoadingErrorWrapper } from '@/features/errorHandling/components/LoadingErrorWrapper'
-import { AdminExerciseDialog } from '@/features/exercises/components/AdminExerciseDialog'
-import { ExerciseCard } from '@/features/exercises/components/ExerciseCard'
-import { ExerciseDialog } from '@/features/exercises/components/ExerciseDialog'
-import { ExerciseFilters } from '@/features/exercises/components/ExerciseFilters'
-import { ExerciseListItem } from '@/features/exercises/components/ExerciseListItem'
-import { ViewToggle } from '@/features/exercises/components/ViewToggle'
-import { useAdminExercises } from '@/features/exercises/hooks/useAdminExercises'
-import { useExercisesList } from '@/features/exercises/hooks/useExercisesList'
-import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import AddIcon from '@mui/icons-material/Add'
 import { Box, Button, Container, Grid, List, Pagination, Paper, useMediaQuery, useTheme } from '@mui/material'
 import { useState } from 'react'
+import { ExerciseCard, ExerciseFilters, ExerciseListItem, ViewToggle } from '../components'
+import { ExercisesFormDialog } from '../components/Dialogs'
+import { ExerciseDialog } from '../components/Dialogs/ExercisesDialog/ExerciseDialog'
+import { useExercises, useExercisesQuery } from '../hooks'
+import { Exercise } from '../types/ExerciseTypes'
 
 const ExercisesPage = () => {
     const { user } = useAuthContext()
@@ -33,13 +29,13 @@ const ExercisesPage = () => {
         selectedExercise,
         handleExerciseSelect,
         handleCloseModal,
-    } = useExercisesList()
+    } = useExercises()
 
     const theme = useTheme()
     const isMobile = useMediaQuery(theme.breakpoints.down('sm'))
     const [isCreateModalOpen, setIsCreateModalOpen] = useState(false)
     const [selectedExerciseForEdit, setSelectedExerciseForEdit] = useState<Exercise | null>(null)
-    const { deleteExercise } = useAdminExercises()
+    const { deleteExercise } = useExercisesQuery()
     const [exerciseToDelete, setExerciseToDelete] = useState<Exercise | null>(null)
 
     const handleOpenCreateModal = () => {
@@ -179,14 +175,14 @@ const ExercisesPage = () => {
                 />
             )}
             {selectedExerciseForEdit && (
-                <AdminExerciseDialog
+                <ExercisesFormDialog
                     exercise={selectedExerciseForEdit}
                     open={!!selectedExerciseForEdit}
                     onClose={() => setSelectedExerciseForEdit(null)}
                     mode="edit"
                 />
             )}
-            <AdminExerciseDialog
+            <ExercisesFormDialog
                 exercise={null}
                 open={isCreateModalOpen}
                 onClose={handleCloseCreateModal}

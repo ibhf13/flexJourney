@@ -1,6 +1,6 @@
 import { useAuth } from '@/features/auth/hooks/useAuth'
+import { ExerciseDialog } from '@/features/exercises/components/Dialogs/ExercisesDialog/ExerciseDialog'
 import { ExerciseCard } from '@/features/exercises/components/ExerciseCard'
-import { ExerciseDialog } from '@/features/exercises/components/ExerciseDialog'
 import { Exercise } from '@/features/workout/types/WorkoutTypes'
 import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined'
 import { Box, IconButton, alpha } from '@mui/material'
