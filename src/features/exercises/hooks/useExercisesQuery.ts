@@ -3,6 +3,7 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { createExercise, deleteExercise, fetchCategories, fetchExerciseById, fetchExercises, updateExercise } from '../api/exerciseService'
 import { Exercise } from '../types/ExerciseTypes'
 
+
 export const useExercisesQuery = () => {
     const queryClient = useQueryClient()
     const { handleError, showMessage } = useErrorHandler()
@@ -26,19 +27,26 @@ export const useExercisesQuery = () => {
     }
 
     const updateExerciseMutation = useMutation({
-        mutationFn: ({ exerciseId, updates }: { exerciseId: string; updates: Partial<Exercise> }) =>
-            updateExercise(exerciseId, updates),
+        mutationFn: async ({ exerciseId, updates }: { exerciseId: string; updates: Partial<Exercise> }) => {
+            try {
+                await updateExercise(exerciseId, updates)
+            } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : 'Failed to update exercise'
+
+                throw new Error(errorMessage)
+            }
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['exercises'] })
             showMessage('Exercise updated successfully', 'success')
         },
         onError: (error) => {
-            handleError(`Failed to update exercise: ${error}`)
+            handleError(error instanceof Error ? error.message : 'Failed to update exercise')
         },
     })
 
     const createExerciseMutation = useMutation({
-        mutationFn: (exerciseData: Omit<Exercise, 'id'>) =>
+        mutationFn: (exerciseData: Exercise) =>
             createExercise(exerciseData),
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['exercises'] })
@@ -50,13 +58,21 @@ export const useExercisesQuery = () => {
     })
 
     const deleteExerciseMutation = useMutation({
-        mutationFn: (exerciseId: string) => deleteExercise(exerciseId),
+        mutationFn: async (exerciseId: string) => {
+            try {
+                await deleteExercise(exerciseId)
+            } catch (error) {
+                const errorMessage = error instanceof Error ? error.message : 'Failed to delete exercise'
+
+                throw new Error(errorMessage)
+            }
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['exercises'] })
             showMessage('Exercise deleted successfully', 'success')
         },
         onError: (error) => {
-            handleError(`Failed to delete exercise: ${error}`)
+            handleError(error instanceof Error ? error.message : 'Failed to delete exercise')
         },
     })
 

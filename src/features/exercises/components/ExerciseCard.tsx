@@ -5,6 +5,8 @@ import EditIcon from '@mui/icons-material/Edit'
 import MoreVertIcon from '@mui/icons-material/MoreVert'
 import { Chip, IconButton, ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material'
 import { useState } from 'react'
+import { canEditExercise } from '../api/exerciseService'
+import { useExercisesQuery } from '../hooks/useExercisesQuery'
 import { Exercise } from '../types/ExerciseTypes'
 
 interface ExerciseCardProps {
@@ -12,7 +14,6 @@ interface ExerciseCardProps {
     onEdit?: (exercise: Exercise) => void
     onDelete?: (exercise: Exercise) => void
     onView?: (exercise: Exercise) => void
-    isAdmin?: boolean
 }
 
 export const ExerciseCard = ({
@@ -20,10 +21,11 @@ export const ExerciseCard = ({
     onEdit,
     onDelete,
     onView,
-    isAdmin = false
 }: ExerciseCardProps) => {
     const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
     const open = Boolean(anchorEl)
+    const canEdit = canEditExercise(exercise)
+    const { isUpdating, isDeleting } = useExercisesQuery()
 
     const handleCardClick = () => {
         onView?.(exercise)
@@ -42,13 +44,17 @@ export const ExerciseCard = ({
     const handleEditClick = (event: React.MouseEvent) => {
         event.stopPropagation()
         setAnchorEl(null)
-        onEdit?.(exercise)
+        if (!isUpdating && onEdit) {
+            onEdit(exercise)
+        }
     }
 
     const handleDeleteClick = (event: React.MouseEvent) => {
         event.stopPropagation()
         setAnchorEl(null)
-        onDelete?.(exercise)
+        if (!isDeleting && onDelete) {
+            onDelete(exercise)
+        }
     }
 
     return (
@@ -57,10 +63,11 @@ export const ExerciseCard = ({
             imageUrl={exercise.imageUrl}
             imageHeight={200}
             onClick={handleCardClick}
-            actionButton={isAdmin && (
+            actionButton={canEdit && (
                 <>
                     <IconButton
                         onClick={handleMenuOpen}
+                        disabled={isUpdating || isDeleting}
                         sx={{
                             position: 'absolute',
                             top: 8,
@@ -82,13 +89,19 @@ export const ExerciseCard = ({
                         onClose={handleMenuClose}
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <MenuItem onClick={handleEditClick}>
+                        <MenuItem
+                            onClick={handleEditClick}
+                            disabled={isUpdating}
+                        >
                             <ListItemIcon>
                                 <EditIcon fontSize="small" />
                             </ListItemIcon>
                             <ListItemText>Edit</ListItemText>
                         </MenuItem>
-                        <MenuItem onClick={handleDeleteClick}>
+                        <MenuItem
+                            onClick={handleDeleteClick}
+                            disabled={isDeleting}
+                        >
                             <ListItemIcon>
                                 <DeleteIcon fontSize="small" />
                             </ListItemIcon>

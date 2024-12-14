@@ -1,7 +1,9 @@
-import { db } from '@/config/firebase'
+import { auth, db } from '@/config/firebase'
 import { COLLECTIONS } from '@/config/firebase/collections'
 import { Exercise } from "@/features/exercises/types/ExerciseTypes"
+import { isUserAdmin } from '@/utils/adminUtils'
 import { addDoc, collection, deleteDoc, doc, getDoc, getDocs, updateDoc } from 'firebase/firestore'
+
 
 const EXERCISES_COLLECTION = COLLECTIONS.GLOBAL.EXERCISES
 
@@ -57,8 +59,19 @@ export const fetchCategories = async (): Promise<string[]> => {
 export const updateExercise = async (exerciseId: string, updates: Partial<Exercise>): Promise<void> => {
   try {
     const exerciseRef = doc(db, EXERCISES_COLLECTION, exerciseId)
-    const timestamp = new Date()
+    const exerciseSnap = await getDoc(exerciseRef)
 
+    if (!exerciseSnap.exists()) {
+      throw new Error('Exercise not found')
+    }
+
+    const exercise = { id: exerciseId, ...exerciseSnap.data() } as Exercise
+
+    if (!canEditExercise(exercise)) {
+      throw new Error('Unauthorized to update this exercise')
+    }
+
+    const timestamp = new Date()
     const updateData = {
       ...updates,
       updatedAt: timestamp,
@@ -72,13 +85,18 @@ export const updateExercise = async (exerciseId: string, updates: Partial<Exerci
   }
 }
 
-export const createExercise = async (exerciseData: Omit<Exercise, 'id'>): Promise<string> => {
+export const createExercise = async (exerciseData: Exercise): Promise<string> => {
   try {
+    const currentUser = auth.currentUser
+
+    if (!currentUser) throw new Error('User must be authenticated')
+
     const exercisesRef = collection(db, EXERCISES_COLLECTION)
     const timestamp = new Date()
 
     const newExercise = {
       ...exerciseData,
+      createdBy: currentUser.uid,
       createdAt: timestamp,
       updatedAt: timestamp,
     }
@@ -93,16 +111,34 @@ export const createExercise = async (exerciseData: Omit<Exercise, 'id'>): Promis
 }
 
 export const deleteExercise = async (exerciseId: string): Promise<void> => {
-  if (!exerciseId) {
-    throw new Error('Exercise ID is required')
-  }
-
   try {
     const exerciseRef = doc(db, EXERCISES_COLLECTION, exerciseId)
+    const exerciseSnap = await getDoc(exerciseRef)
+
+    if (!exerciseSnap.exists()) {
+      throw new Error('Exercise not found')
+    }
+
+    const exercise = { id: exerciseId, ...exerciseSnap.data() } as Exercise
+
+    if (!canEditExercise(exercise)) {
+      throw new Error('Unauthorized to delete this exercise')
+    }
 
     await deleteDoc(exerciseRef)
   } catch (error) {
     console.error('Error deleting exercise:', error)
     throw error
   }
+}
+
+export const canEditExercise = (exercise: Exercise): boolean => {
+  const currentUser = auth.currentUser
+
+  if (!currentUser || !exercise) return false
+
+  const isAdmin = isUserAdmin(currentUser)
+  const isOwner = exercise.createdBy === currentUser.uid
+
+  return isAdmin || isOwner
 }

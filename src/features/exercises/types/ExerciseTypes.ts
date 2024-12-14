@@ -19,6 +19,7 @@ export interface Exercise {
     type: ExerciseType
     level: DifficultyLevel
     defaultRestPeriod: number
+    createdBy: string
     createdAt?: Date
     updatedAt?: Date
 }
