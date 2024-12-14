@@ -16,12 +16,10 @@ service cloud.firestore {
       return isAuthenticated() && request.auth.uid == userId;
     }
 
-    // Global collections
     match /exercises/{exerciseId} {
       allow read: if isAuthenticated();
       allow create: if isAuthenticated();
-      allow update: if isAdmin();
-      allow delete: if isAdmin(); 
+      allow update, delete: if isAdmin() || (isAuthenticated() && resource.data.createdBy == request.auth.uid);
     }
 
     match /workoutPlans/{planId} {

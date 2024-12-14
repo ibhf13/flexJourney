@@ -1,11 +1,11 @@
-import { useExercises } from '@/features/exercises/hooks/useExercises'
+import { useExercisesQuery } from '@/features/exercises/hooks/useExercisesQuery'
 import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import { useState } from 'react'
 import { useWorkoutBuilderContext } from '../contexts/WorkoutBuilderContext'
 
 export const useExerciseSelection = () => {
     const { workoutPlan, updateWorkoutPlan, setCurrentStep } = useWorkoutBuilderContext()
-    const { exercises } = useExercises()
+    const { exercises } = useExercisesQuery()
     const [currentDayIndex, setCurrentDayIndex] = useState(0)
     const [searchQuery, setSearchQuery] = useState('')
 

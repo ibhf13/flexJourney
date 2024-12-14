@@ -1,6 +1,6 @@
 import { BaseCard, BaseCardContent } from '@/components/common/Cards'
-import { ExerciseDialog } from '@/features/exercises/components/ExerciseDialog'
-import { useExercisesList } from '@/features/exercises/hooks/useExercisesList'
+import { ExerciseDialog } from '@/features/exercises/components/Dialogs/ExercisesDialog/ExerciseDialog'
+import { useExercises } from '@/features/exercises/hooks/useExercises'
 import { Chip } from '@mui/material'
 import { DifficultyLevel, Exercise } from '../types/WorkoutTypes'
 
@@ -9,7 +9,7 @@ interface ExerciseCardProps {
 }
 
 export const ExerciseCard = ({ exercise }: ExerciseCardProps) => {
-    const { selectedExercise, handleExerciseSelect, handleCloseModal } = useExercisesList()
+    const { selectedExercise, handleExerciseSelect, handleCloseModal } = useExercises()
 
     return (
         <>

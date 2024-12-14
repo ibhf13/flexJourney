@@ -1,5 +1,5 @@
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
-import { useExercises } from '@/features/exercises/hooks/useExercises'
+import { useExercisesQuery } from '@/features/exercises/hooks/useExercisesQuery'
 import { DifficultyLevel } from '@/features/workout/types/WorkoutTypes'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Paper, Select, Stack, TextField, Typography, useTheme } from '@mui/material'
@@ -13,7 +13,7 @@ export const ReviewStep = ({ onSuccess }: { onSuccess?: () => void }) => {
     const theme = useTheme()
     const styles = reviewStepStyles(theme)
     const { workoutPlan, resetBuilder } = useWorkoutBuilderContext()
-    const { exercises } = useExercises()
+    const { exercises } = useExercisesQuery()
     const { user } = useAuthContext()
     const { handleError } = useErrorHandler()
     const [isSaving, setIsSaving] = useState(false)

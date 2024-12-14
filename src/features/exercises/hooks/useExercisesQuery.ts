@@ -1,11 +1,29 @@
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
-import { useMutation, useQueryClient } from '@tanstack/react-query'
-import { createExercise, deleteExercise, updateExercise } from '../api/exerciseService'
+import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { createExercise, deleteExercise, fetchCategories, fetchExerciseById, fetchExercises, updateExercise } from '../api/exerciseService'
 import { Exercise } from '../types/ExerciseTypes'
 
-export const useAdminExercises = () => {
+export const useExercisesQuery = () => {
     const queryClient = useQueryClient()
     const { handleError, showMessage } = useErrorHandler()
+
+    const exercisesQuery = useQuery({
+        queryKey: ['exercises'],
+        queryFn: fetchExercises,
+    })
+
+    const categoriesQuery = useQuery({
+        queryKey: ['categories'],
+        queryFn: fetchCategories,
+    })
+
+    const useExerciseById = (exerciseId: string) => {
+        return useQuery({
+            queryKey: ['exercise', exerciseId],
+            queryFn: () => fetchExerciseById(exerciseId),
+            enabled: !!exerciseId,
+        })
+    }
 
     const updateExerciseMutation = useMutation({
         mutationFn: ({ exerciseId, updates }: { exerciseId: string; updates: Partial<Exercise> }) =>
@@ -42,7 +60,16 @@ export const useAdminExercises = () => {
         },
     })
 
+
+
     return {
+        exercises: exercisesQuery.data,
+        isExercisesLoading: exercisesQuery.isLoading,
+        exercisesError: exercisesQuery.error,
+        categories: categoriesQuery.data,
+        isCategoriesLoading: categoriesQuery.isLoading,
+        categoriesError: categoriesQuery.error,
+        useExerciseById,
         updateExercise: updateExerciseMutation.mutate,
         createExercise: createExerciseMutation.mutate,
         isUpdating: updateExerciseMutation.isPending,
@@ -50,4 +77,4 @@ export const useAdminExercises = () => {
         deleteExercise: deleteExerciseMutation.mutate,
         isDeleting: deleteExerciseMutation.isPending,
     }
-} 
+}

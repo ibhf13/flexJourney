@@ -1,5 +1,5 @@
 import { Box, FormControl, MenuItem, Select, TextField } from '@mui/material'
-import { useExercises } from '../hooks/useExercises'
+import { useExercisesQuery } from '../hooks/useExercisesQuery'
 
 interface ExerciseFiltersProps {
     searchQuery: string
@@ -16,7 +16,7 @@ export const ExerciseFilters = ({
     onCategoryChange,
     isMobile
 }: ExerciseFiltersProps) => {
-    const { categories } = useExercises()
+    const { categories } = useExercisesQuery()
 
     return (
         <Box sx={{
