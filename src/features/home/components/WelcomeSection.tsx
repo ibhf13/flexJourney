@@ -11,7 +11,6 @@ export const WelcomeSection = () => {
             sx={{
                 p: 4,
                 textAlign: 'center',
-                mb: { xs: 4, md: 6 }
             }}
         >
             <Typography

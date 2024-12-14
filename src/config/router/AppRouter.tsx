@@ -13,7 +13,7 @@ const AppRouter = () => {
   }
 
   const router = createBrowserRouter([
-    ...routes.publicRoutes,
+    ...routes.publicRoutes.filter(route => route.path !== '*'),
 
     isAuthenticated
       ? routes.privateRoutes

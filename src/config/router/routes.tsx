@@ -17,6 +17,7 @@ const ExercisesPage = lazy(() => import('@/features/exercises/pages/ExercisesPag
 const MyPlanPage = lazy(() => import('@/pages/MyPlanPage'))
 const ProfilePage = lazy(() => import('@/pages/ProfilePage'))
 const ComingSoonPage = lazy(() => import('@/pages/ComingSoonPage'))
+const NotFoundPage = lazy(() => import('@/pages/NotFoundPage'))
 
 const withSuspense = (Component: React.ComponentType) => (
     <ErrorBoundary>
@@ -42,6 +43,11 @@ export const routes = {
             path: ROUTES.AUTH.RESET_PASSWORD,
             element: withSuspense(ResetPassword),
             title: 'Reset Password'
+        },
+        {
+            path: '*',
+            element: withSuspense(NotFoundPage),
+            title: 'Page Not Found'
         }
     ],
     privateRoutes: {
@@ -102,7 +108,12 @@ export const routes = {
                 path,
                 element: withSuspense(ComingSoonPage),
                 title: path.slice(1).charAt(0).toUpperCase() + path.slice(2)
-            }))
+            })),
+            {
+                path: '*',
+                element: withSuspense(NotFoundPage),
+                title: 'Page Not Found'
+            }
         ]
     }
 }
