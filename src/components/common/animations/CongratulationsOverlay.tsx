@@ -3,10 +3,11 @@ import { congratsAnimation } from '@/styles/animations/keyframes'
 import CloseIcon from '@mui/icons-material/Close'
 import { Box, IconButton, Typography, useTheme } from '@mui/material'
 import { AnimatePresence, motion } from 'framer-motion'
-import { useCallback, useEffect } from 'react'
+import { CSSProperties, useCallback, useEffect } from 'react'
 import Confetti from 'react-confetti'
 import { ANIMATION_DURATION, CONFETTI_GRAVITY, CONFETTI_PIECES, DEFAULT_DURATION, springTransition } from './constants/animationsConsts'
 import { overlayStyles } from './styles/congratulationsOverlay'
+
 
 
 interface CongratulationsOverlayProps {
@@ -43,43 +44,45 @@ export const CongratulationsOverlay = ({
         <AnimatePresence>
             {show && (
                 <Box sx={overlayStyles.wrapper}>
-                    <MotionDiv
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: ANIMATION_DURATION }}
-                        style={overlayStyles.backdrop as any}
-                    >
+                    <Box>
                         <MotionDiv
-                            initial={{ scale: 0.5, opacity: 0, y: 50 }}
-                            animate={{ scale: 1, opacity: 1, y: 0 }}
-                            exit={{ scale: 0.8, opacity: 0, y: -50 }}
-                            transition={springTransition}
-                            style={overlayStyles.content(theme) as any}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: ANIMATION_DURATION }}
+                            style={{ ...overlayStyles.backdropStyle, ...overlayStyles.backdropSx(theme) }}
                         >
-                            <IconButton
-                                onClick={handleClose}
-                                sx={overlayStyles.closeButton}
+                            <MotionDiv
+                                initial={{ scale: 0.5, opacity: 0, y: 50 }}
+                                animate={{ scale: 1, opacity: 1, y: 0 }}
+                                exit={{ scale: 0.8, opacity: 0, y: -50 }}
+                                transition={springTransition}
+                                style={overlayStyles.content(theme) as CSSProperties}
                             >
-                                <CloseIcon />
-                            </IconButton>
+                                <IconButton
+                                    onClick={handleClose}
+                                    sx={overlayStyles.closeButton}
+                                >
+                                    <CloseIcon />
+                                </IconButton>
 
-                            <Box sx={{ animation: `${congratsAnimation} 2s ease infinite` }}>
-                                <Typography
-                                    variant="h4"
-                                    sx={overlayStyles.title}
-                                >
-                                    🎉 Congratulations! 🎉
-                                </Typography>
-                                <Typography
-                                    variant="h6"
-                                    sx={overlayStyles.message(theme)}
-                                >
-                                    {message}
-                                </Typography>
-                            </Box>
+                                <Box sx={{ animation: `${congratsAnimation} 2s ease infinite` }}>
+                                    <Typography
+                                        variant="h4"
+                                        sx={overlayStyles.title}
+                                    >
+                                        🎉 Congratulations! 🎉
+                                    </Typography>
+                                    <Typography
+                                        variant="h6"
+                                        sx={overlayStyles.message(theme)}
+                                    >
+                                        {message}
+                                    </Typography>
+                                </Box>
+                            </MotionDiv>
                         </MotionDiv>
-                    </MotionDiv>
+                    </Box>
                     <Box sx={{ position: 'fixed', inset: 0, zIndex: theme.zIndex.modal + 1 }}>
                         <Confetti
                             width={width}

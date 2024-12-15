@@ -4,7 +4,6 @@ import { ExerciseLog, Unit } from '@/features/history/types/HistoryTypes'
 import { useWorkoutPlans } from '@/features/workout/hooks/useWorkoutQuerys'
 import { WorkoutPlan } from '@/features/workout/types/WorkoutTypes'
 import { useEffect, useState } from 'react'
-import { PROGRESS_CONSTANTS } from '../constants/progressConstants'
 import { ProgressState, WorkoutExercise } from '../types/ProgressTypes'
 import { useProgressQuery } from './useProgressQuery'
 
@@ -71,11 +70,11 @@ export const useProgress = () => {
 
     const handlePlanSelect = async (plan: WorkoutPlan) => {
         if (!user) {
-            throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_USER)
+            throw new Error('User must be logged in')
         }
 
         if (plan.type === 'custom' && plan.userId !== user.uid) {
-            throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.UNAUTHORIZED_PLAN)
+            throw new Error('You are not authorized to access this plan')
         }
 
         try {
@@ -89,7 +88,7 @@ export const useProgress = () => {
                 isInitialized: true
             })
         } catch (error) {
-            console.error(PROGRESS_CONSTANTS.MESSAGES.ERROR.INIT_FAILED, error)
+            console.error('Failed to initialize progress', error)
             throw error
         }
     }
@@ -106,11 +105,11 @@ export const useProgress = () => {
 
     const handleExerciseProgress = async (dayId: string, exercise: WorkoutExercise) => {
         if (!user?.uid) {
-            throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_USER)
+            throw new Error('User must be logged in')
         }
 
         if (!progressState.progressId || !progressState.selectedPlan || !progressState.selectedDay) {
-            throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_PROGRESS_ID)
+            throw new Error('Progress ID is required')
         }
 
         try {

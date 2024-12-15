@@ -98,7 +98,7 @@ export const ProgressHeader = ({
                     </Box>
 
                     <Box sx={{ display: 'flex', gap: 2 }}>
-                        {progressId && <ResetProgressButton progressId={progressId} completedExercises={completedExercises} />}
+                        {progressId && <ResetProgressButton progressId={progressId} />}
                         <Button
                             variant="contained"
                             onClick={onSelectPlan}

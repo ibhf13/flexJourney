@@ -42,6 +42,10 @@ export const Progress = () => {
         setShowCongrats(true)
     }
 
+    const handleCloseCongrats = () => {
+        setShowCongrats(false)
+    }
+
     return (
         <LoadingErrorWrapper isLoading={isPlansLoading || isProgressLoading} error={error} loadingComponent={<ProgressSkeleton />}>
             <Container maxWidth="lg" sx={{ py: 4 }}>
@@ -84,8 +88,7 @@ export const Progress = () => {
                 <CongratulationsOverlay
                     show={showCongrats}
                     message="You've completed all exercises for today! Keep up the great work! 💪"
-                    onComplete={() => setShowCongrats(false)}
-                    duration={5000}
+                    onComplete={handleCloseCongrats}
                 />
 
                 <PlanSelectorDialog
