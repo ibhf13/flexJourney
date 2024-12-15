@@ -109,7 +109,7 @@ export const useHistory = (filters?: HistoryFilters) => {
             }
 
             queryClient.invalidateQueries({ queryKey: ['training-history'] })
-            showMessage('Exercise progress saved to history', ErrorSeverity.SUCCESS)
+            // showMessage('Exercise progress saved to history', ErrorSeverity.SUCCESS)
 
             return true
         } catch (error) {

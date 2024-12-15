@@ -4,7 +4,9 @@ type CleaningOptions = {
     dateFields?: string[]
 }
 
-export const cleanData = <T extends Record<string, any>>(
+type DataRecord = Record<string, string | number | Date | undefined>
+
+export const cleanData = <T extends DataRecord>(
     data: T,
     options: CleaningOptions = {}
 ): Partial<T> => {
@@ -33,13 +35,13 @@ export const cleanData = <T extends Record<string, any>>(
             const numValue = Number(value)
 
             if (!isNaN(numValue) && numValue > 0) {
-                acc[key as keyof T] = numValue as any
+                acc[key as keyof T] = numValue as T[keyof T]
 
                 return acc
             }
         }
 
-        acc[key as keyof T] = value
+        acc[key as keyof T] = value as T[keyof T]
 
         return acc
     }, {} as Partial<T>)

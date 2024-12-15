@@ -5,15 +5,17 @@ export const overlayStyles = {
         position: 'relative',
         zIndex: (theme: Theme) => theme.zIndex.modal
     },
-    backdrop: {
-        position: 'fixed',
+    backdropSx: (theme: Theme) => ({
+        backgroundColor: alpha(theme.palette.background.default, 0.85)
+    }),
+    backdropStyle: {
+        position: 'fixed' as const,
         inset: 0,
-        backgroundColor: (theme: Theme) => alpha(theme.palette.background.default, 0.85),
         backdropFilter: 'blur(8px)',
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 24
+        display: 'flex' as const,
+        alignItems: 'center' as const,
+        justifyContent: 'center' as const,
+        padding: '24px'
     },
     content: (theme: Theme) => ({
         position: 'relative',
@@ -34,6 +36,7 @@ export const overlayStyles = {
         right: 12,
         color: (theme: Theme) => theme.palette.text.secondary,
         transition: 'all 0.2s ease',
+        cursor: 'pointer',
         '&:hover': {
             transform: 'rotate(90deg)',
             color: (theme: Theme) => theme.palette.error.main,

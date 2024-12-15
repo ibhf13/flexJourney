@@ -3,8 +3,8 @@ import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { ErrorSeverity } from '@/features/errorHandling/types/errorTypes'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { getCurrentProgress, initializeProgress, resetProgress, saveExerciseProgress } from '../api/progressService'
-import { PROGRESS_CONSTANTS } from '../constants/progressConstants'
 import { WorkoutExercise } from '../types/ProgressTypes'
+import { hasCompletedDays } from '../utils/progressUtils'
 
 export const useProgressQuery = () => {
     const { user } = useAuth()
@@ -12,9 +12,9 @@ export const useProgressQuery = () => {
     const { handleError, showMessage } = useErrorHandler()
 
     const progressQuery = useQuery({
-        queryKey: [PROGRESS_CONSTANTS.QUERY_KEYS.WORKOUT_PROGRESS, user?.uid],
+        queryKey: ['workoutProgress', user?.uid],
         queryFn: () => {
-            if (!user?.uid) throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_USER)
+            if (!user?.uid) throw new Error('User must be logged in')
 
             return getCurrentProgress(user.uid)
         },
@@ -26,13 +26,13 @@ export const useProgressQuery = () => {
             initializeProgress(userId, planId),
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: [PROGRESS_CONSTANTS.QUERY_KEYS.WORKOUT_PROGRESS]
+                queryKey: ['workoutProgress']
             })
-            showMessage(PROGRESS_CONSTANTS.MESSAGES.SUCCESS.PROGRESS_INITIALIZED, ErrorSeverity.SUCCESS)
+            showMessage('Progress initialized successfully', ErrorSeverity.SUCCESS)
         },
         onError: (error) => {
             handleError(
-                `${PROGRESS_CONSTANTS.MESSAGES.ERROR.INIT_FAILED}: ${error}`,
+                `Failed to initialize progress: ${error}`,
                 ErrorSeverity.ERROR
             )
         }
@@ -66,14 +66,13 @@ export const useProgressQuery = () => {
         },
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: [PROGRESS_CONSTANTS.QUERY_KEYS.WORKOUT_PROGRESS]
+                queryKey: ['workoutProgress']
             })
-            showMessage(PROGRESS_CONSTANTS.MESSAGES.SUCCESS.EXERCISE_SAVED, ErrorSeverity.SUCCESS)
         },
         onError: (error) => {
             console.error('Mutation error details:', error)
             handleError(
-                `${PROGRESS_CONSTANTS.MESSAGES.ERROR.SAVE_FAILED}: ${error}`,
+                `Failed to save exercise progress: ${error}`,
                 ErrorSeverity.ERROR
             )
         }
@@ -84,7 +83,7 @@ export const useProgressQuery = () => {
             resetProgress(userId, progressId),
         onSuccess: () => {
             queryClient.invalidateQueries({
-                queryKey: [PROGRESS_CONSTANTS.QUERY_KEYS.WORKOUT_PROGRESS]
+                queryKey: ['workoutProgress']
             })
             showMessage('Progress has been reset successfully', ErrorSeverity.SUCCESS)
         },
@@ -97,7 +96,7 @@ export const useProgressQuery = () => {
     })
 
     const initializeUserProgress = async (planId: string) => {
-        if (!user) throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_USER)
+        if (!user) throw new Error('User must be logged in')
 
         return initProgressMutation.mutateAsync({ userId: user.uid, planId })
     }
@@ -107,7 +106,7 @@ export const useProgressQuery = () => {
         dayId: string,
         exercise: WorkoutExercise
     ) => {
-        if (!user) throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_USER)
+        if (!user) throw new Error('User must be logged in')
 
         const isExerciseCompleted = exercise.sets.every(set => set.isCompleted)
         const exerciseWithStatus = {
@@ -125,7 +124,7 @@ export const useProgressQuery = () => {
     }
 
     const resetUserProgress = async (progressId: string) => {
-        if (!user) throw new Error(PROGRESS_CONSTANTS.MESSAGES.ERROR.NO_USER)
+        if (!user) throw new Error('User must be logged in')
         await resetProgressMutation.mutateAsync({
             userId: user.uid,
             progressId
@@ -134,6 +133,7 @@ export const useProgressQuery = () => {
 
     return {
         progress: progressQuery.data,
+        hasProgress: progressQuery.data ? hasCompletedDays(progressQuery.data) : false,
         isLoading: progressQuery.isLoading,
         error: progressQuery.error,
         initializeUserProgress,

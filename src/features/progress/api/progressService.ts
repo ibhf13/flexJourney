@@ -145,7 +145,7 @@ export const getCurrentProgress = async (userId: string): Promise<WorkoutProgres
 
 export const resetProgress = async (userId: string, progressId: string): Promise<void> => {
     if (!userId || !progressId) {
-        throw new Error('Invalid parameters for progress reset')
+        throw new Error('Invalid parameters for progress reset.')
     }
 
     try {

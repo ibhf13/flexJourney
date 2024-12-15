@@ -6,22 +6,18 @@ import { useProgressQuery } from '../hooks/useProgressQuery'
 
 interface ResetProgressButtonProps {
     progressId: string
-    completedExercises: number
 }
 
-export const ResetProgressButton = ({
-    progressId,
-    completedExercises
-}: ResetProgressButtonProps) => {
+export const ResetProgressButton = ({ progressId }: ResetProgressButtonProps) => {
     const [isDialogOpen, setIsDialogOpen] = useState(false)
-    const { resetUserProgress, isResetting } = useProgressQuery()
+    const { resetUserProgress, isResetting, hasProgress } = useProgressQuery()
 
     const handleReset = async () => {
         await resetUserProgress(progressId)
         setIsDialogOpen(false)
     }
 
-    const isDisabled = isResetting || completedExercises === 0
+    const isDisabled = isResetting || !hasProgress
 
     const button = (
         <Button
@@ -49,7 +45,7 @@ export const ResetProgressButton = ({
     return (
         <>
             {isDisabled ? (
-                <Tooltip title="Complete at least one exercise to enable reset">
+                <Tooltip title="Complete at least one day to enable reset">
                     <span style={{ display: 'inline-block' }}>{button}</span>
                 </Tooltip>
             ) : (
@@ -59,7 +55,7 @@ export const ResetProgressButton = ({
             <ConfirmationPopUp
                 open={isDialogOpen}
                 title="Reset Progress"
-                message={`Are you sure you want to reset your progress? This will clear all ${completedExercises} completed exercises for this plan.`}
+                message="Are you sure you want to reset your progress? This will clear all completed exercises for this plan."
                 onConfirm={handleReset}
                 onCancel={() => setIsDialogOpen(false)}
                 buttonText="Reset"
