@@ -1,5 +1,7 @@
+import { useExercisesQuery } from '@/features/exercises/hooks'
 import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { useWorkoutBuilderContext } from '../contexts/WorkoutBuilderContext'
 import { ExerciseSelectionFormData, exerciseSelectionSchema } from '../schemas/workoutBuilderSchemas'
@@ -9,12 +11,12 @@ export const useExerciseSelectionForm = () => {
     const { workoutPlan, setCurrentStep, updateWorkoutPlan } = useWorkoutBuilderContext()
     const {
         currentDayIndex,
-        searchQuery,
-        filteredExercises,
         currentDayExercises,
-        handleSearchChange,
         handleDayChange
     } = useExerciseSelection()
+    const { exercises } = useExercisesQuery()
+    const [searchQuery, setSearchQuery] = useState('')
+    const [selectedCategory, setSelectedCategory] = useState('')
 
     const { handleSubmit, formState: { errors }, setValue } = useForm<ExerciseSelectionFormData>({
         resolver: zodResolver(exerciseSelectionSchema),
@@ -59,6 +61,21 @@ export const useExerciseSelectionForm = () => {
         setCurrentStep('days')
     }
 
+    const handleSearchChange = (query: string) => {
+        setSearchQuery(query)
+    }
+
+    const handleCategoryChange = (category: string) => {
+        setSelectedCategory(category)
+    }
+
+    const filteredExercises = exercises?.filter((exercise: Exercise) => {
+        const matchesSearch = exercise.title.toLowerCase().includes(searchQuery.toLowerCase())
+        const matchesCategory = !selectedCategory || exercise.category === selectedCategory
+
+        return matchesSearch && matchesCategory
+    })
+
     return {
         currentDayIndex,
         searchQuery,
@@ -72,6 +89,8 @@ export const useExerciseSelectionForm = () => {
         navigateBack,
         handleSubmit,
         onSubmit,
-        errors
+        errors,
+        selectedCategory,
+        handleCategoryChange
     }
 }

@@ -15,7 +15,7 @@ export const TrainingDaysStep = () => {
     const { control, handleSubmit, formState: { errors } } = useForm<TrainingDaysFormData>({
         resolver: zodResolver(trainingDaysSchema),
         defaultValues: {
-            days: workoutPlan.days || []
+            days: workoutPlan.days?.length ? workoutPlan.days : [{ title: 'Day 1' }]
         }
     })
 
@@ -63,7 +63,7 @@ export const TrainingDaysStep = () => {
                 <FormControl fullWidth sx={{ mb: 4 }}>
                     <InputLabel>Number of Training Days</InputLabel>
                     <Select
-                        value={fields.length}
+                        value={fields.length || 1}
                         onChange={(e) => handleDaysChange(Number(e.target.value))}
                         label="Number of Training Days"
                         sx={styles.select}

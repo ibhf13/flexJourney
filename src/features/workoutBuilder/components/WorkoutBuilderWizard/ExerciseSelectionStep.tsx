@@ -1,7 +1,8 @@
+import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
-import SearchIcon from '@mui/icons-material/Search'
-import { Box, Button, Chip, Fade, InputAdornment, Paper, Tab, Tabs, TextField, Typography, useTheme } from '@mui/material'
+import { Box, Button, Chip, Fade, Paper, Tab, Tabs, Typography, useTheme } from '@mui/material'
+import { ExerciseFilters } from '../../../exercises/components/ExerciseFilters'
 import { useExerciseSelectionForm } from '../../hooks/useExerciseSelectionForm'
 import { ExerciseChip } from './ExerciseChip'
 import { SelectedExerciseItem } from './SelectedExerciseItem'
@@ -13,12 +14,14 @@ export const ExerciseSelectionStep = () => {
     const {
         currentDayIndex,
         searchQuery,
+        selectedCategory,
         workoutPlan,
         filteredExercises,
         currentDayExercises,
         handleExerciseAdd,
         handleExerciseRemove,
         handleSearchChange,
+        handleCategoryChange,
         handleDayChange,
         navigateBack,
         handleSubmit,
@@ -70,19 +73,11 @@ export const ExerciseSelectionStep = () => {
                 </Tabs>
             </Paper>
 
-            <TextField
-                fullWidth
-                placeholder="Search exercises..."
-                value={searchQuery}
-                onChange={(e) => handleSearchChange(e.target.value)}
-                InputProps={{
-                    startAdornment: (
-                        <InputAdornment position="start">
-                            <SearchIcon color="action" />
-                        </InputAdornment>
-                    )
-                }}
-                sx={styles.searchField}
+            <ExerciseFilters
+                searchQuery={searchQuery}
+                selectedCategory={selectedCategory}
+                onSearchChange={handleSearchChange}
+                onCategoryChange={handleCategoryChange}
             />
 
             <Box sx={styles.exercisesContainer}>
@@ -92,9 +87,9 @@ export const ExerciseSelectionStep = () => {
                         Available Exercises
                     </Typography>
                     <Box sx={styles.scrollableContent}>
-                        {filteredExercises?.map(exercise => (
+                        {filteredExercises?.map((exercise: Exercise, index: number) => (
                             <ExerciseChip
-                                key={exercise.id}
+                                key={`${exercise.id}-${index}`}
                                 exercise={exercise}
                                 isSelected={currentDayExercises.some(e => e.id === exercise.id)}
                                 onSelect={handleExerciseAdd}
