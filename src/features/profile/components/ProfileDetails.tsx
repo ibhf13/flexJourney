@@ -113,6 +113,9 @@ export const ProfileDetails = ({ profile }: ProfileDetailsProps) => {
                         )}
                     </Stack>
                 </ProfileSection>
+                <Box sx={{ pt: 3, width: '100%' }}>
+                    <PasswordManagement />
+                </Box>
             </Box>
 
 
@@ -159,9 +162,7 @@ export const ProfileDetails = ({ profile }: ProfileDetailsProps) => {
                     </Stack>
                 </ProfileSection>
             </Box>
-            <Box sx={{ width: { xs: '100%', md: '48%' } }}>
-                <PasswordManagement />
-            </Box>
+
         </Box >
     )
 }
