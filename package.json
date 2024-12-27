@@ -10,7 +10,7 @@
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "preview": "rsbuild preview",
-    "firebase": "npm run build && firebase deploy --only hosting:flexjourney"
+    "deploy": "npm run build && firebase deploy --only hosting:flexjourney"
   },
   "dependencies": {
     "@emotion/react": "^11.13.5",
