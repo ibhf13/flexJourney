@@ -22,14 +22,11 @@ export const exerciseSelectionStyles = (theme: Theme) => ({
         }
     },
     searchField: {
-        mb: 3,
-        '& .MuiInputBase-root': {
-            borderRadius: 2,
-            backdropFilter: 'blur(8px)',
-            '&.Mui-focused': {
-                boxShadow: `0 0 0 2px ${theme.palette.primary.main}40`
-            }
-        }
+        mb: 2,
+        px: { xs: 1, sm: 2 },
+        py: 1,
+        backgroundColor: theme.palette.background.paper,
+        borderRadius: 1,
     },
     exercisesContainer: {
         display: 'flex',
