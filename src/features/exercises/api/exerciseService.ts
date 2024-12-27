@@ -94,14 +94,18 @@ export const createExercise = async (exerciseData: Exercise): Promise<string> =>
     const exercisesRef = collection(db, EXERCISES_COLLECTION)
     const timestamp = new Date()
 
+    const { id, ...exerciseDataWithoutId } = exerciseData
+
     const newExercise = {
-      ...exerciseData,
+      ...exerciseDataWithoutId,
       createdBy: currentUser.uid,
       createdAt: timestamp,
       updatedAt: timestamp,
     }
 
     const docRef = await addDoc(exercisesRef, newExercise)
+
+    await updateDoc(docRef, { id: docRef.id })
 
     return docRef.id
   } catch (error) {

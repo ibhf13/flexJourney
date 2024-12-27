@@ -47,8 +47,11 @@ export const useExercisesQuery = () => {
     })
 
     const createExerciseMutation = useMutation({
-        mutationFn: (exerciseData: Exercise) =>
-            createExercise(exerciseData),
+        mutationFn: async (exerciseData: Exercise) => {
+            const id = await createExercise(exerciseData)
+
+            return id
+        },
         onSuccess: () => {
             queryClient.invalidateQueries({ queryKey: ['exercises'] })
             showMessage('Exercise created successfully', ErrorSeverity.SUCCESS)
