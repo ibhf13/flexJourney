@@ -15,7 +15,7 @@ export const useExerciseImage = (options: UploadImageOptions = {}) => {
     const { handleError, showMessage } = useErrorHandler()
     const queryClient = useQueryClient()
     const {
-        maxSizeMB = 5,
+        maxSizeMB = 10,
         acceptedTypes = ['image/jpeg', 'image/png', 'image/webp'],
         onSuccess,
     } = options

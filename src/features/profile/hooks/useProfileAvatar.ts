@@ -19,7 +19,7 @@ export const useProfileAvatar = (options: UploadAvatarOptions = {}) => {
     const { handleError, showMessage } = useErrorHandler()
     const queryClient = useQueryClient()
     const {
-        maxSizeMB = 5,
+        maxSizeMB = 10,
         acceptedTypes = ['image/jpeg', 'image/png', 'image/webp'],
         onSuccess,
     } = options
@@ -55,23 +55,8 @@ export const useProfileAvatar = (options: UploadAvatarOptions = {}) => {
 
                 img.onload = () => {
                     const canvas = document.createElement('canvas')
-                    let width = img.width
-                    let height = img.height
-
-                    const MAX_WIDTH = 400
-                    const MAX_HEIGHT = 400
-
-                    if (width > height) {
-                        if (width > MAX_WIDTH) {
-                            height = height * (MAX_WIDTH / width)
-                            width = MAX_WIDTH
-                        }
-                    } else {
-                        if (height > MAX_HEIGHT) {
-                            width = width * (MAX_HEIGHT / height)
-                            height = MAX_HEIGHT
-                        }
-                    }
+                    const width = img.width
+                    const height = img.height
 
                     canvas.width = width
                     canvas.height = height
@@ -143,7 +128,12 @@ export const useProfileAvatar = (options: UploadAvatarOptions = {}) => {
         },
         onError: (error) => {
             setUploadProgress(0)
-            handleError(error instanceof Error ? error.message : 'Failed to upload avatar', ErrorSeverity.ERROR)
+            const errorMessage = error instanceof Error
+                ? error.message
+                : 'Failed to upload avatar'
+
+            handleError(errorMessage, ErrorSeverity.ERROR)
+            console.error('Avatar upload error:', error)
         },
     })
 

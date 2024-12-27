@@ -19,6 +19,7 @@ const queryClient = new QueryClient({
   },
 })
 
+
 function App() {
   return (
     <ErrorBoundary>
@@ -26,8 +27,8 @@ function App() {
         <ThemeProvider theme={theme}>
           <CssBaseline />
           <MuiGlobalStyles styles={GlobalStyles} />
-          <NavigationProvider>
-            <AuthProvider>
+          <AuthProvider>
+            <NavigationProvider>
               <WorkoutBuilderProvider>
                 <AppRouter />
                 <Toaster
@@ -41,8 +42,8 @@ function App() {
                   }}
                 />
               </WorkoutBuilderProvider>
-            </AuthProvider>
-          </NavigationProvider>
+            </NavigationProvider>
+          </AuthProvider>
         </ThemeProvider>
       </QueryClientProvider>
     </ErrorBoundary>

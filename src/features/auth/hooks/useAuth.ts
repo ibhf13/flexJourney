@@ -9,7 +9,8 @@ import { useAuthError } from './useAuthError'
 
 export const useAuth = () => {
     const [user, setUser] = useState<User | null>(null)
-    const [isLoading, setLoading] = useState(true)
+    const [isLoading, setLoading] = useState(false)
+    const [isInitializing, setIsInitializing] = useState(true)
     const [error, setError] = useState<string | null>(null)
     const [isAuthenticated, setIsAuthenticated] = useState(false)
     const { handleError } = useErrorHandler()
@@ -23,6 +24,7 @@ export const useAuth = () => {
                     email: firebaseUser.email,
                     displayName: firebaseUser.displayName,
                     photoURL: firebaseUser.photoURL,
+                    provider: firebaseUser.providerData[0]?.providerId || 'email',
                 })
                 setIsAuthenticated(true)
             } else {
@@ -30,35 +32,47 @@ export const useAuth = () => {
                 setIsAuthenticated(false)
             }
 
-            setLoading(false)
+            setIsInitializing(false)
         })
 
-        return unsubscribe
+        return () => unsubscribe()
     }, [])
 
     const login = async (email: string, password: string) => {
         try {
+            setLoading(true)
             setError(null)
-            await authApi.login(email, password)
+            const user = await authApi.login(email, password)
+
+            setUser(user)
+            setIsAuthenticated(true)
         } catch (error) {
             const errorMessage = getErrorMessage(error)
 
             setError(errorMessage)
             handleError(errorMessage, ErrorSeverity.ERROR)
             throw error
+        } finally {
+            setLoading(false)
         }
     }
 
     const register = async (email: string, password: string, displayName: string) => {
         try {
+            setLoading(true)
             setError(null)
-            await authApi.register(email, password, displayName)
+            const user = await authApi.register(email, password, displayName)
+
+            setUser(user)
+            setIsAuthenticated(true)
         } catch (error) {
             const errorMessage = getErrorMessage(error)
 
             setError(errorMessage)
             handleError(errorMessage, ErrorSeverity.ERROR)
             throw error
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -82,10 +96,20 @@ export const useAuth = () => {
 
     const googleSignIn = async () => {
         try {
-            await authApi.googleSignIn()
+            setLoading(true)
+            setError(null)
+            const user = await authApi.googleSignIn()
+
+            setUser(user)
+            setIsAuthenticated(true)
         } catch (error) {
-            handleError(getErrorMessage(error), ErrorSeverity.ERROR)
+            const errorMessage = getErrorMessage(error)
+
+            setError(errorMessage)
+            handleError(errorMessage, ErrorSeverity.ERROR)
             throw error
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -93,6 +117,7 @@ export const useAuth = () => {
         user,
         currentUser: user,
         isLoading,
+        isInitializing,
         error,
         isAuthenticated,
         login,

@@ -1,12 +1,13 @@
+import { COLLECTIONS } from '@/config/firebase/collections'
 import { db } from '@config/firebase'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { Timestamp } from '@firebase/firestore'
 import { useMediaQuery, useTheme } from '@mui/material'
-import { updateProfile, User } from 'firebase/auth'
 import { doc, updateDoc } from 'firebase/firestore'
 import { useState } from 'react'
 import { UserProfile } from '../types/ProfileTypes'
 import { useProfile } from './useProfile'
+
 
 export const useProfilePage = () => {
     const [isEditing, setIsEditing] = useState(false)
@@ -21,6 +22,7 @@ export const useProfilePage = () => {
         email: currentUser?.email || '',
         displayName: currentUser?.displayName || 'Anonymous User',
         photoURL: currentUser?.photoURL || '',
+        fitnessGoals: [],
         fitnessLevel: 'Beginner',
         createdAt: Timestamp.now().toDate(),
         updatedAt: Timestamp.now().toDate()
@@ -32,24 +34,20 @@ export const useProfilePage = () => {
     const handleEditSuccess = () => setIsEditing(false)
 
     const handleAvatarUpdate = async (avatarURL: string) => {
-        if (!currentUser) return
+        if (!currentUser?.uid) return
 
         setIsUpdating(true)
         try {
-            await updateProfile(currentUser as User, {
-                photoURL: avatarURL
-            })
+            const userRef = doc(db, COLLECTIONS.USERS.COLLECTION, currentUser.uid)
 
-            const profileRef = doc(db, 'profiles', currentUser.uid)
-
-            await updateDoc(profileRef, {
+            await updateDoc(userRef, {
                 photoURL: avatarURL,
-                updatedAt: Timestamp.now()
+                updatedAt: Timestamp.now(),
+                avatarUpdatedAt: new Date().toISOString()
             })
-
         } catch (error) {
             console.error('Error updating avatar:', error)
-            throw error
+            throw new Error('Failed to update profile picture')
         } finally {
             setIsUpdating(false)
         }
