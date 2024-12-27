@@ -15,7 +15,7 @@ interface ProfileAvatarProps {
 export const ProfileAvatar = ({ photoURL, size = 120, onUpdate }: ProfileAvatarProps) => {
     const { handleAvatarChange, isUploading, uploadProgress } = useProfileAvatar({
         onSuccess: (url) => onUpdate?.(url),
-        maxSizeMB: 2,
+        maxSizeMB: 10,
     })
 
     return (

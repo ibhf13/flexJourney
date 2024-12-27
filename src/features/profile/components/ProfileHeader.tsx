@@ -6,6 +6,7 @@ interface ProfileHeaderProps {
     photoURL?: string
     displayName: string
     fitnessLevel?: string
+    bio?: string
     onEditClick: () => void
     onAvatarUpdate?: (url: string) => void
 }
@@ -14,6 +15,7 @@ export const ProfileHeader = ({
     photoURL,
     displayName,
     fitnessLevel,
+    bio,
     onEditClick,
     onAvatarUpdate,
 }: ProfileHeaderProps) => {
@@ -59,7 +61,6 @@ export const ProfileHeader = ({
                             direction={{ xs: 'column', sm: 'row' }}
                             alignItems="center"
                             spacing={1}
-                            mb={1}
                         >
                             <Typography
                                 variant="h5"
@@ -77,6 +78,9 @@ export const ProfileHeader = ({
                                 <EditRoundedIcon sx={{ fontSize: 40, color: theme.palette.primary.main }} />
                             </IconButton>
                         </Stack>
+                        <Typography variant="body1" color="text.secondary" gutterBottom>
+                            {bio}
+                        </Typography>
                         {fitnessLevel && (
                             <Typography
                                 variant="subtitle2"

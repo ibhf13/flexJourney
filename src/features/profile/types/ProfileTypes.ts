@@ -38,3 +38,9 @@ export type UpdateProfileData = Partial<BaseProfileData> & {
     avatarUpdatedAt?: string
     email?: string
 }
+
+export interface PasswordFormData {
+    currentPassword?: string
+    newPassword: string
+    confirmPassword: string
+}

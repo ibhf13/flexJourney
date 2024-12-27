@@ -27,4 +27,18 @@ export const profileSchema = z.object({
     fitnessGoals: z.array(z.string()).nullable(),
 })
 
+export const passwordSchema = z.object({
+    currentPassword: z.string().optional(),
+    newPassword: z.string()
+        .min(8, 'Password must be at least 8 characters')
+        .regex(
+            /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/,
+            'Password must contain at least one uppercase letter, one lowercase letter, and one number'
+        ),
+    confirmPassword: z.string()
+}).refine(data => data.newPassword === data.confirmPassword, {
+    message: "Passwords don't match",
+    path: ['confirmPassword']
+})
+
 export type ProfileFormData = z.infer<typeof profileSchema>

@@ -2,7 +2,10 @@ export interface User {
   uid: string
   email: string | null
   displayName: string | null
-  photoURL?: string | null
+  photoURL: string | null
+  createdAt?: string
+  lastLoginAt?: string
+  provider?: string
 }
 
 export interface AuthCredentials {

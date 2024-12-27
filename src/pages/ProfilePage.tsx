@@ -24,6 +24,7 @@ const ProfilePage = () => {
                 photoURL={displayedProfile.photoURL}
                 displayName={displayedProfile.displayName}
                 fitnessLevel={displayedProfile.fitnessLevel}
+                bio={displayedProfile.bio}
                 onEditClick={handleEditClick}
                 onAvatarUpdate={handleAvatarUpdate}
             />

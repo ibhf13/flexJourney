@@ -12,6 +12,7 @@ import {
 import { UserProfile } from '../types/ProfileTypes'
 import { calculateAge } from '../utils/profileUtils'
 import { BMICard } from './BMICard'
+import { PasswordManagement } from './PasswordManagement'
 
 interface ProfileSectionProps {
     icon: React.ReactNode
@@ -114,6 +115,7 @@ export const ProfileDetails = ({ profile }: ProfileDetailsProps) => {
                 </ProfileSection>
             </Box>
 
+
             <Box sx={{ width: { xs: '100%', md: '48%' } }}>
                 <ProfileSection
                     icon={<ScaleIcon color="primary" />}
@@ -156,6 +158,9 @@ export const ProfileDetails = ({ profile }: ProfileDetailsProps) => {
                         />
                     </Stack>
                 </ProfileSection>
+            </Box>
+            <Box sx={{ width: { xs: '100%', md: '48%' } }}>
+                <PasswordManagement />
             </Box>
         </Box >
     )
