@@ -52,13 +52,12 @@ const ExercisesPage = () => {
     }
 
     const handleConfirmDelete = async () => {
-        if (exerciseToDelete?.id) {
-            try {
-                await deleteExercise(exerciseToDelete.id)
-                setExerciseToDelete(null)
-            } catch (error) {
-                console.error('Failed to delete exercise:', error)
-            }
+        if (!exerciseToDelete) return
+        try {
+            await deleteExercise(exerciseToDelete.id)
+            setExerciseToDelete(null)
+        } catch (error) {
+            console.error('Failed to delete exercise:', error)
         }
     }
 
