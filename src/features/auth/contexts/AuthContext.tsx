@@ -1,4 +1,3 @@
-import { CircularProgress } from '@mui/material'
 import { createContext, useContext } from 'react'
 import { useAuth } from '../hooks/useAuth'
 import { AuthContextType } from '../types/AuthTypes'
@@ -9,7 +8,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
   const auth = useAuth()
 
   if (auth.isInitializing) {
-    return <CircularProgress />
+    return null
   }
 
   return (
