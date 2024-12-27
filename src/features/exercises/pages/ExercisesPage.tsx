@@ -119,8 +119,8 @@ const ExercisesPage = () => {
                 <LoadingErrorWrapper isLoading={isExercisesLoading} error={exercisesError}>
                     {isGridView ? (
                         <Grid container spacing={{ xs: 2, sm: 3 }}>
-                            {exercises.map(exercise => (
-                                <Grid item xs={12} sm={6} md={4} lg={3} key={exercise.id}>
+                            {exercises.map((exercise, index) => (
+                                <Grid item xs={12} sm={6} md={4} lg={3} key={`grid-${exercise.id}-${index}`}>
                                     <ExerciseCard
                                         exercise={exercise}
                                         onEdit={handleExerciseEdit}
@@ -136,9 +136,9 @@ const ExercisesPage = () => {
                             width: '100%',
                             '& .MuiListItem-root': { px: { xs: 1, sm: 2 } }
                         }}>
-                            {exercises.map(exercise => (
+                            {exercises.map((exercise, index) => (
                                 <ExerciseListItem
-                                    key={`list-${exercise.id}`}
+                                    key={`list-${exercise.id}-${index}`}
                                     exercise={exercise}
                                     onSelect={handleExerciseSelect}
                                 />
