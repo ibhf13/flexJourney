@@ -6,7 +6,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useEffect, useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { updateUserProfile } from '../api/profileService'
-import { ProfileFormData, UpdateProfileData, UserProfile } from '../types/ProfileTypes'
+import { FitnessGoal, FitnessLevels, Genders, UserProfile } from '../types/ProfileTypes'
 import { DEFAULT_FORM_VALUES } from '../utils/profileConstants'
 import { profileSchema } from '../utils/profileValidationSchema'
 
@@ -21,23 +21,47 @@ export const useProfileForm = ({ initialData, onSuccess }: UseProfileFormProps =
     const queryClient = useQueryClient()
     const { handleError, showMessage } = useErrorHandler()
 
-    const convertedInitialData: Partial<ProfileFormData> = {
+    const convertedInitialData: Partial<UserProfile> = {
         ...initialData,
-        birthDate: initialData?.birthDate ? new Date(initialData.birthDate) : undefined,
-        fitnessGoals: initialData?.fitnessGoals ?? [],
+        baseInfo: {
+            firstName: initialData?.baseInfo?.firstName ?? '',
+            lastName: initialData?.baseInfo?.lastName ?? '',
+            displayName: initialData?.baseInfo?.displayName ?? '',
+            bio: initialData?.baseInfo?.bio ?? '',
+            photoURL: initialData?.baseInfo?.photoURL ?? '',
+            gender: initialData?.baseInfo?.gender ?? Genders.MALE,
+        },
+        timestampFields: {
+            updatedAt: initialData?.timestampFields?.updatedAt ?? new Date(),
+        },
+        profileMetrics: {
+            height: initialData?.profileMetrics?.height ?? 0,
+            weight: initialData?.profileMetrics?.weight ?? 0,
+            targetWeight: initialData?.profileMetrics?.targetWeight ?? 0,
+            age: initialData?.profileMetrics?.age ?? 0,
+        },
+        fitnessDetails: {
+            fitnessGoals: initialData?.fitnessDetails?.fitnessGoals ?? [],
+            fitnessLevel: initialData?.fitnessDetails?.fitnessLevel ?? FitnessLevels.BEGINNER,
+        },
     }
 
-    const methods = useForm<ProfileFormData>({
+    const methods = useForm<UserProfile>({
         resolver: zodResolver(profileSchema),
         defaultValues: {
+            id: currentUser?.uid ?? '',
             ...DEFAULT_FORM_VALUES,
-            ...convertedInitialData,
+            ...convertedInitialData as Partial<UserProfile>,
         },
         mode: 'onChange',
     })
 
+    const removeDuplicateGoals = (goals: FitnessGoal[]): FitnessGoal[] => {
+        return Array.from(new Set(goals))
+    }
+
     const { mutate: submitForm, isPending } = useMutation({
-        mutationFn: (data: UpdateProfileData) => {
+        mutationFn: (data: UserProfile) => {
             if (!currentUser?.uid) throw new Error('No user authenticated')
 
             return updateUserProfile(currentUser.uid, data)
@@ -53,11 +77,30 @@ export const useProfileForm = ({ initialData, onSuccess }: UseProfileFormProps =
         },
     })
 
-    const handleSubmit = methods.handleSubmit((data: ProfileFormData) => {
-        const formattedData: UpdateProfileData = {
+    const handleSubmit = methods.handleSubmit((data: UserProfile) => {
+        const formattedData: UserProfile = {
             ...data,
-            birthDate: data.birthDate?.toISOString(),
-            updatedAt: new Date().toISOString(),
+            baseInfo: {
+                ...data.baseInfo,
+                email: initialData?.baseInfo?.email ?? data.baseInfo.email,
+                photoURL: data.baseInfo?.photoURL ?? '',
+            },
+            profileMetrics: {
+                ...data.profileMetrics,
+                height: data.profileMetrics?.height ?? 0,
+                weight: data.profileMetrics?.weight ?? 0,
+                targetWeight: data.profileMetrics?.targetWeight ?? 0,
+                age: data.profileMetrics?.age ?? 0,
+            },
+            fitnessDetails: {
+                ...data.fitnessDetails,
+                fitnessLevel: data.fitnessDetails?.fitnessLevel ?? FitnessLevels.BEGINNER,
+                fitnessGoals: removeDuplicateGoals(data.fitnessDetails?.fitnessGoals ?? []),
+            },
+            timestampFields: {
+                ...data.timestampFields,
+                updatedAt: new Date(),
+            },
         }
 
         submitForm(formattedData)

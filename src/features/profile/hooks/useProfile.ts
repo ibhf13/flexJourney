@@ -3,8 +3,9 @@ import { useAuthContext } from '@/features/auth/contexts/AuthContext'
 import { useErrorHandler } from '@/features/errorHandling/hooks/useErrorHandler'
 import { ErrorSeverity } from '@/features/errorHandling/types/errorTypes'
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
+import { FirestoreError } from 'firebase/firestore'
 import { fetchUserProfile, updateUserProfile } from '../api/profileService'
-import type { UpdateProfileData, UserProfile } from '../types/ProfileTypes'
+import type { UserProfile } from '../types/ProfileTypes'
 
 const PROFILE_CACHE_TIME = 5 * 60 * 1000
 const MAX_RETRIES = 3
@@ -23,8 +24,8 @@ export const useProfile = () => {
         queryKey: ['profile', currentUser?.uid],
         queryFn: () => currentUser?.uid ? fetchUserProfile(currentUser.uid) : null,
         enabled: !!currentUser?.uid,
-        retry: (failureCount, error: any) => {
-            if (error?.code === FIREBASE_ERROR_CODES.NOT_FOUND) return false
+        retry: (failureCount, error) => {
+            if (error instanceof FirestoreError && error.code === FIREBASE_ERROR_CODES.NOT_FOUND) return false
 
             return failureCount < MAX_RETRIES
         },
@@ -36,7 +37,7 @@ export const useProfile = () => {
         isPending: isUpdating,
         reset: resetMutation,
     } = useMutation({
-        mutationFn: (data: UpdateProfileData) => {
+        mutationFn: (data: UserProfile) => {
             if (!currentUser?.uid) throw new Error('User not authenticated')
 
             return updateUserProfile(currentUser.uid, data)

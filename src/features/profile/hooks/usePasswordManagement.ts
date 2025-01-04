@@ -38,10 +38,10 @@ export const usePasswordManagement = () => {
         try {
             setIsLoading(true)
 
-            if (hasPassword) {
+            if (hasPassword && data.currentPassword) {
                 const credential = EmailAuthProvider.credential(
                     auth.currentUser.email,
-                    data.currentPassword!
+                    data.currentPassword
                 )
 
                 await reauthenticateWithCredential(auth.currentUser, credential)

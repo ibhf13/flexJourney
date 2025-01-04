@@ -4,7 +4,8 @@ import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { useMutation, useQueryClient } from '@tanstack/react-query'
 import { useState } from 'react'
 import { updateUserProfile } from '../api/profileService'
-import { UpdateProfileData } from '../types/ProfileTypes'
+import { UserProfile } from '../types/ProfileTypes'
+
 
 interface UploadAvatarOptions {
     onSuccess?: (url: string) => void
@@ -101,11 +102,16 @@ export const useProfileAvatar = (options: UploadAvatarOptions = {}) => {
                     new File([compressedBlob], file.name, { type: 'image/jpeg' })
                 )
 
-                const updateData: UpdateProfileData = {
-                    displayName: currentUser.displayName || '',
-                    photoURL: base64String,
-                    avatarUpdatedAt: new Date().toISOString(),
-                    updatedAt: new Date().toISOString(),
+                const updateData: UserProfile = {
+                    id: currentUser.uid,
+                    baseInfo: {
+                        email: currentUser.email || '',
+                        displayName: currentUser.displayName || '',
+                        photoURL: base64String,
+                    },
+                    timestampFields: {
+                        updatedAt: new Date(),
+                    },
                 }
 
                 await updateUserProfile(currentUser.uid, updateData)

@@ -1,4 +1,5 @@
 import { PageContainer } from '@/components/common/StructureComponents/PageContainer'
+import env from '@/config/env.config'
 import { HomePageSkeleton } from '@/features/home/components/HomePageSkeleton'
 import { HomeStats } from '@/features/home/components/HomeStats'
 import { WelcomeSection } from '@/features/home/components/WelcomeSection'
@@ -20,7 +21,7 @@ const HomePage = () => {
     return <HomePageSkeleton />
   }
 
-  const allowSeed = user?.uid === 'VvjUP3SpQGNwARNFQl1HjG725Ly1'
+  const allowSeed = user?.uid === env.ADMIN_TOKEN
 
   return (
     <PageContainer>

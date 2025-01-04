@@ -21,10 +21,10 @@ const ProfilePage = () => {
     return (
         <LoadingErrorWrapper isLoading={isLoading} error={error}>
             <ProfileHeader
-                photoURL={displayedProfile.photoURL}
-                displayName={displayedProfile.displayName}
-                fitnessLevel={displayedProfile.fitnessLevel}
-                bio={displayedProfile.bio}
+                photoURL={displayedProfile.baseInfo?.photoURL}
+                displayName={displayedProfile.baseInfo?.displayName}
+                fitnessLevel={displayedProfile.fitnessDetails?.fitnessLevel}
+                bio={displayedProfile.baseInfo?.bio}
                 onEditClick={handleEditClick}
                 onAvatarUpdate={handleAvatarUpdate}
             />
