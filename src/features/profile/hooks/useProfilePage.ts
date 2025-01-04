@@ -5,7 +5,7 @@ import { Timestamp } from '@firebase/firestore'
 import { useMediaQuery, useTheme } from '@mui/material'
 import { doc, updateDoc } from 'firebase/firestore'
 import { useState } from 'react'
-import { UserProfile } from '../types/ProfileTypes'
+import { FitnessLevels, UserProfile } from '../types/ProfileTypes'
 import { useProfile } from './useProfile'
 
 
@@ -19,13 +19,29 @@ export const useProfilePage = () => {
 
     const defaultProfileData: UserProfile = {
         id: currentUser?.uid || '',
-        email: currentUser?.email || '',
-        displayName: currentUser?.displayName || 'Anonymous User',
-        photoURL: currentUser?.photoURL || '',
-        fitnessGoals: [],
-        fitnessLevel: 'Beginner',
-        createdAt: Timestamp.now().toDate(),
-        updatedAt: Timestamp.now().toDate()
+        baseInfo: {
+            email: currentUser?.email || '',
+            displayName: currentUser?.displayName || 'Anonymous User',
+            photoURL: currentUser?.photoURL || '',
+            firstName: '',
+            lastName: '',
+            bio: '',
+            gender: undefined,
+        },
+        profileMetrics: {
+            height: 0,
+            weight: 0,
+            targetWeight: 0,
+            age: 0,
+        },
+        fitnessDetails: {
+            fitnessLevel: FitnessLevels.BEGINNER,
+            fitnessGoals: [],
+        },
+        timestampFields: {
+            createdAt: Timestamp.now().toDate(),
+            updatedAt: Timestamp.now().toDate()
+        }
     }
     const displayedProfile = profile || defaultProfileData
 

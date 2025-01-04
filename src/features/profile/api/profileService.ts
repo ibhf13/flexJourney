@@ -1,8 +1,8 @@
 import { COLLECTIONS } from '@/config/firebase/collections'
 import { db } from '@/config/firebase/firebaseConfig'
-import { cleanData } from '@/utils/dataUtils'
 import { doc, FirestoreError, getDoc, setDoc, Timestamp, updateDoc } from 'firebase/firestore'
-import { UpdateProfileData, UserProfile } from '../types/ProfileTypes'
+import { FitnessLevels, UserProfile } from '../types/ProfileTypes'
+import { cleanProfileData } from '../utils/profileDataCleaner'
 
 
 export const fetchUserProfile = async (userId: string): Promise<UserProfile | null> => {
@@ -27,7 +27,7 @@ export const fetchUserProfile = async (userId: string): Promise<UserProfile | nu
     }
 }
 
-export const updateUserProfile = async (userId: string, data: UpdateProfileData): Promise<void> => {
+export const updateUserProfile = async (userId: string, data: UserProfile): Promise<void> => {
     if (!userId?.trim()) {
         throw new Error('Invalid user ID provided')
     }
@@ -40,7 +40,7 @@ export const updateUserProfile = async (userId: string, data: UpdateProfileData)
         const userRef = doc(db, COLLECTIONS.USERS.COLLECTION, userId)
         const docSnap = await getDoc(userRef)
         const timestamp = Timestamp.now()
-        const cleanedData = cleanData(data)
+        const cleanedData = cleanProfileData(data)
 
         if (docSnap.exists()) {
             const existingData = docSnap.data()
@@ -48,21 +48,34 @@ export const updateUserProfile = async (userId: string, data: UpdateProfileData)
                 ...existingData,
                 ...cleanedData,
                 updatedAt: timestamp,
-                photoURL: cleanedData.photoURL || existingData.photoURL,
+                photoURL: cleanedData.baseInfo?.photoURL || existingData.baseInfo?.photoURL,
             }
 
             await updateDoc(userRef, updateData)
         } else {
             const newUserData: UserProfile = {
                 id: userId,
-                email: data.email || '',
-                displayName: data.displayName || 'Anonymous User',
-                ...cleanedData,
-                createdAt: timestamp.toDate(),
-                updatedAt: timestamp.toDate(),
+                baseInfo: {
+                    email: data.baseInfo.email || '',
+                    displayName: data.baseInfo.displayName || 'Anonymous User',
+                },
+                profileMetrics: {
+                    height: data.profileMetrics?.height || 0,
+                    weight: data.profileMetrics?.weight || 0,
+                    targetWeight: data.profileMetrics?.targetWeight || 0,
+                    age: data.profileMetrics?.age || 0,
+                },
+                fitnessDetails: {
+                    fitnessLevel: data.fitnessDetails?.fitnessLevel || FitnessLevels.BEGINNER,
+                    fitnessGoals: data.fitnessDetails?.fitnessGoals || [],
+                },
+                timestampFields: {
+                    updatedAt: timestamp.toDate(),
+                },
             }
+            const cleanedUserData = cleanProfileData(newUserData)
 
-            await setDoc(userRef, cleanData(newUserData))
+            await setDoc(userRef, cleanedUserData)
         }
     } catch (error) {
         const firestoreError = error as FirestoreError

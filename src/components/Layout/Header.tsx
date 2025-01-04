@@ -80,7 +80,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
               }}
             >
               <Avatar
-                src={profile?.photoURL || undefined}
+                src={profile?.baseInfo?.photoURL || undefined}
                 sx={{
                   width: 32,
                   height: 32,

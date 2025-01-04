@@ -2,56 +2,25 @@ import PersonIcon from '@mui/icons-material/Person'
 import ScaleIcon from '@mui/icons-material/Scale'
 import {
     Box,
-    Card,
     Chip,
     Divider,
     Stack,
-    Typography,
-    useTheme,
+    Typography
 } from '@mui/material'
 import { UserProfile } from '../types/ProfileTypes'
-import { calculateAge } from '../utils/profileUtils'
+import { calculateWeightGoalInfo } from '../utils/profileUtils'
 import { BMICard } from './BMICard'
 import { PasswordManagement } from './PasswordManagement'
-
-interface ProfileSectionProps {
-    icon: React.ReactNode
-    title: string
-    children: React.ReactNode
-}
-
-const ProfileSection = ({ icon, title, children }: ProfileSectionProps) => {
-    const theme = useTheme()
-
-    return (
-        <Card
-            sx={{
-                p: 3,
-                width: '100%',
-                transition: 'transform 0.2s',
-                '&:hover': {
-                    transform: 'translateY(-4px)',
-                    boxShadow: theme.shadows[8],
-                },
-            }}
-        >
-            <Stack spacing={2}>
-                <Stack direction="row" spacing={1} alignItems="center">
-                    {icon}
-                    <Typography variant="h6">{title}</Typography>
-                </Stack>
-                <Divider />
-                {children}
-            </Stack>
-        </Card>
-    )
-}
+import ProfileSection from './ProfileSection'
 
 interface ProfileDetailsProps {
     profile: UserProfile
 }
 
 export const ProfileDetails = ({ profile }: ProfileDetailsProps) => {
+    const { baseInfo, profileMetrics, fitnessDetails } = profile
+    const weightGoalInfo = calculateWeightGoalInfo(profileMetrics?.weight, profileMetrics?.height, profileMetrics?.targetWeight)
+
     return (
         <Box
             sx={{
@@ -72,22 +41,22 @@ export const ProfileDetails = ({ profile }: ProfileDetailsProps) => {
                                 Full Name
                             </Typography>
                             <Typography>
-                                {profile.firstName} {profile.lastName}
+                                {baseInfo.firstName} {baseInfo.lastName}
                             </Typography>
                         </Box>
                         <Box>
                             <Typography variant="subtitle2" color="text.secondary">
                                 Email
                             </Typography>
-                            <Typography>{profile.email}</Typography>
+                            <Typography>{baseInfo.email}</Typography>
                         </Box>
-                        {profile.birthDate && (
+                        {profileMetrics?.age && (
                             <Box>
                                 <Typography variant="subtitle2" color="text.secondary">
                                     Age
                                 </Typography>
                                 <Typography>
-                                    {calculateAge(profile.birthDate)} years
+                                    {profileMetrics?.age} years
                                 </Typography>
                             </Box>
                         )}
@@ -96,17 +65,17 @@ export const ProfileDetails = ({ profile }: ProfileDetailsProps) => {
                                 Fitness Level
                             </Typography>
                             <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} width={{ xs: '50%', md: 'auto' }}>
-                                <Chip label={profile.fitnessLevel} color="primary" variant="outlined" />
+                                <Chip label={fitnessDetails?.fitnessLevel} color="primary" variant="outlined" />
                             </Box>
                         </Box>
-                        {profile.fitnessGoals && (
+                        {fitnessDetails?.fitnessGoals && (
                             <Box>
                                 <Typography variant="subtitle2" color="text.secondary" gutterBottom>
                                     Fitness Goals
                                 </Typography>
                                 <Box display="flex" flexDirection={{ xs: 'column', md: 'row' }} flexWrap="wrap" gap={1} width={{ xs: '50%', md: 'auto' }}>
-                                    {profile.fitnessGoals.map((goal) => (
-                                        <Chip key={goal} label={goal} color="secondary" variant="outlined" />
+                                    {fitnessDetails?.fitnessGoals.map((goal, index) => (
+                                        <Chip key={`${goal}-${index}`} label={goal} color="secondary" variant="outlined" />
                                     ))}
                                 </Box>
                             </Box>
@@ -125,30 +94,38 @@ export const ProfileDetails = ({ profile }: ProfileDetailsProps) => {
                     title="Body Metrics"
                 >
                     <Stack spacing={2}>
-                        {profile.height && (
+                        {profileMetrics?.height && (
                             <Box>
                                 <Typography variant="subtitle2" color="text.secondary">
                                     Height
                                 </Typography>
-                                <Typography>{profile.height} cm</Typography>
+                                <Typography>{profileMetrics?.height} cm</Typography>
                             </Box>
                         )}
-                        {(profile.weight || profile.targetWeight) && (
+                        {(profileMetrics?.weight || profileMetrics?.targetWeight) && (
                             <Box>
                                 <Typography variant="subtitle2" color="text.secondary">
                                     Weight
                                 </Typography>
                                 <Stack direction="row" spacing={2} alignItems="center">
-                                    {profile.weight && (
+                                    {profileMetrics?.weight && (
                                         <Typography>
-                                            Current: {profile.weight} kg
+                                            Current: {profileMetrics?.weight} kg
                                         </Typography>
                                     )}
-                                    {profile.targetWeight && (
+                                    {profileMetrics?.targetWeight && (
                                         <>
                                             <Divider orientation="vertical" flexItem />
                                             <Typography>
-                                                Target: {profile.targetWeight} kg
+                                                Target: {profileMetrics?.targetWeight} kg
+                                            </Typography>
+                                        </>
+                                    )}
+                                    {profileMetrics?.weight && profileMetrics?.height && (
+                                        <>
+                                            <Divider orientation="vertical" flexItem />
+                                            <Typography>
+                                                Ideal: {weightGoalInfo?.idealWeight} kg
                                             </Typography>
                                         </>
                                     )}
@@ -156,8 +133,8 @@ export const ProfileDetails = ({ profile }: ProfileDetailsProps) => {
                             </Box>
                         )}
                         <BMICard
-                            height={profile.height}
-                            weight={profile.weight}
+                            height={profileMetrics?.height}
+                            weight={profileMetrics?.weight}
                         />
                     </Stack>
                 </ProfileSection>

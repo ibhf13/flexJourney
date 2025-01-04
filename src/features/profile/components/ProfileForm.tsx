@@ -11,8 +11,7 @@ import {
     Typography
 } from '@mui/material'
 import { useProfileForm } from '../hooks/useProfileForm'
-import { UserProfile } from '../types/ProfileTypes'
-import { FITNESS_GOALS, FITNESS_LEVELS, GENDERS } from '../utils/profileConstants'
+import { FitnessGoals, FitnessLevels, Genders, UserProfile } from '../types/ProfileTypes'
 
 interface ProfileFormProps {
     open: boolean
@@ -42,7 +41,6 @@ export const ProfileForm = ({
         },
     })
 
-    const fitnessGoals = watch('fitnessGoals')
 
     const handleClose = () => {
         resetForm()
@@ -68,7 +66,7 @@ export const ProfileForm = ({
                     <Grid item xs={12} sm={6}>
                         <FormTextField
                             control={control}
-                            name="firstName"
+                            name="baseInfo.firstName"
                             label="First Name"
                             fullWidth
                         />
@@ -76,7 +74,7 @@ export const ProfileForm = ({
                     <Grid item xs={12} sm={6}>
                         <FormTextField
                             control={control}
-                            name="lastName"
+                            name="baseInfo.lastName"
                             label="Last Name"
                             fullWidth
                         />
@@ -85,7 +83,7 @@ export const ProfileForm = ({
                     <Grid item xs={12}>
                         <FormTextField
                             control={control}
-                            name="displayName"
+                            name="baseInfo.displayName"
                             label="Display Name"
                             required
                             fullWidth
@@ -95,7 +93,7 @@ export const ProfileForm = ({
                     <Grid item xs={12}>
                         <FormTextField
                             control={control}
-                            name="bio"
+                            name="baseInfo.bio"
                             label="Bio"
                             multiline
                             rows={3}
@@ -106,7 +104,7 @@ export const ProfileForm = ({
                     <Grid item xs={12} sm={6}>
                         <FormTextField
                             control={control}
-                            name="height"
+                            name="profileMetrics.height"
                             label="Height (cm)"
                             type="number"
                             fullWidth
@@ -115,7 +113,7 @@ export const ProfileForm = ({
                     <Grid item xs={12} sm={6}>
                         <FormTextField
                             control={control}
-                            name="weight"
+                            name="profileMetrics.weight"
                             label="Current Weight (kg)"
                             type="number"
                             fullWidth
@@ -125,7 +123,7 @@ export const ProfileForm = ({
                     <Grid item xs={12} sm={6}>
                         <FormTextField
                             control={control}
-                            name="targetWeight"
+                            name="profileMetrics.targetWeight"
                             label="Target Weight (kg)"
                             type="number"
                             fullWidth
@@ -135,12 +133,13 @@ export const ProfileForm = ({
                     <Grid item xs={12} sm={6}>
                         <FormTextField
                             control={control}
-                            name="fitnessLevel"
+                            name="fitnessDetails.fitnessLevel"
                             label="Fitness Level"
                             select
                             fullWidth
+                            defaultValue={FitnessLevels.BEGINNER}
                         >
-                            {FITNESS_LEVELS.map((level) => (
+                            {Object.values(FitnessLevels).map((level) => (
                                 <MenuItem key={level} value={level}>
                                     {level}
                                 </MenuItem>
@@ -151,12 +150,12 @@ export const ProfileForm = ({
                     <Grid item xs={12} sm={6}>
                         <FormTextField
                             control={control}
-                            name="gender"
+                            name="baseInfo.gender"
                             label="Gender"
                             select
                             fullWidth
                         >
-                            {GENDERS.map((gender) => (
+                            {Object.values(Genders).map((gender) => (
                                 <MenuItem key={gender} value={gender}>
                                     {gender}
                                 </MenuItem>
@@ -167,9 +166,9 @@ export const ProfileForm = ({
                     <Grid item xs={12} sm={6}>
                         <FormTextField
                             control={control}
-                            name="birthDate"
-                            label="Birth Date"
-                            type="date"
+                            name="profileMetrics.age"
+                            label="Age"
+                            type="number"
                             fullWidth
                             InputLabelProps={{
                                 shrink: true,
@@ -180,17 +179,13 @@ export const ProfileForm = ({
                     <Grid item xs={12}>
                         <FormTextField
                             control={control}
-                            name="fitnessGoals"
+                            name="fitnessDetails.fitnessGoals"
                             label="Fitness Goals"
                             select
                             fullWidth
-                            defaultValue={[]}
                             slotProps={{
                                 select: {
                                     multiple: true,
-                                    value: Array.isArray(control._formValues.fitnessGoals)
-                                        ? control._formValues.fitnessGoals
-                                        : [],
                                     renderValue: (selected) => {
                                         const selectedArray = Array.isArray(selected) ? selected : []
 
@@ -207,18 +202,15 @@ export const ProfileForm = ({
                                 }
                             }}
                         >
-                            {FITNESS_GOALS.map((goal) => (
+                            {Object.values(FitnessGoals).map((goal) => (
                                 <MenuItem key={goal} value={goal}>
                                     <Checkbox
-                                        checked={Array.isArray(control._formValues.fitnessGoals)
-                                            ? control._formValues.fitnessGoals?.includes(goal)
-                                            : false}
+                                        checked={watch('fitnessDetails.fitnessGoals')?.includes(goal)}
                                     />
                                     <ListItemText primary={goal} />
                                 </MenuItem>
                             ))}
                         </FormTextField>
-
                     </Grid>
                 </Grid>
             </DialogContent>

@@ -1,4 +1,5 @@
 import { useProfile } from '@/features/profile/hooks/useProfile'
+import { calculateWeightGoalInfo } from '@/features/profile/utils/profileUtils'
 import { useStatistics } from '@/features/statistics/hooks/useStatistics'
 import CalendarMonthIcon from '@mui/icons-material/CalendarMonth'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
@@ -12,8 +13,8 @@ export const HomeStats = () => {
 
     if (!stats) return null
 
-    const weightProgress = profile?.weight && profile?.targetWeight
-        ? ((profile.weight / profile.targetWeight) * 100).toFixed(1)
+    const weightGoalInfo = profile?.profileMetrics?.weight && profile?.profileMetrics?.targetWeight
+        ? calculateWeightGoalInfo(profile.profileMetrics.weight, profile.profileMetrics.height, profile.profileMetrics.targetWeight)
         : null
 
     return (
@@ -114,7 +115,7 @@ export const HomeStats = () => {
                 </Paper>
             </Grid>
 
-            {profile?.weight && profile?.targetWeight && (
+            {weightGoalInfo && (
                 <Grid item xs={12} sm={6} md={3}>
                     <Paper
                         sx={{
@@ -135,14 +136,14 @@ export const HomeStats = () => {
                         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 2 }}>
                             <ScaleIcon color="info" />
                             <Typography variant="h6" color="info.main">
-                                Weight Goal
+                                Weight {weightGoalInfo.type === 'loss' ? 'Loss' : 'Gain'} Goal
                             </Typography>
                         </Box>
                         <Typography variant="h6" sx={{ fontWeight: 600 }}>
-                            {profile.weight} / {profile.targetWeight} kg
+                            {weightGoalInfo.currentWeight} / {profile?.profileMetrics?.targetWeight} kg
                         </Typography>
                         <Typography variant="body2" color="text.secondary">
-                            {weightProgress}% of target weight
+                            {weightGoalInfo.remainingWeight.toFixed(1)} kg to {weightGoalInfo.type}
                         </Typography>
                     </Paper>
                 </Grid>
