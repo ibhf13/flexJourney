@@ -33,6 +33,9 @@ service cloud.firestore {
 
     // User collections
     match /users/{userId} {
+      // Allow admins to read and write all user documents for migration
+      allow read, write: if isAdmin();
+      // Regular user permissions
       allow read, create, update: if isOwner(userId);
 
       // Subcollections
