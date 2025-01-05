@@ -1,36 +1,22 @@
-import { DifficultyLevel } from '@/features/workout/types/WorkoutTypes'
 import { createContext, ReactNode, useContext, useState } from 'react'
+import { basicsStep, INITIAL_STATE } from '../constants'
 import { WorkoutBuilderStep, WorkoutPlan } from '../types/workoutBuilderTypes'
-
-interface WorkoutBuilderState extends Partial<WorkoutPlan> {
-    days: WorkoutPlan['days']
-    description: string
-    level: DifficultyLevel
-    type: 'custom' | 'default'
-}
 
 interface WorkoutBuilderContextType {
     currentStep: WorkoutBuilderStep
-    workoutPlan: WorkoutBuilderState
+    workoutPlan: WorkoutPlan
     setCurrentStep: (step: WorkoutBuilderStep) => void
-    updateWorkoutPlan: (updates: Partial<WorkoutBuilderState>) => void
+    updateWorkoutPlan: (updates: Partial<WorkoutPlan>) => void
     resetBuilder: () => void
-}
-
-const INITIAL_STATE: WorkoutBuilderState = {
-    days: [],
-    description: '',
-    level: 'Beginner' as DifficultyLevel,
-    type: 'custom'
 }
 
 const WorkoutBuilderContext = createContext<WorkoutBuilderContextType | undefined>(undefined)
 
 export const WorkoutBuilderProvider = ({ children }: { children: ReactNode }) => {
-    const [currentStep, setCurrentStep] = useState<WorkoutBuilderStep>('basics')
-    const [workoutPlan, setWorkoutPlan] = useState<WorkoutBuilderState>(INITIAL_STATE)
+    const [currentStep, setCurrentStep] = useState<WorkoutBuilderStep>(basicsStep)
+    const [workoutPlan, setWorkoutPlan] = useState<WorkoutPlan>(INITIAL_STATE)
 
-    const updateWorkoutPlan = (updates: Partial<WorkoutBuilderState>) => {
+    const updateWorkoutPlan = (updates: Partial<WorkoutPlan>) => {
         setWorkoutPlan(prev => ({
             ...prev,
             ...updates,
@@ -39,7 +25,7 @@ export const WorkoutBuilderProvider = ({ children }: { children: ReactNode }) =>
     }
 
     const resetBuilder = () => {
-        setCurrentStep('basics')
+        setCurrentStep(basicsStep)
         setWorkoutPlan(INITIAL_STATE)
     }
 
@@ -65,7 +51,7 @@ export const WorkoutBuilderProvider = ({ children }: { children: ReactNode }) =>
     )
 }
 
-export const useWorkoutBuilderContext = () => {
+const useWorkoutBuilderContext = () => {
     const context = useContext(WorkoutBuilderContext)
 
     if (!context) {
@@ -74,3 +60,5 @@ export const useWorkoutBuilderContext = () => {
 
     return context
 }
+
+export default useWorkoutBuilderContext

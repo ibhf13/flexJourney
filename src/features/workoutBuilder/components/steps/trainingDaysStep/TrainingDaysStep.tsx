@@ -1,56 +1,22 @@
-import { WorkoutDay } from '@/features/workout/types/WorkoutTypes'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Button, FormControl, InputLabel, MenuItem, Paper, Select, Stack, TextField, useTheme } from '@mui/material'
-import { Controller, useFieldArray, useForm } from 'react-hook-form'
-import { AVAILABLE_DAYS } from '../../constants/WorkoutBuilderConstants'
-import { useWorkoutBuilderContext } from '../../contexts/WorkoutBuilderContext'
-import { TrainingDaysFormData, trainingDaysSchema } from '../../schemas/workoutBuilderSchemas'
-import { trainingDaysStyles } from './styles/trainingDaysStyles'
+import { Controller } from 'react-hook-form'
+import { AVAILABLE_DAYS } from '../../../constants'
+import { useTrainingDaysStep } from '../../../hooks'
+import { trainingDaysStyles } from '../../../styles'
 
 export const TrainingDaysStep = () => {
     const theme = useTheme()
     const styles = trainingDaysStyles(theme)
-    const { workoutPlan, updateWorkoutPlan, setCurrentStep } = useWorkoutBuilderContext()
-
-    const { control, handleSubmit, formState: { errors } } = useForm<TrainingDaysFormData>({
-        resolver: zodResolver(trainingDaysSchema),
-        defaultValues: {
-            days: workoutPlan.days?.length ? workoutPlan.days : [{ title: 'Day 1' }]
-        }
-    })
-
-    const { fields, append, remove } = useFieldArray({
+    const {
         control,
-        name: 'days'
-    })
-
-    const handleDaysChange = (numberOfDays: number) => {
-        const currentLength = fields.length
-
-        if (numberOfDays > currentLength) {
-            for (let i = currentLength; i < numberOfDays; i++) {
-                append({ title: `Day ${i + 1}` })
-            }
-        } else {
-            for (let i = currentLength - 1; i >= numberOfDays; i--) {
-                remove(i)
-            }
-        }
-    }
-
-    const onSubmit = (data: TrainingDaysFormData) => {
-        const completeWorkoutDays: WorkoutDay[] = data.days.map((day) => ({
-            id: crypto.randomUUID(),
-            title: day.title,
-            description: '',
-            imageUrl: '',
-            level: workoutPlan.level,
-            exercises: []
-        }))
-
-        updateWorkoutPlan({ days: completeWorkoutDays })
-        setCurrentStep('exercises')
-    }
+        fields,
+        errors,
+        handleSubmit,
+        handleDaysChange,
+        onSubmit,
+        setCurrentStep,
+        basicsStep
+    } = useTrainingDaysStep()
 
     return (
         <Box sx={styles.container}>
@@ -99,7 +65,7 @@ export const TrainingDaysStep = () => {
                 <Box sx={styles.buttonContainer}>
                     <Button
                         variant="outlined"
-                        onClick={() => setCurrentStep('basics')}
+                        onClick={() => setCurrentStep(basicsStep)}
                         sx={styles.backButton}
                     >
                         Back

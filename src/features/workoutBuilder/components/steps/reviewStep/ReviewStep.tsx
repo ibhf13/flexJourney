@@ -4,10 +4,10 @@ import { DifficultyLevel } from '@/features/workout/types/WorkoutTypes'
 import { useAuthContext } from '@features/auth/contexts/AuthContext'
 import { Box, Button, CircularProgress, FormControl, InputLabel, MenuItem, Paper, Select, Stack, TextField, Typography, useTheme } from '@mui/material'
 import { useState } from 'react'
-import { saveWorkoutPlan } from '../../api/workoutBuilderService'
-import { useWorkoutBuilderContext } from '../../contexts/WorkoutBuilderContext'
-import { PlanSummary } from './ReviewStep/PlanSummary'
-import { reviewStepStyles } from './styles/reviewStepStyles'
+import { saveWorkoutPlan } from '../../../api/workoutBuilderService'
+import { useWorkoutBuilderContext } from '../../../contexts'
+import { reviewStepStyles } from '../../../styles'
+import { PlanSummary } from './PlanSummary'
 
 export const ReviewStep = ({ onSuccess }: { onSuccess?: () => void }) => {
     const theme = useTheme()
@@ -24,7 +24,7 @@ export const ReviewStep = ({ onSuccess }: { onSuccess?: () => void }) => {
         if (!user || !workoutPlan.title || !workoutPlan.days) return
         setIsSaving(true)
         try {
-            await saveWorkoutPlan(workoutPlan as any, description, level, workoutPlan.type, user as any)
+            await saveWorkoutPlan(workoutPlan, description, level, workoutPlan.type, user as any)
             resetBuilder()
             onSuccess?.()
         } catch (error) {
