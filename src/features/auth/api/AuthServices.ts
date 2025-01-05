@@ -25,7 +25,12 @@ const createUserDocument = async (user: User) => {
     const userRef = doc(db, COLLECTIONS.USERS.COLLECTION, user.uid)
 
     await setDoc(userRef, {
-        ...user,
+        id: user.uid,
+        baseInfo: {
+            email: user.email,
+            displayName: user.displayName,
+            photoURL: user.photoURL,
+        },
         createdAt: serverTimestamp(),
         lastLoginAt: serverTimestamp(),
     }, { merge: true })
