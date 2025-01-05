@@ -1,6 +1,5 @@
 import { DifficultyLevel, WorkoutDay } from '@/features/workout/types/WorkoutTypes'
 
-
 export interface ExerciseInWorkout {
     exerciseId: string
     sets: number
@@ -20,4 +19,18 @@ export interface WorkoutPlan {
     type: 'custom' | 'default'
 }
 
-export type WorkoutBuilderStep = 'basics' | 'days' | 'exercises' | 'review'
+
+export enum WorkoutBuilderStepKeys {
+    BASICS = 'basics',
+    PLAN_DAYS = 'planDays',
+    EXERCISES = 'exercises',
+    REVIEW = 'review'
+}
+
+export type WorkoutBuilderStepKey = `${WorkoutBuilderStepKeys}`
+
+export interface WorkoutBuilderStep {
+    key: WorkoutBuilderStepKey
+    label: string
+    progress: number
+}

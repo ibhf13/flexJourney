@@ -1,9 +1,10 @@
 import { useExercisesQuery } from '@/features/exercises/hooks/useExercisesQuery'
 import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import { useState } from 'react'
-import { useWorkoutBuilderContext } from '../contexts/WorkoutBuilderContext'
+import { planDaysStep, reviewStep } from '../constants'
+import { useWorkoutBuilderContext } from '../contexts'
 
-export const useExerciseSelection = () => {
+const useExerciseSelection = () => {
     const { workoutPlan, updateWorkoutPlan, setCurrentStep } = useWorkoutBuilderContext()
     const { exercises } = useExercisesQuery()
     const [currentDayIndex, setCurrentDayIndex] = useState(0)
@@ -44,11 +45,11 @@ export const useExerciseSelection = () => {
     }
 
     const navigateBack = () => {
-        setCurrentStep('days')
+        setCurrentStep(planDaysStep)
     }
 
     const navigateToReview = () => {
-        setCurrentStep('review')
+        setCurrentStep(reviewStep)
     }
 
     return {
@@ -65,3 +66,5 @@ export const useExerciseSelection = () => {
         navigateToReview
     }
 }
+
+export default useExerciseSelection

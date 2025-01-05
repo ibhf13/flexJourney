@@ -1,7 +1,7 @@
 import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import { Box, Chip, Paper, Stack, Typography, useTheme } from '@mui/material'
-import { WorkoutPlan } from '../../../types/workoutBuilderTypes'
-import { reviewStepStyles } from '../styles/reviewStepStyles'
+import { reviewStepStyles } from '../../../styles'
+import { WorkoutPlan } from '../../../types'
 
 
 interface PlanSummaryProps {

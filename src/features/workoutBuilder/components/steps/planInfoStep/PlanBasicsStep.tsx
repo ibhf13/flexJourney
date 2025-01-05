@@ -1,10 +1,10 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { Box, Button, FormControl, InputLabel, MenuItem, Paper, Select, TextField, Typography, useTheme } from '@mui/material'
 import { Controller, useForm } from 'react-hook-form'
-import { DIFFICULTY_LEVELS } from '../../constants/WorkoutBuilderConstants'
-import { useWorkoutBuilderContext } from '../../contexts/WorkoutBuilderContext'
-import { PlanBasicsFormData, planBasicsSchema } from '../../schemas/workoutBuilderSchemas'
-import { planBasicsStyles } from './styles/planBasicsStyles'
+import { DIFFICULTY_LEVELS, planDaysStep } from '../../../constants'
+import { useWorkoutBuilderContext } from '../../../contexts'
+import { PlanBasicsFormData, planBasicsSchema } from '../../../schemas'
+import { planBasicsStyles } from '../../../styles'
 
 
 export const PlanBasicsStep = () => {
@@ -23,7 +23,7 @@ export const PlanBasicsStep = () => {
 
     const onSubmit = (data: PlanBasicsFormData) => {
         updateWorkoutPlan(data)
-        setCurrentStep('days')
+        setCurrentStep(planDaysStep)
     }
 
     return (

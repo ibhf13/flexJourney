@@ -3,11 +3,12 @@ import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { useWorkoutBuilderContext } from '../contexts/WorkoutBuilderContext'
-import { ExerciseSelectionFormData, exerciseSelectionSchema } from '../schemas/workoutBuilderSchemas'
-import { useExerciseSelection } from './useExerciseSelection'
+import { planDaysStep, reviewStep } from '../constants'
+import { useWorkoutBuilderContext } from '../contexts'
+import { ExerciseSelectionFormData, exerciseSelectionSchema } from '../schemas'
+import useExerciseSelection from './useExerciseSelection'
 
-export const useExerciseSelectionForm = () => {
+const useExerciseSelectionForm = () => {
     const { workoutPlan, setCurrentStep, updateWorkoutPlan } = useWorkoutBuilderContext()
     const {
         currentDayIndex,
@@ -53,12 +54,12 @@ export const useExerciseSelectionForm = () => {
         setValue(`days.${currentDayIndex}.exercises`, currentDay.exercises)
     }
 
-    const onSubmit = (data: ExerciseSelectionFormData) => {
-        setCurrentStep('review')
+    const onSubmit = () => {
+        setCurrentStep(reviewStep)
     }
 
     const navigateBack = () => {
-        setCurrentStep('days')
+        setCurrentStep(planDaysStep)
     }
 
     const handleSearchChange = (query: string) => {
@@ -94,3 +95,5 @@ export const useExerciseSelectionForm = () => {
         handleCategoryChange
     }
 }
+
+export default useExerciseSelectionForm

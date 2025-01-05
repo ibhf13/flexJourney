@@ -1,70 +1,63 @@
 import { WorkoutDay } from '@/features/workout/types/WorkoutTypes'
-import { useState } from 'react'
-import { useWorkoutBuilderContext } from '../contexts/WorkoutBuilderContext'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useFieldArray, useForm } from 'react-hook-form'
+import { basicsStep, exercisesStep } from '../constants'
+import { useWorkoutBuilderContext } from '../contexts'
+import { TrainingDaysFormData, trainingDaysSchema } from '../schemas'
 
-export const useTrainingDaysStep = () => {
+const useTrainingDaysStep = () => {
     const { workoutPlan, updateWorkoutPlan, setCurrentStep } = useWorkoutBuilderContext()
-    const [errors, setErrors] = useState<string[]>([])
 
-    const createNewDay = (index: number): WorkoutDay => ({
-        id: workoutPlan.days?.[index]?.id || crypto.randomUUID(),
-        title: workoutPlan.days?.[index]?.title || `Day ${index + 1}`,
-        description: '',
-        imageUrl: '',
-        level: workoutPlan.level || 'Beginner',
-        exercises: workoutPlan.days?.[index]?.exercises || []
+    const { control, handleSubmit, formState: { errors } } = useForm<TrainingDaysFormData>({
+        resolver: zodResolver(trainingDaysSchema),
+        defaultValues: {
+            days: workoutPlan.days?.length ? workoutPlan.days.map(day => ({ title: day.title })) : [{ title: 'Day 1' }]
+        }
+    })
+
+    const { fields, append, remove } = useFieldArray({
+        control,
+        name: 'days'
     })
 
     const handleDaysChange = (numberOfDays: number) => {
-        const newDays = Array.from(
-            { length: numberOfDays },
-            (_, index) => createNewDay(index)
-        )
+        const currentLength = fields.length
 
-        updateWorkoutPlan({ days: newDays })
+        if (numberOfDays > currentLength) {
+            for (let i = currentLength; i < numberOfDays; i++) {
+                append({ title: `Day ${i + 1}` })
+            }
+        } else {
+            for (let i = currentLength - 1; i >= numberOfDays; i--) {
+                remove(i)
+            }
+        }
     }
 
-    const handleDayTitleChange = (index: number, title: string) => {
-        const newDays = [...workoutPlan.days!]
+    const onSubmit = (data: TrainingDaysFormData) => {
+        const completeWorkoutDays: WorkoutDay[] = data.days.map((day) => ({
+            id: crypto.randomUUID(),
+            title: day.title,
+            description: '',
+            imageUrl: '',
+            level: workoutPlan.level,
+            exercises: []
+        }))
 
-        newDays[index] = { ...newDays[index], title }
-        updateWorkoutPlan({ days: newDays })
-    }
-
-    const validateDays = (): string[] => {
-        const errors: string[] = []
-
-        if (!workoutPlan.days?.length) {
-            errors.push('Please select number of training days')
-        }
-
-        const dayTitles = workoutPlan.days?.map(day => day.title) || []
-
-        if (dayTitles.length !== new Set(dayTitles).size) {
-            errors.push('Each training day must have a unique title')
-        }
-
-        return errors
-    }
-
-    const handleContinue = () => {
-        const validationErrors = validateDays()
-
-        if (validationErrors.length > 0) {
-            setErrors(validationErrors)
-
-            return
-        }
-
-        setCurrentStep('exercises')
+        updateWorkoutPlan({ days: completeWorkoutDays })
+        setCurrentStep(exercisesStep)
     }
 
     return {
-        workoutPlan,
+        control,
+        fields,
         errors,
+        handleSubmit,
         handleDaysChange,
-        handleDayTitleChange,
-        handleContinue,
-        setCurrentStep
+        onSubmit,
+        setCurrentStep,
+        basicsStep
     }
 }
+
+export default useTrainingDaysStep

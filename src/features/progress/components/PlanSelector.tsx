@@ -1,6 +1,6 @@
 import { PlanCard } from '@/features/workout/components/PlanCard'
 import { WorkoutPlan } from '@/features/workout/types/WorkoutTypes'
-import { WorkoutBuilderCard } from '@/features/workoutBuilder/components/WorkoutBuilderCard'
+import WorkoutBuilderCard from '@/features/workoutBuilder/components/WorkoutBuilderWizard'
 import { Grid } from '@mui/material'
 
 interface PlanSelectorProps {

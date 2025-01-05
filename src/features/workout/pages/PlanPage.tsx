@@ -3,7 +3,7 @@ import { LoadingErrorWrapper } from '@/features/errorHandling/components/Loading
 import { PlanCard } from '@/features/workout/components/PlanCard'
 import { useRefreshWorkoutPlans, useWorkoutPlans } from '@/features/workout/hooks/useWorkoutQuerys'
 import { WorkoutPlan } from '@/features/workout/types/WorkoutTypes'
-import { WorkoutBuilderCard } from '@/features/workoutBuilder/components/WorkoutBuilderCard'
+import WorkoutBuilderCard from '@/features/workoutBuilder/components/WorkoutBuilderWizard'
 import { Box, Container, Grid, Paper, Typography } from '@mui/material'
 import { useNavigate } from 'react-router-dom'
 import { PlanPageSkeleton } from '../components/skeletons/PlanCardSkeleton'

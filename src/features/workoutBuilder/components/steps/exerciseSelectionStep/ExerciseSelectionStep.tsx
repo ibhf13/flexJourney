@@ -1,12 +1,12 @@
+import { ExerciseFilters } from '@/features/exercises/components/ExerciseFilters'
 import { Exercise } from '@/features/exercises/types/ExerciseTypes'
 import ErrorOutlineIcon from '@mui/icons-material/ErrorOutline'
 import FitnessCenterIcon from '@mui/icons-material/FitnessCenter'
 import { Box, Button, Chip, Fade, Paper, Tab, Tabs, Typography, useTheme } from '@mui/material'
-import { ExerciseFilters } from '../../../exercises/components/ExerciseFilters'
-import { useExerciseSelectionForm } from '../../hooks/useExerciseSelectionForm'
+import { useExerciseSelectionForm } from '../../../hooks'
+import { exerciseSelectionStyles } from '../../../styles'
 import { ExerciseChip } from './ExerciseChip'
 import { SelectedExerciseItem } from './SelectedExerciseItem'
-import { exerciseSelectionStyles } from './styles/exerciseSelectionStyles'
 
 export const ExerciseSelectionStep = () => {
     const theme = useTheme()
